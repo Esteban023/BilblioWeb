@@ -1,8 +1,11 @@
 package com.example.biblioteca.LibrosRepositorio;
 
-import com.example.biblioteca.Model.Autor;
+import com.example.biblioteca.Model.Ejemplar;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 @Repository
-public interface AutorRepositorio extends JpaRepository<Autor, Integer> {}
+
+public interface EjemplarRepositorio extends JpaRepository<Ejemplar, Integer> {
+    
+}

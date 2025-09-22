@@ -1,4 +1,4 @@
-package com.example.biblioteca.LibrosRepositorio;
+package com.example.biblioteca.bibliotecaRepositorio;
 
 import com.example.biblioteca.Model.Autor;
 import org.springframework.stereotype.Repository;

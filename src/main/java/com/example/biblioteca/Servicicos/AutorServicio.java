@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.biblioteca.LibrosRepositorio.AutorRepositorio;
+import com.example.biblioteca.bibliotecaRepositorio.AutorRepositorio;
 import com.example.biblioteca.Model.Autor;
 
 @Service
@@ -36,7 +36,6 @@ public class AutorServicio {
         });
 
         return autorRepositorio.save(autorExistente);
-    
     }
 
 

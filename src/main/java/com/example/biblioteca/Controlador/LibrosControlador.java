@@ -23,9 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
-
 @RestController
 @RequestMapping("/api/libros")
 
@@ -58,7 +55,7 @@ public class LibrosControlador {
         return new ResponseEntity<>(nuevoLibro, HttpStatus.CREATED);
     }
 
-    @PutMapping("path/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Libros> actualizarLibro(@PathVariable int id, @RequestBody Libros libro) {
         Optional<Libros> libroExistente = librosServicios.obtenerLibroPorId(id);
         boolean existe = libroExistente.isPresent();

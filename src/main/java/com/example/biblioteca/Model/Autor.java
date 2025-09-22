@@ -19,6 +19,9 @@ public class Autor {
     @OneToMany
     List<Libros> libros;
 
+    @OneToMany
+    List<Ejemplar> ejemplares;
+
     public Integer getId() {
         return id;
     }
@@ -67,6 +70,4 @@ public class Autor {
         this.libros = libros;
     }
 
-    
-    
 }

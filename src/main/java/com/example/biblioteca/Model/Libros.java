@@ -13,7 +13,6 @@ import jakarta.persistence.ManyToOne;
 public class Libros {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     private Integer id;
     private String titulo;
     private String genero;
@@ -79,7 +78,6 @@ public class Libros {
     public void setAutor(Autor autor) {
         this.autor = autor;
     }
-
-    
+ 
 }
 

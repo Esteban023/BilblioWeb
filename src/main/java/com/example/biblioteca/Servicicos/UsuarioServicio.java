@@ -35,9 +35,11 @@ public class UsuarioServicio {
     }
 
     public Usuario actualizarUsuario(int id, Usuario usuario) {
-        Usuario usuarioExistente = usuarioRepositorio.findById(id).orElseThrow(() -> {
-            throw new RuntimeException("Usuario no encontrado con id: " + id);
-        });
+        Usuario usuarioExistente = usuarioRepositorio.findById(id).orElseThrow(
+            () -> {
+                throw new RuntimeException("Usuario no encontrado con id: " + id);
+            }
+        );
 
         return usuarioRepositorio.save(usuarioExistente);
     }

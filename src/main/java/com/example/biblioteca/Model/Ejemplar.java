@@ -9,6 +9,8 @@ import jakarta.persistence.ManyToOne;
 public class Ejemplar {
     @Id
     private Integer id;
+    private Integer idAutor;
+    private String tema;
     private String titulo;
     private String estado;
     private String categoria;
@@ -24,6 +26,22 @@ public class Ejemplar {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getIdAutor() {
+        return idAutor;
+    }
+
+    public void setIdAutor(Integer idAutor) {
+        this.idAutor = idAutor;
+    }
+
+    public String getTema() {
+        return tema;
+    }
+
+    public void setTema(String tema) {
+        this.tema = tema;
     }
 
     public String getTitulo() {

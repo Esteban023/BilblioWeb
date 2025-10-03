@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.biblioteca.bibliotecaRepositorio.EjemplarRepositorio;
 import com.example.biblioteca.Model.Ejemplar;
+import com.example.biblioteca.Servicicos.EjemplarServicio;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class EjemplarControlador {
     @Autowired
     private EjemplarRepositorio ejemplarRepositorio;
+
+    @Autowired
+    private EjemplarServicio ejemplarServicio;
 
     @GetMapping
     public ResponseEntity<List<Ejemplar>> listarEjemplares(@RequestParam String param) {
@@ -58,7 +62,7 @@ public class EjemplarControlador {
 
     @GetMapping("/buscar/titulo-autor/{titulo}/{nombreAutor}")
     public ResponseEntity<List<Ejemplar>> buscarEjemplaresPorTituloAutor(@PathVariable String titulo, @PathVariable String nombreAutor) {
-        List<Ejemplar> ejemplares = ejemplarRepositorio.findByTituloContainingIgnoreCase(titulo, nombreAutor);
+        List<Ejemplar> ejemplares = ejemplarRepositorio.buscarLibroPorTituloNombreAutor(titulo, nombreAutor);
         boolean existe = ejemplares != null && !ejemplares.isEmpty();
 
         if (existe) {
@@ -67,6 +71,19 @@ public class EjemplarControlador {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/bucsar/genero/{genero}")
+    public ResponseEntity<List<Ejemplar>> buscarEjemplaresPorGenero(@PathVariable String genero) {
+        List<Ejemplar> ejemplares = ejemplarServicio.buscarPorTema(genero);
+        boolean existe = ejemplares != null && !ejemplares.isEmpty();
+
+        if (existe) {
+            return new ResponseEntity<>(ejemplares, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
 
     @PostMapping
     public ResponseEntity<Ejemplar> crearEjemplar(@RequestBody Ejemplar ejemplar) {

@@ -1,7 +1,13 @@
 package com.example.biblioteca.Model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -19,8 +25,9 @@ public class Autor {
     @OneToMany
     List<Libros> libros;
 
-    @OneToMany
-    List<Ejemplar> ejemplares;
+
+    @ManyToMany(mappedBy = "autores")
+    Set<RecursoBibliografico> recursosBibliograficos = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -70,4 +77,12 @@ public class Autor {
         this.libros = libros;
     }
 
+    public Set<RecursoBibliografico> getRecursoBibliograficos() {
+        return recursosBibliograficos;
+    }
+
+    public void setRecursoBibliograficos(Set<RecursoBibliografico> recursosBibliograficos) {
+        this.recursosBibliograficos = recursosBibliograficos;
+    }
+  
 }

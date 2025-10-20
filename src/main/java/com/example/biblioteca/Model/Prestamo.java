@@ -1,13 +1,13 @@
 package com.example.biblioteca.Model;
-import java.time.LocalDate;
-import java.util.Date;
 
+import java.util.Date;
+import java.time.LocalDate;
+import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
 @Entity
 
@@ -21,7 +21,7 @@ public class Prestamo {
     private LocalDate fechaAdquisicion;
 
     @OneToOne
-    private Ejemplar ejemplar; // Relación con Ejemplar
+    private RecursoBibliografico recursoBibliografico; 
 
     @ManyToOne
     private Usuario usuario; // Relación con Usuario
@@ -58,12 +58,12 @@ public class Prestamo {
         this.fechaAdquisicion = fechaAdquisicion;
     }
 
-    public Ejemplar getEjemplar() {
-        return ejemplar;
+    public RecursoBibliografico getEjemplar() {
+        return recursoBibliografico;
     }
 
-    public void setEjemplar(Ejemplar ejemplar) {
-        this.ejemplar = ejemplar;
+    public void setEjemplar(RecursoBibliografico recursoBibliografico) {
+        this.recursoBibliografico = recursoBibliografico;
     }
 
     public Usuario getUsuario() {

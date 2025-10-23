@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" th:href="@{/css/busqueda.css}" />
+  </head>
+  <body>
+    <div th:replace="~{fragmentos :: top-bar}"></div>
+    <div class="container">
+      <div class="home-page">
+        <div class="main-content">
+          <div th:replace="~{fragmentos :: profile}"></div>
+          <div class="search">
+            <div class="search-content">
+              <div class="text-wrapper">Búsqueda Principal</div>
+              <form class="nav" th:action="@{/buscar}" method="post">
+                <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo">
+                <button class="vector-wrapper" type="submit"><img class="vector" th:src="@{/img/busqueda.svg}" /></button>
+                <div class="voice"><img class="img" th:src="@{/img/microfono.svg}" /></div>
+              </form>
+              <div class="adv-nav-component">
+                <div class="adv-nav">
+                  <div class="switch-btn">
+                    <div class="ellipse"></div>
+                    <div class="div">No</div>
+                  </div>
+                  <div class="text-wrapper-2">Búsqueda Avanzada</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer th:replace="~{fragmentos :: footer}"></footer>
+        </div>
+      </div>
+      <div th:replace="~{fragmentos :: side-bar}"></div>
+    </div>
+  </body>
+</html>

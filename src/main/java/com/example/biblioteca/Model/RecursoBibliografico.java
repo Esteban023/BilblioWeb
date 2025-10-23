@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToMany;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -253,6 +254,14 @@ public class RecursoBibliografico {
 
     public Set<Autor> getAutores() {
         return autores;
+    }
+
+    public String getAutoresString(){
+        String lista = "";
+        if(!autores.isEmpty()) {
+            lista = autores.stream().map(a -> a.getNombre() + " " + a.getApellido()).collect(Collectors.joining(";"));
+        }
+        return lista;
     }
 
     public void setAutores(Set<Autor> autores) {

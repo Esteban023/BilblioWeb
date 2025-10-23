@@ -58,6 +58,10 @@ public class RecursoServicio {
         return rbRepositorio.buscarRecursoBibliograficoPorTituloNombreAutor(titulo, nombreAutor);
     }
 
+    public List<RecursoBibliografico> buscarPorTitulo(String titulo){
+        return rbRepositorio.findByTitulo(titulo);
+    }
+
     public Set<RecursoBibliografico> buscarPorTema(String tema) {
         return rbRepositorio.encontrarPorTema(tema);
     }

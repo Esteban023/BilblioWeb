@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <link rel="stylesheet" th:href="@{/css/recursos.css}" />
+</head>
+<body>
+<div th:replace="~{fragmentos :: top-bar}"></div>
+<div class="container">
+  <div class="home-page">
+    <div class="main-content">
+      <div th:replace="~{fragmentos :: profile}"></div>
+
+      <div class="search">
+        <div class="detalles-recurso-wrapper">
+          <div class="detalles-recurso">
+            <div class="tipo">
+              <div class="div-wrapper"><div class="text-wrapper-2" th:text="${lista[0].tipoDePublicacion}"></div></div>
+              <div class="img-wrapper"><img class="img" th:src="@{/img/libros.svg}" /></div>
+            </div>
+            <p class="p" th:text="${lista[0].titulo}"></p>
+            <div class="frame-2">
+              <div class="text-wrapper-3" >Autores:</div>
+              <p class="text-wrapper-4" th:text="${lista[0].getAutoresString()}"></p>
+            </div>
+            <div class="frame-2">
+              <div class="text-wrapper-3">Publicación:</div>
+              <p class="text-wrapper-5" th:text="${lista[0].publicacion}"></p>
+            </div>
+            <div class="frame-2">
+              <div class="text-wrapper-3">Idioma:</div>
+              <div class="text-wrapper-5" th:text="${lista[0].idioma}"></div>
+            </div>
+            <div class="frame-3">
+              <div class="text-wrapper-3">Materia(s):</div>
+              <p class="text-wrapper-5" th:text="${lista[0].tema}">
+
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="frame-4">
+          <div class="frame-5">
+            <div class="text-wrapper-6">Disponibilidad del Ejemplar</div>
+            <div class="canasta"></div>
+          </div>
+          <div class="table">
+            <header class="header">
+              <div class="frame-6"><div style="width: 20px;"></div></div>
+              <div class="frame-7"><div class="text-wrapper-7">Código</div></div>
+              <div class="frame-8"><div class="text-wrapper-7">Localización</div></div>
+              <div class="frame-7"><div class="text-wrapper-7">Categoría</div></div>
+              <div class="frame-7"><div class="text-wrapper-7">Estado</div></div>
+              <div class="frame-8">
+                <div class="servicio">Servicio<br />(Préstamo / Reserva)</div>
+              </div>
+            </header>
+            <div class="row" th:each="recurso : ${lista}">
+              <div class="frame-6"><input class="div-2" type="checkbox"></div>
+              <div class="frame-7"><div class="text-wrapper-8" th:text="${recurso.codigoDeBarras}"></div></div>
+              <div class="frame-8"><div class="text-wrapper-9" th:text="${recurso.localizacion}"></div></div>
+              <div class="frame-7"><div class="text-wrapper-8" th:text="${recurso.categoria}"></div></div>
+              <div class="frame-7"><div class="text-wrapper-8" th:text="${recurso.estado}"></div></div>
+              <div class="frame-9">
+                <img class="image" th:src="@{/img/btn-reserva.png}" />
+                <div class="line"></div>
+                <button>Reservar</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <footer th:replace="~{fragmentos :: footer}"></footer>
+    </div>
+  </div>
+  <div th:replace="~{fragmentos :: side-bar}"></div>
+</div>
+</body>
+</html>

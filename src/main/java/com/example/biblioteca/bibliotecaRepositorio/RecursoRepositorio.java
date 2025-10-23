@@ -59,5 +59,6 @@ public interface RecursoRepositorio extends JpaRepository<RecursoBibliografico, 
        @Query("SELECT recurso FROM RecursoBibliografico recurso WHERE recurso.tema ILIKE CONCAT('%', ?1, '%')")
        Set<RecursoBibliografico> encontrarPorTema(String tema);
 
+       List<RecursoBibliografico> findByTitulo(String titulo);
        
 }

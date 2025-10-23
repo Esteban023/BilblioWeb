@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <link rel="stylesheet" th:href="@{/css/login.css}" />
+</head>
+<body>
+<div class="login">
+  <div class="left-content">
+    <div class="univalle-logo">
+      <img  th:src="@{/img/univalle_logo.png}" />
+    </div>
+  </div>
+  <div class="right-content">
+    <div class="error-message" th:if="${error}" th:text="${error}">
+
+    </div>
+    <div class="content">
+      <div class="title">Iniciar Sesión</div>
+      <form class="login-content" th:action="@{/login}" method="post">
+        <div class="div">
+          <img class="icon" th:src="@{/img/user.jpeg}" />
+          <input type="number" name="codigo"  placeholder="Ingrese su codigo (2178945)" required>
+        </div>
+<!--        <div class="div">-->
+<!--          <img class="vector" th:src="@{/img/candado.jpeg}" />-->
+<!--          <input type="text" name="password" placeholder="Contraseña">-->
+<!--        </div>-->
+        <div class="button-place">
+          <button class="button" type="submit">
+            <div class="place-holder"><div class="text-wrapper-2">Ingresar</div></div>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -42,8 +42,18 @@ public class RecursoServicio {
         return rbRepositorio.save(rbExistente);
     }
 
-    public void eliminarRecursoBibliografico(String codigoDeBarras) {
-        rbRepositorio.deleteById(codigoDeBarras);
+    public Optional<RecursoBibliografico> eliminarRecursoBibliografico(String codigoDeBarras) {
+        Optional<RecursoBibliografico> recursoBiblio  = rbRepositorio.findById(codigoDeBarras);
+
+        boolean isPresent = recursoBiblio.isPresent();
+        if(isPresent) {
+            RecursoBibliografico rb = recursoBiblio.get();
+            rbRepositorio.delete(rb);
+            return Optional.of(rb);
+        } else {
+            return Optional.empty();
+        }
+
     } 
 
     public void eliminarRecursoBibliograficoPorIsbn(String isbn) {

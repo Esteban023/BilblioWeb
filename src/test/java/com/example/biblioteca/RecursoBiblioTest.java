@@ -2,17 +2,13 @@ package com.example.biblioteca;
 
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 
-import com.example.biblioteca.Servicicos.AutorServicio;
 import jakarta.transaction.Transactional;
 import com.example.biblioteca.Model.Autor;
 import com.example.biblioteca.Model.RecursoBibliografico;
@@ -35,9 +31,6 @@ public class RecursoBiblioTest {
 
     @Autowired
     private RecursoServicio recursoServicio;
-
-    @Autowired
-    private AutorServicio autorServicio;
 
     private Set<Autor> autores;
     private Set<RecursoBibliografico> recursosBibliograficos;
@@ -188,9 +181,6 @@ public class RecursoBiblioTest {
         Set<RecursoBibliografico> resultado = recursoServicio.buscarPorTituloAutor("titulo1", "Nombre1");
         assert(resultado.size() > 0);
     }
-
-    
-
 
     @AfterEach
     void limpiarDatos() {

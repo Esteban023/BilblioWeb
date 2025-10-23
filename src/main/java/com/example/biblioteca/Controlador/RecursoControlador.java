@@ -15,13 +15,12 @@ import com.example.biblioteca.Servicicos.RecursoServicio;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/ejemplares")
+@RequestMapping("/api/recursosBibliograficos")
 
 public class RecursoControlador {
 
@@ -29,12 +28,12 @@ public class RecursoControlador {
     private RecursoServicio rbServicio;
 
     @GetMapping
-    public ResponseEntity<List<RecursoBibliografico>> listarRecursosBibliograficos(@RequestParam String param) {
+    public ResponseEntity<List<RecursoBibliografico>> listarRecursosBibliograficos() {
         List<RecursoBibliografico> recursosBibliograficos = rbServicio.listarRecursosBibliograficos();
         return new ResponseEntity<>(recursosBibliograficos, HttpStatus.OK);
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/{codigoBarras}")
     public ResponseEntity<RecursoBibliografico> buscarRecursoBibliograficoCodigoBarras(@PathVariable String codigoBarras) {
         Optional<RecursoBibliografico> ejemplar = rbServicio.obtenerRecursoBibliograficoCodigoDeBarras(codigoBarras);
         boolean existe = ejemplar.isPresent();
@@ -72,11 +71,11 @@ public class RecursoControlador {
 
     @GetMapping("/buscar/tema/{tema}")
     public ResponseEntity<Set<RecursoBibliografico>> buscarEjemplaresPorTema(@PathVariable String tema) {
-        Set<RecursoBibliografico> ejemplares = rbServicio.buscarPorTema(tema);
-        boolean existe = ejemplares != null && !ejemplares.isEmpty();
+        Set<RecursoBibliografico> recursosBibliograficos = rbServicio.buscarPorTema(tema);
+        boolean existe = recursosBibliograficos != null && !recursosBibliograficos.isEmpty();
 
         if (existe) {
-            return new ResponseEntity<>(ejemplares, HttpStatus.OK);
+            return new ResponseEntity<>(recursosBibliograficos, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -89,9 +88,9 @@ public class RecursoControlador {
         return new ResponseEntity<>(nuevoRecurso, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{codigoBarras}")
     public ResponseEntity<RecursoBibliografico> actualizarRecursoBibliografico(@PathVariable String codigoBarras, @RequestBody RecursoBibliografico recursoBiblio) {
-        Optional<RecursoBibliografico> rbExistente = rbServicio.obtnerRecursoBibliograficoPorIsbn(codigoBarras);
+        Optional<RecursoBibliografico> rbExistente = rbServicio.obtenerRecursoBibliograficoCodigoDeBarras(codigoBarras);
         boolean existe = rbExistente.isPresent();
 
         if (existe) {
@@ -122,17 +121,16 @@ public class RecursoControlador {
     }
 
     @DeleteMapping("/{codigoBarras}")
-    public ResponseEntity<Void> borrarRecursoBibliografico(@PathVariable String codigoBarras) {
-        try {
-            rbServicio.eliminarRecursoBibliografico(codigoBarras);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-           return ResponseEntity.notFound().build();
+    public ResponseEntity<RecursoBibliografico> borrarRecursoBibliografico(@PathVariable String codigoBarras) {
+        Optional<RecursoBibliografico> eliminado = rbServicio.eliminarRecursoBibliografico(codigoBarras);
+
+        boolean isPresent = eliminado.isPresent();
+        if(isPresent) {
+            RecursoBibliografico rbEliminado = eliminado.get();
+            return ResponseEntity.ok(rbEliminado);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
-
-
-    
-    
 
 }

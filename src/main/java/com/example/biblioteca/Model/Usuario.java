@@ -1,21 +1,23 @@
 package com.example.biblioteca.Model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
 @Entity
-@IdClass(UsuarioId.class)
 
 public class Usuario {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Id
     @Column(name = "cedula", nullable = false, unique = true)
     private Long cedula;
 
@@ -40,8 +42,10 @@ public class Usuario {
     @Column(name = "telefono", nullable = false, length = 15)
     private String telefono;
 
-    @OneToMany
-    private List<Prestamo> prestamo; // Relación con Prestamo
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Prestamo> prestamos = new ArrayList<>();
+
 
     public Integer getId() {
         return id;
@@ -115,12 +119,13 @@ public class Usuario {
         this.telefono = telefono;
     }
 
-    public List<Prestamo> getPrestamo() {
-        return prestamo;
+    public List<Prestamo> getPrestamos() {
+        return prestamos;
     }
 
-    public void setPrestamo(List<Prestamo> prestamo) {
-        this.prestamo = prestamo;
+    public void setPrestamos(List<Prestamo> prestamos) {
+        this.prestamos = prestamos;
     }
+
     
 }

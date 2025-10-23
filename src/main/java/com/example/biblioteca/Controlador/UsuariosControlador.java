@@ -32,7 +32,7 @@ public class UsuariosControlador {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtenerUsuarioPorId(@RequestParam int id) {
+    public ResponseEntity<Usuario> obtenerUsuarioPorId(@RequestParam Integer id) {
         Usuario usuario = usuarioServicio.obtenerUsuarioPorId(id).orElse(null);
 
         if (usuario != null) {

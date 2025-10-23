@@ -4,9 +4,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.HashSet;
+import java.util.Optional;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -85,7 +91,12 @@ public class RecursoBibliografico {
         joinColumns = @JoinColumn(name = "codigo_de_barras"),
         inverseJoinColumns = @JoinColumn(name = "autor_id")
     )
+    @JsonIgnore
     private Set<Autor> autores = new HashSet<>();
+
+    @OneToOne
+    @JsonIgnore
+    private Prestamo prestamo;
 
     public RecursoBibliografico() {
 
@@ -259,7 +270,12 @@ public class RecursoBibliografico {
         this.autores = autores;
     }
 
+    public Prestamo getPrestamo() {
+        return prestamo;
+    }
     
-
-    
+    public void setPrestamo(Prestamo prestamo) {
+        this.prestamo = prestamo;
+    }  
+        
 }

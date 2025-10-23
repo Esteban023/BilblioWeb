@@ -23,7 +23,7 @@ public class UsuarioServicio {
     }
 
     public Optional<Usuario> obtenerUsuarioPorCedula(Long cedula) {
-        return usuarioRepositorio.findByCedula(cedula);
+        return usuarioRepositorio.encontarPorCedula(cedula);
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
@@ -34,7 +34,7 @@ public class UsuarioServicio {
         usuarioRepositorio.deleteById(id);
     }
 
-    public Usuario actualizarUsuario(int id, Usuario usuario) {
+    public Usuario actualizarUsuario(Integer id, Usuario usuario) {
         Usuario usuarioExistente = usuarioRepositorio.findById(id).orElseThrow(
             () -> {
                 throw new RuntimeException("Usuario no encontrado con id: " + id);

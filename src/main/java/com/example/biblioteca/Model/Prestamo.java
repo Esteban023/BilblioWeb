@@ -1,11 +1,17 @@
 package com.example.biblioteca.Model;
 
-import java.util.Date;
-import java.time.LocalDate;
+
+import jakarta.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -17,14 +23,19 @@ public class Prestamo {
     
     private int id;
     private boolean estado;
-    private Date fechaDevolucion;
-    private LocalDate fechaAdquisicion;
+    private boolean vencido;
+    private LocalDateTime fechaDevolucion;
+    private LocalDateTime fechaAdquisicion;
+    private LocalDateTime fechaDevolucionReal;
 
     @OneToOne
-    private RecursoBibliografico recursoBibliografico; 
+    private RecursoBibliografico recursoBibliografico;
 
     @ManyToOne
-    private Usuario usuario; // Relación con Usuario
+    @JsonProperty("usuario")
+    @JoinColumn(name = "usuario_id", nullable = false)
+    @JsonIgnore
+    private Usuario usuario; 
 
     public int getId() {
         return id;
@@ -42,28 +53,20 @@ public class Prestamo {
         this.estado = estado;
     }
 
-    public Date getFechaDevolucion() {
+    public LocalDateTime getFechaDevolucion() {
         return fechaDevolucion;
     }
 
-    public void setFechaDevolucion(Date fechaDevolucion) {
+    public void setFechaDevolucion(LocalDateTime fechaDevolucion) {
         this.fechaDevolucion = fechaDevolucion;
     }
 
-    public LocalDate getFechaAdquisicion() {
+    public LocalDateTime getFechaAdquisicion() {
         return fechaAdquisicion;
     }
 
-    public void setFechaAdquisicion(LocalDate fechaAdquisicion) {
+    public void setFechaAdquisicion(LocalDateTime fechaAdquisicion) {
         this.fechaAdquisicion = fechaAdquisicion;
-    }
-
-    public RecursoBibliografico getEjemplar() {
-        return recursoBibliografico;
-    }
-
-    public void setEjemplar(RecursoBibliografico recursoBibliografico) {
-        this.recursoBibliografico = recursoBibliografico;
     }
 
     public Usuario getUsuario() {
@@ -74,6 +77,30 @@ public class Prestamo {
         this.usuario = usuario;
     }
 
+    public RecursoBibliografico getRecursoBibliografico() {
+        return recursoBibliografico;
+    }
 
+    public void setRecursoBibliografico(RecursoBibliografico recursoBibliografico) {
+        this.recursoBibliografico = recursoBibliografico;
+    }
+
+    public boolean isVencido() {
+        return vencido;
+    }
+
+    public void setVencido(boolean vencido) {
+        this.vencido = vencido;
+    }
+
+    public LocalDateTime getFechaDevolucionReal() {
+        return fechaDevolucionReal;
+    }
+
+    public void setFechaDevolucionReal(LocalDateTime fechaDevolucionReal) {
+        this.fechaDevolucionReal = fechaDevolucionReal;
+    }
+
+    
 
 }

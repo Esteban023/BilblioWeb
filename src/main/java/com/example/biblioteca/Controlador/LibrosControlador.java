@@ -39,9 +39,9 @@ public class LibrosControlador {
     @GetMapping("/{id}")
     public ResponseEntity<Libros> obtenerLibroPorId(@PathVariable int id) {
         Optional <Libros> libro = librosServicios.obtenerLibroPorId(id);
-        boolean existe = libro.isPresent();
 
-        if (existe) {
+        boolean isPresent = libro.isPresent();
+        if (isPresent) {
             return new ResponseEntity<>(libro.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

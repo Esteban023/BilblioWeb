@@ -12,7 +12,9 @@
       <div class="main-content">
         <div th:replace="~{fragmentos :: profile}"></div>
         <div class="search">
-            <h5 th:text="${session.user.nombre}"></h5>
+            <h3 th:text="${session.user.nombre}"></h3>
+            <h3 > Tus prestamos</h3>
+            <table th:replace="~{tablaTemporal :: tabla}"></table>
         </div>
         <footer th:replace="~{fragmentos :: footer}"></footer>
       </div>

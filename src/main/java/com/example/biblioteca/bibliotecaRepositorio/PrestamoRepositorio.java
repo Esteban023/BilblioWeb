@@ -1,5 +1,6 @@
 package com.example.biblioteca.bibliotecaRepositorio;
 
+import java.util.List;
 import java.util.Optional;
 import com.example.biblioteca.Model.Prestamo;
 import org.springframework.stereotype.Repository;
@@ -15,4 +16,6 @@ public interface PrestamoRepositorio extends JpaRepository<Prestamo, Integer> {
     @Transactional
     @Query("UPDATE Prestamo p SET p.estado = false WHERE p.id = ?1")
     Optional<Prestamo> finalizarPrestamo(Integer prestamoId);
+
+    List<Prestamo> findByUsuarioId(Integer usuarioId);
 }

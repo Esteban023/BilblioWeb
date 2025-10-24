@@ -2,6 +2,7 @@ package com.example.biblioteca.Servicicos;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import com.example.biblioteca.Model.Prestamo;
@@ -79,7 +80,7 @@ public class PrestamoServicio {
         prestamo.setFechaDevolucion(fechaDevolucion);
 
         //Cambiar el estado del libro
-        rb.setEstado("NO DISPONIBLE");
+        rb.setEstado("No Disponible");
         rbRepositorio.save(rb);
 
         //Guardar el prestamo en el usuario
@@ -87,7 +88,7 @@ public class PrestamoServicio {
         usuario.getPrestamos().add(prestamo);
         usuarioRepositorio.save(usuario);
 
-        return new ResultadoPrestamo(true, "Préstamo creado correctamente", prestamoGuardado);
+        return new ResultadoPrestamo(true, "Prestamo exitoso", prestamoGuardado);
     }
 
     public ResultadoPrestamo finalizarPrestamo(Integer idPrestamo) {
@@ -137,5 +138,8 @@ public class PrestamoServicio {
         } else {
             return Optional.empty();
         }
+    }
+    public List<Prestamo> getPrestamosPorUsuario(Integer usuarioId){
+        return prestamoRepositorio.findByUsuarioId(usuarioId);
     }
 }

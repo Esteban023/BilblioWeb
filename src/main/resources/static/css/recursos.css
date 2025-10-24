@@ -644,3 +644,110 @@ a {
     background-color: #c20e1a;
     height:3%;
 }
+
+/*Estilos del modal resultado*/
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-overlay .modal-box {
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px 24px;
+  width: 340px;
+  /* height: 350px; */
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-overlay .modal-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100%;
+    background-color: #cc0000;
+    font-size: 36px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+.modal-overlay .text-contenedor{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 12px;
+}
+
+.modal-overlay .modal-title {
+  color: #cc0000;
+  margin: 8px auto;
+  font-family: "Open Sans";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.modal-overlay .modal-message {
+  margin-bottom: 16px;
+  color: #1F1F1F;
+
+  text-align: justify;
+  font-family: "Open Sans";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+}
+.modal-overlay .time-contenedor{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1 0 0;
+  align-self: stretch;
+}
+.modal-overlay .time-img{
+  width: 24px;
+  height: 24px;
+}
+.modal-overlay .time-text{
+  color: #1F1F1F;
+  font-family: "Open Sans";
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 300;
+  line-height: normal;
+}
+
+.modal-overlay .modal-button {
+  background-color: #c20e1a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-overlay .modal-button:hover {
+    cursor: pointer;
+    background-color: #a10c15;
+    transition: background-color 0.3s ease;
+}
+.modal-overlay .modal-button:active{
+    background-color: #a10c15;
+    transform: scale(0.99);
+}

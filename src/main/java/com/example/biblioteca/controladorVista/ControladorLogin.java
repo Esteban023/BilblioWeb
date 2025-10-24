@@ -22,7 +22,11 @@ public class ControladorLogin {
     UsuarioServicio servicio;
 
     @GetMapping("/login")
-    public String getLogin(){
+    public String getLogin(HttpSession session){
+        Usuario user = (Usuario) session.getAttribute("user");
+        if(user != null){
+            return "redirect:/";
+        }
         return "login";
     }
     @PostMapping("/login")
@@ -36,5 +40,13 @@ public class ControladorLogin {
         }
         redirect.addFlashAttribute("error", "No se encontro el codigo");
         return "redirect:/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        if(session != null){
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 }

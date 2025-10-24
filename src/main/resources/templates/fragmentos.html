@@ -40,7 +40,7 @@
             <div class="img-wrapper"><img class="vector-4" th:src="@{/img/canasta.jpeg}" /></div>
             <div class="text-wrapper-4">Mi Canasta</div>
           </a>
-          <a class="item" href="#">
+          <a class="item" th:href="@{/prestamo/listar}">
             <div class="vector-wrapper-2"><img class="vector-5" th:src="@{/img/prestamo.jpeg}" /></div>
             <div class="text-wrapper-4">Mis Préstamos</div>
           </a>
@@ -53,7 +53,27 @@
       <div class="tools-section">
         <div class="div-2"><div class="text-wrapper-5">Herramientas de Búsqueda</div></div>
       </div>
+      <a class="login" style="margin-bottom: 10px;" th:if="${session.user}" th:href="@{/logout}">Cerrar session</a>
     </div>
+    <th:block th:fragment="modal-resultado">
+      <div class="modal-overlay" th:if="${mensajeModal}">
+        <div class="modal-box">
+          <div class="modal-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#FFFFFF"><path d="M382-232.35 146.35-468l64.89-64.89L382-362.13l366.76-366.76L813.65-664 382-232.35Z"/></svg>
+          </div>
+          <div class="text-contenedor">
+            <h2 class="modal-title" th:text="${tituloModal}"></h2>
+            <p class="modal-message" th:text="${mensajeModal}"></p>
+            <div class="time-contenedor" th:if="${mensajeTime}">
+              <img th:src="@{/img/time.svg}" class="time-img">
+              <p class="time-text" th:text="${mensajeTime}"></p>
+            </div>
+          </div>
+
+          <button class="modal-button" onclick="document.querySelector('.modal-overlay').style.display = 'none';">Cerrar</button>
+        </div>
+      </div>
+    </th:block>
   </body>
 
 

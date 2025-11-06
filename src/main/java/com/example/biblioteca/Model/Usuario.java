@@ -46,6 +46,10 @@ public class Usuario {
     @JsonIgnore
     private List<Prestamo> prestamos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Reserva> reservas = new ArrayList<>();
+
 
     public Integer getId() {
         return id;
@@ -125,6 +129,14 @@ public class Usuario {
 
     public void setPrestamos(List<Prestamo> prestamos) {
         this.prestamos = prestamos;
+    }
+
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
     }
 
     

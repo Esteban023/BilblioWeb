@@ -2,7 +2,7 @@ package com.example.biblioteca.DTO;
 
 public class PrestamoRequest {
     private Integer idUsuario;
-    private String codigo;
+    private String codigoDeBarras;
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -12,11 +12,11 @@ public class PrestamoRequest {
         this.idUsuario = idUsuario;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public String getCodigoDeBarras() {
+        return codigoDeBarras;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setCodigoDeBarras(String codigoDeBarras) {
+        this.codigoDeBarras = codigoDeBarras;
     }
 }

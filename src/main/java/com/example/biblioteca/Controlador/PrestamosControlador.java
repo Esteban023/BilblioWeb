@@ -1,5 +1,6 @@
 package com.example.biblioteca.Controlador;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.biblioteca.DTO.PrestamoRequest;
+import com.example.biblioteca.DTO.ReservaDTO;
 import com.example.biblioteca.Model.Prestamo;
 import com.example.biblioteca.Model.ResultadoPrestamo;
 import com.example.biblioteca.Servicicos.PrestamoServicio;
@@ -42,7 +44,7 @@ public class PrestamosControlador {
     @PostMapping("/iniciar")
     public ResponseEntity<ResultadoPrestamo> cargarPrestamo(@RequestBody PrestamoRequest request) {
         Integer usuarioId = request.getIdUsuario();
-        String codigoBarras = request.getCodigo();
+        String codigoBarras = request.getCodigoDeBarras();
 
         if(usuarioId == null || codigoBarras == null) {
             ResultadoPrestamo rPrestamo = new ResultadoPrestamo(false, "Datos incorrectos");
@@ -51,6 +53,29 @@ public class PrestamosControlador {
         ResultadoPrestamo nuevoPrestamo = prestamoServicio.iniciarPrestamo(usuarioId, codigoBarras);
 
         return new ResponseEntity<>(nuevoPrestamo, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/varios_prestamos")
+    public ResponseEntity<ResultadoPrestamo> cargarVariosPrestamos(@RequestBody List<PrestamoRequest> requests) {
+        ResultadoPrestamo resultadoFinal = new ResultadoPrestamo(true, "Todos los prestamos se realizaron con exito");
+
+        for (PrestamoRequest request : requests) {
+            Integer usuarioId = request.getIdUsuario();
+            String codigoBarras = request.getCodigoDeBarras();
+
+            if(usuarioId == null || codigoBarras == null) {
+                ResultadoPrestamo rPrestamo = new ResultadoPrestamo(false, "Datos incorrectos en uno de los prestamos");
+                return ResponseEntity.badRequest().body(rPrestamo);
+            }
+            ResultadoPrestamo resultadoPrestamo = prestamoServicio.iniciarPrestamo(usuarioId, codigoBarras);
+            
+            if (!resultadoPrestamo.isExito()) {
+                resultadoFinal.setExito(false);
+                resultadoFinal.setMensaje("Algunos prestamos no se pudieron realizar correctamente");
+            }
+        }
+
+        return new ResponseEntity<>(resultadoFinal, HttpStatus.CREATED);
     }
 
     @PutMapping("terminar/{id}")

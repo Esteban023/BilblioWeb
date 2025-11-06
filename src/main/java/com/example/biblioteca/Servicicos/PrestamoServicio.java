@@ -1,6 +1,4 @@
 package com.example.biblioteca.Servicicos;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +23,21 @@ public class PrestamoServicio {
     @Autowired 
     UsuarioRepositorio usuarioRepositorio;
 
-    private static final int DIAS_PRESTAMO_GENERAL = 20;
+    private static final int DIAS_PRESTAMO_GENERAL = 15;
     private static final int DIAS_PRESTAMO_RESERVA = 2;
 
     @Autowired
     RecursoRepositorio rbRepositorio;
+
+    private Prestamo crearPrestamoEntity(Usuario usuario, RecursoBibliografico rb, LocalDateTime fechaDevolucion, LocalDateTime fechaAdquisicion) {
+        Prestamo prestamo = new Prestamo();
+        prestamo.setUsuario(usuario);
+        prestamo.setRecursoBibliografico(rb);
+        prestamo.setFechaDevolucion(fechaDevolucion);
+        prestamo.setFechaAdquisicion(fechaAdquisicion);
+        prestamo.setEstado(true);
+        return prestamo;
+    }
 
     private LocalDateTime calcularFechaDevolucion(RecursoBibliografico rb, LocalDateTime date) {
         String categoria = rb.getCategoria().toLowerCase().trim();
@@ -53,9 +61,14 @@ public class PrestamoServicio {
         Optional<Usuario> userOpt = usuarioRepositorio.findById(idUsuario);
         Optional<RecursoBibliografico> rbOpt = rbRepositorio.findById(codigoBarras);
 
-        boolean isPresent = userOpt.isPresent() && rbOpt.isPresent();
-        if(!isPresent) {
-            return new ResultadoPrestamo(false, "Usuario o recurso no encontrado");
+        boolean usuarioExiste = userOpt.isPresent(); 
+        if(!usuarioExiste) {
+            return new ResultadoPrestamo(false, "Usuario no encontrado");
+        }
+
+        boolean recursoExiste = rbOpt.isPresent();
+        if (!recursoExiste) {
+            return new ResultadoPrestamo(false, "Recurso bibliográfico no encontrado");        
         }
 
         Usuario usuario = userOpt.get();
@@ -71,22 +84,26 @@ public class PrestamoServicio {
             );
         }
 
-        Prestamo prestamo = new Prestamo();
-        LocalDateTime fechaDevolucion = calcularFechaDevolucion(rb, fechaInicio);
-        prestamo.setUsuario(usuario);
-        prestamo.setEstado(true);
-        prestamo.setRecursoBibliografico(rb);
-        prestamo.setFechaAdquisicion(fechaInicio);
-        prestamo.setFechaDevolucion(fechaDevolucion);
+        LocalDateTime fechaDevolucion = calcularFechaDevolucion(rb, fechaInicio); 
+        // 1. Crear la entidad Prestamo
+        Prestamo prestamo = crearPrestamoEntity(usuario, rb, fechaDevolucion, fechaInicio);
+        
+        // 2. ESTABLECER RELACIÓN BIDIRECCIONAL ANTES DE GUARDAR
+        prestamo.setRecursoBibliografico(rb);  // Del préstamo al recurso
+        rb.setPrestamo(prestamo);              // Del recurso al préstamo
+        rb.setEstado("No disponible");
+        
+        // 3. Ahora guardar el préstamo (con la relación ya establecida)
 
-        //Cambiar el estado del libro
-        rb.setEstado("No Disponible");
-        rbRepositorio.save(rb);
-
-        //Guardar el prestamo en el usuario
         Prestamo prestamoGuardado = prestamoRepositorio.save(prestamo);
-        usuario.getPrestamos().add(prestamo);
+        
+        // 4. Actualizar el usuario
+        usuario.getPrestamos().add(prestamoGuardado);
         usuarioRepositorio.save(usuario);
+        
+        // 5. El recurso bibliográfico YA debería estar actualizado por la relación
+        // pero por si acaso lo guardamos también
+        rbRepositorio.save(rb);
 
         return new ResultadoPrestamo(true, "Prestamo exitoso", prestamoGuardado);
     }

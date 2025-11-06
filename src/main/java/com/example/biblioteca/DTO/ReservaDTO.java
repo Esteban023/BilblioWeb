@@ -8,6 +8,7 @@ public class ReservaDTO {
     private Reserva reserva;
     private Integer idUsuario;
     private String codigoDeBarras;
+    private String codigoReserva;
 
     public ReservaDTO() {
     }
@@ -66,6 +67,14 @@ public class ReservaDTO {
 
     public void setCodigoDeBarras(String codigoDeBarras) {
         this.codigoDeBarras = codigoDeBarras;
+    }
+
+    public String getCodigoReserva() {
+        return codigoReserva;
+    }
+
+    public void setCodigoReserva(String codigoReserva) {
+        this.codigoReserva = codigoReserva;
     }
 
 }

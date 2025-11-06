@@ -1,7 +1,10 @@
 package com.example.biblioteca.bibliotecaRepositorio;
 
 
+import java.util.List;
 import java.util.Optional;
+
+import com.example.biblioteca.Model.RecursoBibliografico;
 import com.example.biblioteca.Model.Reserva;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +27,14 @@ public interface ReservaRepositorio extends JpaRepository<Reserva, String> {
         @Param("estadoReserva") Reserva.EstadoReserva estadoReserva,
         @Param("usuarioId") Integer usuarioId);
 
+    @Query("""
+        SELECT r 
+        FROM Reserva r 
+        WHERE r.recursoBibliografico = :recurso 
+            AND r.estado = :estado
+    """)
+    List<Reserva> findByRecursoBibliograficoAndEstado(
+        @Param("recurso") RecursoBibliografico recursoBibliografico,
+        @Param("estado") Reserva.EstadoReserva estado);
+    
 }

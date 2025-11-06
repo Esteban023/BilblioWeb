@@ -1,5 +1,6 @@
 package com.example.biblioteca.Controlador;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.biblioteca.DTO.PrestamoRequest;
+import com.example.biblioteca.DTO.ReservaDTO;
 import com.example.biblioteca.Model.Prestamo;
 import com.example.biblioteca.Model.ResultadoPrestamo;
 import com.example.biblioteca.Servicicos.PrestamoServicio;
@@ -54,7 +56,7 @@ public class PrestamosControlador {
     }
 
     @PostMapping("/varios_prestamos")
-    public ResponseEntity<ResultadoPrestamo> cargarVariosPrestamos(@RequestBody PrestamoRequest[] requests) {
+    public ResponseEntity<ResultadoPrestamo> cargarVariosPrestamos(@RequestBody List<PrestamoRequest> requests) {
         ResultadoPrestamo resultadoFinal = new ResultadoPrestamo(true, "Todos los prestamos se realizaron con exito");
 
         for (PrestamoRequest request : requests) {
@@ -66,8 +68,8 @@ public class PrestamosControlador {
                 return ResponseEntity.badRequest().body(rPrestamo);
             }
             ResultadoPrestamo resultadoPrestamo = prestamoServicio.iniciarPrestamo(usuarioId, codigoBarras);
-            boolean exito = resultadoPrestamo.isExito();
-            if (!exito) {
+            
+            if (!resultadoPrestamo.isExito()) {
                 resultadoFinal.setExito(false);
                 resultadoFinal.setMensaje("Algunos prestamos no se pudieron realizar correctamente");
             }

@@ -41,7 +41,7 @@ public class Reserva {
     private EstadoReserva estado;
     
     // Posición en la cola de reservas (si hay múltiples reservas para el mismo recurso)
-    @Column(name = "posicion_cola", nullable = false)
+    @Column(name = "posicion_cola", nullable = true)
     private Integer posicionCola;
     
     // Método para generar código único de reserva

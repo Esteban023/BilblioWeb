@@ -4,15 +4,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
+import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -94,9 +94,13 @@ public class RecursoBibliografico {
     @JsonIgnore
     private Set<Autor> autores = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(mappedBy = "recursoBibliografico")
     @JsonIgnore
     private Prestamo prestamo;
+
+    @OneToMany(mappedBy = "recursoBibliografico", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Reserva> reserva = new ArrayList<>();
 
     public RecursoBibliografico() {
 
@@ -277,5 +281,13 @@ public class RecursoBibliografico {
     public void setPrestamo(Prestamo prestamo) {
         this.prestamo = prestamo;
     }  
+
+    public void setReserva(List<Reserva> reserva) {
+        this.reserva = reserva;
+    }
+
+    public List<Reserva> getReserva() {
+        return reserva;
+    }
         
 }

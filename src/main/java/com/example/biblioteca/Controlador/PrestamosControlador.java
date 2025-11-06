@@ -42,7 +42,7 @@ public class PrestamosControlador {
     @PostMapping("/iniciar")
     public ResponseEntity<ResultadoPrestamo> cargarPrestamo(@RequestBody PrestamoRequest request) {
         Integer usuarioId = request.getIdUsuario();
-        String codigoBarras = request.getCodigo();
+        String codigoBarras = request.getCodigoDeBarras();
 
         if(usuarioId == null || codigoBarras == null) {
             ResultadoPrestamo rPrestamo = new ResultadoPrestamo(false, "Datos incorrectos");
@@ -51,6 +51,29 @@ public class PrestamosControlador {
         ResultadoPrestamo nuevoPrestamo = prestamoServicio.iniciarPrestamo(usuarioId, codigoBarras);
 
         return new ResponseEntity<>(nuevoPrestamo, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/varios_prestamos")
+    public ResponseEntity<ResultadoPrestamo> cargarVariosPrestamos(@RequestBody PrestamoRequest[] requests) {
+        ResultadoPrestamo resultadoFinal = new ResultadoPrestamo(true, "Todos los prestamos se realizaron con exito");
+
+        for (PrestamoRequest request : requests) {
+            Integer usuarioId = request.getIdUsuario();
+            String codigoBarras = request.getCodigoDeBarras();
+
+            if(usuarioId == null || codigoBarras == null) {
+                ResultadoPrestamo rPrestamo = new ResultadoPrestamo(false, "Datos incorrectos en uno de los prestamos");
+                return ResponseEntity.badRequest().body(rPrestamo);
+            }
+            ResultadoPrestamo resultadoPrestamo = prestamoServicio.iniciarPrestamo(usuarioId, codigoBarras);
+            boolean exito = resultadoPrestamo.isExito();
+            if (!exito) {
+                resultadoFinal.setExito(false);
+                resultadoFinal.setMensaje("Algunos prestamos no se pudieron realizar correctamente");
+            }
+        }
+
+        return new ResponseEntity<>(resultadoFinal, HttpStatus.CREATED);
     }
 
     @PutMapping("terminar/{id}")

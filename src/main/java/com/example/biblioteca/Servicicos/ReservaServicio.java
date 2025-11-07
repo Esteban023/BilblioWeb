@@ -23,7 +23,6 @@ import com.example.biblioteca.bibliotecaRepositorio.RecursoRepositorio;
 import com.example.biblioteca.bibliotecaRepositorio.ReservaRepositorio;
 import com.example.biblioteca.bibliotecaRepositorio.UsuarioRepositorio;
 
-import ch.qos.logback.classic.pattern.Util;
 
 @Service
 public class ReservaServicio {
@@ -191,9 +190,5 @@ public class ReservaServicio {
                 new ReservaDTO("Reserva cancelada exitosamente", true)
             );
     }
-
-    
-
-
 
 }

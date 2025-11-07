@@ -12,6 +12,7 @@
     <div class="main-content">
       <div th:replace="~{fragmentos :: profile}"></div>
       <div class="search">
+        <!-- FORMULARIO DE BÚSQUEDA -->
         <div class="nav-content">
           <form class="nav" th:action="@{/buscar}" method="post">
             <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo" th:value="${palabra}">
@@ -19,18 +20,23 @@
             <div class="voice"><img class="img" th:src="@{/img/microfono.svg}" /></div>
           </form>
         </div>
+        
         <div class="nav-result-wrapper">
           <div class="nav-result">
-            <div class="div-wrapper"><div class="text-wrapper"><span th:text="${resultados.size()}"></span>  Resultados</div></div>
+            <div class="div-wrapper"><div class="text-wrapper"><span th:text="${resultados.size()}"></span> Resultados</div></div>
             <div class="div"><p class="p">Mi canasta</p></div>
           </div>
         </div>
-        <form class="result-content" th:action="post">
 
+        <!-- FORMULARIO PARA PRÉSTAMOS -->
+        <form th:action="@{/prestamo/varios}" method="post" id="prestamoForm" class="result-content">
           <div class="result" th:each="resultado, iterStat : ${resultados}">
-              <div class="numero"><input type="checkbox" name="select" th:value="${resultado.codigoDeBarras}"> <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div></div>
+            <div class="numero">
+              <input type="checkbox" name="select" th:value="${resultado.codigoDeBarras}"> 
+              <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div>
+            </div>
             <div class="contenido">
-              <a class="text-wrapper-3" th:text="${resultado.titulo}" th:href="@{/buscar/{titulo}(titulo = ${resultado.titulo})}"></a>
+              <a class="text-wrapper-3" th:text="${resultado.titulo}" th:href="@{'/buscar/' + ${resultado.titulo}}"></a>
               <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
               <div class="icon-text">
                 <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
@@ -39,15 +45,80 @@
               <div class="text-wrapper-6">Ejemplares: 2</div>
             </div>
           </div>
-            <button type="submit" th:formaction="@{/prestamo/varios}">prestar todos</button>
-            <button type="submit" th:formaction="@{/reserva/varios}">reservar todos</button>
+          <button type="submit" class="btn-prestamo">Prestar seleccionados</button>
+        </form>
+
+        <!-- FORMULARIO PARA RESERVAS -->
+        <form th:action="@{/reserva/varios}" method="post" id="reservaForm" class="result-content">
+          <div class="result" th:each="resultado, iterStat : ${resultados}">
+            <div class="numero">
+              <input type="checkbox" name="select" th:value="${resultado.codigoDeBarras}"> 
+              <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div>
+            </div>
+            <div class="contenido">
+              <a class="text-wrapper-3" th:text="${resultado.titulo}" th:href="@{'/buscar/' + ${resultado.titulo}}"></a>
+              <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
+              <div class="icon-text">
+                <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
+                <div class="frame-2"><div class="text-wrapper-5" th:text="${resultado.tipoDePublicacion}"></div></div>
+              </div>
+              <div class="text-wrapper-6">Ejemplares: 2</div>
+            </div>
+          </div>
+          <button type="submit" class="btn-reserva">Reservar seleccionados</button>
         </form>
       </div>
       <footer th:replace="~{fragmentos :: footer}"></footer>
     </div>
-
   </div>
   <div th:replace="~{fragmentos :: side-bar}"></div>
 </div>
+<script>
+  function validarSeleccion(formId) {
+      const form = document.getElementById(formId);
+      const checkboxes = form.querySelectorAll('input[type="checkbox"][name="select"]');
+      let alMenosUnoSeleccionado = false;
+      
+      checkboxes.forEach(checkbox => {
+          if(checkbox.checked) {
+              alMenosUnoSeleccionado = true;
+          }
+      });
+      
+      if(!alMenosUnoSeleccionado) {
+          alert('Por favor seleccione al menos un recurso');
+          return false;
+      }
+      
+      return true;
+  }
+</script>
+<style>
+.result-content {
+  margin-bottom: 20px;
+}
+
+.btn-prestamo, .btn-reserva {
+  padding: 10px 20px;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-prestamo:hover, .btn-reserva:hover {
+  background-color: #0056b3;
+}
+
+.btn-reserva {
+  background-color: #28a745;
+}
+
+.btn-reserva:hover {
+  background-color: #218838;
+}
+</style>
 </body>
 </html>

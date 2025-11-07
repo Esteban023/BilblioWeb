@@ -64,18 +64,43 @@ public class ControladorPrestamo {
     }
     
     @PostMapping("/varios")
-    public String prestarVarios(@RequestParam("select") List<String> select, HttpSession session){
+    public String prestarVarios(@RequestParam(value = "select", required = false) List<String> select, 
+                            HttpSession session, 
+                            RedirectAttributes redirect) {
         
         Usuario user = (Usuario) session.getAttribute("user");
-        if(user == null) return "redirect:/";
-        Integer idUser = user.getId();
-        for (String codigo : select){
-            ControladorReserva.logger.info("hasta aca llego");
-            if(codigo == null) return "redirect:/";
-            ResultadoPrestamo resultado = servicio.iniciarPrestamo(idUser, codigo);
-           if(!resultado.isExito()) return "redirect:/";
-           
+        if(user == null) {
+            return "redirect:/";
         }
+        // Validar selección
+        if(select == null) {
+            redirect.addFlashAttribute("error", "Por favor seleccione al menos un recurso para prestar");
+            return "redirect:/canasta/listar";
+        }
+
+        if (select.isEmpty()) {
+            redirect.addFlashAttribute("error", "Por favor seleccione al menos un recurso para prestar");
+            return "redirect:/canasta/listar";
+            
+        }
+        
+        Integer idUser = user.getId();
+        boolean todosExitosos = true;
+        
+        for (String codigo : select){
+            if(codigo == null || codigo.trim().isEmpty()) continue;
+            
+            ResultadoPrestamo resultado = servicio.iniciarPrestamo(idUser, codigo);
+            if(!resultado.isExito()) {
+                redirect.addFlashAttribute("error", "Error al prestar el recurso " + codigo + ": " + resultado.getMensaje());
+                todosExitosos = false;
+            }
+        }
+        
+        if(todosExitosos) {
+            redirect.addFlashAttribute("success", "Todos los recursos se prestaron exitosamente");
+        }
+        
         return "redirect:/canasta/listar";
     }
 }

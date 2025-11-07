@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 import java.util.List;
 import java.util.Set;
@@ -49,7 +48,7 @@ public class RecursoBibliografico {
     @Column(name = "idioma", nullable = false, length = 50)
     private String idioma;
 
-    @Column(name = "publicacion", nullable = true, length = 50)
+    @Column(name = "publicacion", nullable = true, length = 150)
     private String publicacion;
 
     @Column(name = "tema", nullable = false, length = 100)

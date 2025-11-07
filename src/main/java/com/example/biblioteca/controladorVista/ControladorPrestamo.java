@@ -1,5 +1,6 @@
 package com.example.biblioteca.controladorVista;
 
+import com.example.biblioteca.Controlador.ReservaControlador;
 import com.example.biblioteca.Model.Prestamo;
 import com.example.biblioteca.Model.ResultadoPrestamo;
 import com.example.biblioteca.Model.Usuario;
@@ -18,6 +19,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/prestamo")
@@ -59,5 +62,20 @@ public class ControladorPrestamo {
         model.addAttribute("lista", prestamosPorUsuario);
         return "pruebas";
     }
-
+    
+    @PostMapping("/varios")
+    public String prestarVarios(@RequestParam("select") List<String> select, HttpSession session){
+        
+        Usuario user = (Usuario) session.getAttribute("user");
+        if(user == null) return "redirect:/";
+        Integer idUser = user.getId();
+        for (String codigo : select){
+            ControladorReserva.logger.info("hasta aca llego");
+            if(codigo == null) return "redirect:/";
+            ResultadoPrestamo resultado = servicio.iniciarPrestamo(idUser, codigo);
+           if(!resultado.isExito()) return "redirect:/";
+           
+        }
+        return "redirect:/canasta/listar";
+    }
 }

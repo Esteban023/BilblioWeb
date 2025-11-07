@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" />
+  <link rel="stylesheet" th:href="@{/css/resultado.css}" />
+</head>
+<body>
+<div th:replace="~{fragmentos :: top-bar}"></div>
+<div class="container">
+  <div class="home-page">
+    <div class="main-content">
+      <div th:replace="~{fragmentos :: profile}"></div>
+      <div class="search">
+        <div class="nav-content">
+          <form class="nav" th:action="@{/buscar}" method="post">
+            <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo" th:value="${palabra}">
+            <button class="vector-wrapper" type="submit"><img class="vector" th:src="@{/img/busqueda.svg}" /></button>
+            <div class="voice"><img class="img" th:src="@{/img/microfono.svg}" /></div>
+          </form>
+        </div>
+        <div class="nav-result-wrapper">
+          <div class="nav-result">
+            <div class="div-wrapper"><div class="text-wrapper"><span th:text="${resultados.size()}"></span>  Resultados</div></div>
+            <div class="div"><p class="p">Mi canasta</p></div>
+          </div>
+        </div>
+        <form class="result-content" th:action="post">
+
+          <div class="result" th:each="resultado, iterStat : ${resultados}">
+              <div class="numero"><input type="checkbox" name="select" th:value="${resultado.codigoDeBarras}"> <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div></div>
+            <div class="contenido">
+              <a class="text-wrapper-3" th:text="${resultado.titulo}" th:href="@{/buscar/{titulo}(titulo = ${resultado.titulo})}"></a>
+              <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
+              <div class="icon-text">
+                <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
+                <div class="frame-2"><div class="text-wrapper-5" th:text="${resultado.tipoDePublicacion}"></div></div>
+              </div>
+              <div class="text-wrapper-6">Ejemplares: 2</div>
+            </div>
+          </div>
+            <button type="submit" th:formaction="@{/prestamo/varios}">prestar todos</button>
+            <button type="submit" th:formaction="@{/reserva/varios}">reservar todos</button>
+        </form>
+      </div>
+      <footer th:replace="~{fragmentos :: footer}"></footer>
+    </div>
+
+  </div>
+  <div th:replace="~{fragmentos :: side-bar}"></div>
+</div>
+</body>
+</html>

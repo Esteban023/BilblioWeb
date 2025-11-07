@@ -327,9 +327,24 @@ a {
     line-height: normal;
 }
 .frame-4 .canasta {
-    width: 212px;
-    height: 25px;
+/*    width: 212px;
+    height: 25px;*/ 
+  display:none;
+  gap: 3px;
+  border: none;
+  background-color: transparent;
+  align-items: center;
+  
 }
+.canasta:hover{
+    cursor: pointer;
+    transform: scale(1.02);
+
+}
+.canasta-text{
+    text-decoration: underline;
+}
+
 .frame-4 .table {
     flex-direction: column;
     align-items: flex-start;
@@ -452,6 +467,19 @@ a {
     height: 34px;
     background-color: #e5e5e5;
 }
+.table .res-icon{
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #c20e1a;
+    color: #fff;
+    text-decoration:none;
+    
+}
+.table .res-icon:hover{
+  cursor: pointer;
+  background-color: #a10c15;
+}
+
 .side-bar {
     display: flex;
     flex-direction: column;

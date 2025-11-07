@@ -18,7 +18,7 @@ public interface PrestamoRepositorio extends JpaRepository<Prestamo, Integer> {
     @Query("UPDATE Prestamo p SET p.estado = false WHERE p.id = ?1")
     Optional<Prestamo> finalizarPrestamo(Integer prestamoId);
 
-
+    
     List<Prestamo> findByUsuarioId(Integer usuarioId);
 
     @Query("""

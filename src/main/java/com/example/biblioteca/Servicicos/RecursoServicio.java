@@ -10,6 +10,7 @@ import com.example.biblioteca.Model.RecursoBibliografico;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.biblioteca.bibliotecaRepositorio.RecursoRepositorio;
+import java.util.ArrayList;
 
 @Service
 public class RecursoServicio {
@@ -74,6 +75,16 @@ public class RecursoServicio {
 
     public Set<RecursoBibliografico> buscarPorTema(String tema) {
         return rbRepositorio.encontrarPorTema(tema);
+    }
+    
+    public List<RecursoBibliografico> buscarVarios(List<RecursoBibliografico> listaDesac){
+        List<RecursoBibliografico> lista = new ArrayList<>();
+        for (RecursoBibliografico recurso : listaDesac){
+            RecursoBibliografico item = rbRepositorio.findById(recurso.getCodigoDeBarras()).orElseThrow( 
+                    () -> RuntimeException("Ejemplar no encontrado con id: ", ""));
+            lista.add(item);
+        }
+        return lista;
     }
 
     private RuntimeException RuntimeException(String string, Object primaryKey) {

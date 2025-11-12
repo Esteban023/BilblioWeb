@@ -12,6 +12,7 @@
         <div class="main-content">
           <div th:replace="~{fragmentos :: profile}"></div>
           <div class="search">
+              <div th:replace="~{fragmentos :: error-alert}"></div>
             <div class="search-content">
               <div class="text-wrapper">Búsqueda Principal</div>
               <form class="nav" th:action="@{/buscar}" method="post">

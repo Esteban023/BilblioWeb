@@ -129,6 +129,7 @@ a {
     height: 75%;
     align-self: stretch;
     width: 100%;
+    position: relative;
 
 }
 .nav-content {
@@ -386,6 +387,28 @@ a {
     letter-spacing: 0;
     line-height: normal;
 }
+.servicio {
+  width: 200px;
+  padding: 6px;
+  border: 1px solid #9D989A; 
+  border-radius: 5px;
+  font-size: 16px;
+  color: #cfcfecd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+ /*Al pasar el mouse */
+.servicio:hover {
+  background-color: #eef;
+}
+
+ /*Opciones dentro del dropdown */
+.servicio option {
+  padding: 8px;
+  background-color: #fff;
+  color: #333;
+}
 
 .side-bar {
     display: flex;
@@ -577,4 +600,18 @@ a {
 .top-bar {
     background-color: #c20e1a;
     height:3%;
+}
+
+.error-message {
+            color: #c20e1a;
+            width: 80%;
+            background-color: #ffdddd;
+            border: 1px solid #eccccc;
+            padding: 12px;
+            margin-top: 30px;
+            font-size: 20px;
+            left: 10%;
+            border-radius: 8px;
+            position: absolute;
+            top: -6.2rem;
 }

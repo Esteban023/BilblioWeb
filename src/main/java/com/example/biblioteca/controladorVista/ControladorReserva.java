@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,7 +41,7 @@ public class ControladorReserva {
         Usuario user = (Usuario) session.getAttribute("user");
         ReservaDTO crearReserva = servicio.crearReserva(user.getId(), id);
         if(!crearReserva.isExito()){
-            logger.info(crearReserva.getMensaje());
+            redirect.addFlashAttribute("error", crearReserva.getMensaje());
             return "redirect:/";
         }
         String tituloModal = crearReserva.getMensaje();
@@ -58,8 +59,8 @@ public class ControladorReserva {
         return "redirect:/buscar/" + tituloRecurso;
     }
 
-    @PostMapping("/varios")
-    public String reservarVarias(@RequestParam("select") List<String> select,
+    @GetMapping("/varios")
+    public String reservarVarias(@ModelAttribute("select") List<String> select,
                                  HttpSession session,RedirectAttributes redirect) {
         
                                     
@@ -67,15 +68,7 @@ public class ControladorReserva {
         if(user == null) {
             return "redirect:/";
         }
-        // Validar selección
-        if(select == null) {
-            redirect.addFlashAttribute("error", "Por favor seleccione al menos un recurso para prestar");
-            return "redirect:/canasta/listar";
-        }
-        if (select.isEmpty()) {
-            redirect.addFlashAttribute("error", "Por favor seleccione al menos un recurso para prestar");
-            return "redirect:/canasta/listar";
-        }
+
 
         Integer idUser = user.getId();
         boolean todosExitosos = true;

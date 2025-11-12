@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/canasta")
@@ -45,11 +46,18 @@ public class ControladorCanasta {
         List<RecursoBibliografico> lista = (ArrayList)session.getAttribute("canasta");
         if(lista == null) lista = new ArrayList<>();
         else lista = servicio.buscarVarios(lista);
-        
-        
-        
         model.addAttribute("resultados", lista);
         return "canasta";
         
+    }
+    
+    @PostMapping("/servicio")
+    public String servicio(@RequestParam(value = "select", required = false) List<String> select, @RequestParam String servicio, RedirectAttributes flash){
+         if(select == null || select.isEmpty()) {
+            flash.addFlashAttribute("error", "Por favor seleccione al menos un recurso para prestar");
+            return "redirect:/canasta/listar";
+        }
+         flash.addFlashAttribute("select", select);
+         return "redirect:/"+servicio+"/varios";
     }
 }

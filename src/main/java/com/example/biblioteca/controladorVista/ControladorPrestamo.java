@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,6 +36,10 @@ public class ControladorPrestamo {
         String tituloRecurso = "";
         Usuario user = (Usuario) session.getAttribute("user");
         ResultadoPrestamo resultadoPrestamo = servicio.iniciarPrestamo(user.getId(), id);
+        if(!resultadoPrestamo.isExito()){
+            redirect.addFlashAttribute("error", resultadoPrestamo.getMensaje());
+            return "redirect:/";
+        }
         String tituloModal = resultadoPrestamo.getMensaje();
         Prestamo prestamo = resultadoPrestamo.getPrestamo();
         String mensaje = String.format(
@@ -63,25 +68,14 @@ public class ControladorPrestamo {
         return "pruebas";
     }
     
-    @PostMapping("/varios")
-    public String prestarVarios(@RequestParam(value = "select", required = false) List<String> select, 
+    @GetMapping("/varios")
+    public String prestarVarios(@ModelAttribute("select") List<String> select, 
                             HttpSession session, 
                             RedirectAttributes redirect) {
         
         Usuario user = (Usuario) session.getAttribute("user");
         if(user == null) {
             return "redirect:/";
-        }
-        // Validar selección
-        if(select == null) {
-            redirect.addFlashAttribute("error", "Por favor seleccione al menos un recurso para prestar");
-            return "redirect:/canasta/listar";
-        }
-
-        if (select.isEmpty()) {
-            redirect.addFlashAttribute("error", "Por favor seleccione al menos un recurso para prestar");
-            return "redirect:/canasta/listar";
-            
         }
         
         Integer idUser = user.getId();

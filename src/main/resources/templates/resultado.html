@@ -13,6 +13,7 @@
     <div class="main-content">
       <div th:replace="~{fragmentos :: profile}"></div>
       <div class="search">
+          <div th:replace="~{fragmentos :: error-alert}"></div>
         <div class="nav-content">
           <form class="nav" th:action="@{/buscar}" method="post">
             <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo" th:value="${palabra}">

@@ -108,6 +108,8 @@ a {
     align-self: stretch;
     width: 100%;
     overflow-y: scroll;
+    position: relative;
+
 }
 .back {
     display: inline-flex;
@@ -311,7 +313,7 @@ a {
     padding: 8px 12px;
     align-self: stretch;
     width: 100%;
-    flex: 0 0 auto;
+    height: 42px;
     background-color: #e5e5e5;
     border-radius: 5px;
 }
@@ -467,7 +469,7 @@ a {
 }
 .table .res-icon{
     padding: 10px 20px;
-    border-radius: 10px;
+    border-radius: 6px;
     background-color: #c20e1a;
     color: #fff;
     text-decoration:none;
@@ -776,4 +778,17 @@ a {
 .modal-overlay .modal-button:active{
     background-color: #a10c15;
     transform: scale(0.99);
+}
+.error-message {
+            color: #c20e1a;
+            width: 80%;
+            background-color: #ffdddd;
+            border: 1px solid #eccccc;
+            padding: 12px;
+            margin-top: 30px;
+            font-size: 20px;
+            left: 10%;
+            border-radius: 8px;
+            position: absolute;
+            top: -6.2rem;
 }

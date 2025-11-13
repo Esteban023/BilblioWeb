@@ -1,9 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
+    <title>Búsqueda - Catálogo Universitario</title>
     <link rel="stylesheet" th:href="@{/css/busqueda.css}" />
+    <style>
+      /* Estilos para elementos accesibles */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* Mejorar contraste y focus */
+      .nav input:focus {
+        outline: 2px solid #c20e1a;
+        outline-offset: 2px;
+      }
+
+      .voice:focus {
+        outline: 2px solid #4a90e2;
+        outline-offset: 2px;
+      }
+
+      /* Mejorar contraste para texto */
+      .text-wrapper-4 {
+        color: #000000;
+        font-weight: 500;
+      }
+
+      /* Indicadores visuales para estado activo */
+      .item:focus {
+        background-color: #e6e6e6;
+        box-shadow: 0 0 0 2px #c20e1a;
+      }
+
+      /* Mejoras de contraste adicionales */
+      .text-wrapper {
+        color: #000000;
+      }
+
+      .text-wrapper-2 {
+        color: #000000;
+      }
+
+      .nav input::placeholder {
+        color: #333333;
+        opacity: 0.6;
+      }
+    </style>
   </head>
   <body>
     <div th:replace="~{fragmentos :: top-bar}"></div>
@@ -13,15 +65,31 @@
           <div th:replace="~{fragmentos :: profile}"></div>
           <div class="search">
             <div class="search-content">
-              <div class="text-wrapper">Búsqueda Principal</div>
-              <form class="nav" th:action="@{/buscar}" method="post">
-                <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo">
-                <button class="vector-wrapper" type="submit"><img class="vector" th:src="@{/img/busqueda.svg}" /></button>
-                <div class="voice"><img class="img" th:src="@{/img/microfono.svg}" /></div>
+              <h1 class="text-wrapper">Búsqueda Principal</h1>
+              <form class="nav" th:action="@{/buscar}" method="post" role="search" aria-label="Formulario de búsqueda principal">
+                <label for="busqueda-principal" class="sr-only">Buscar en el catálogo</label>
+                <input 
+                  type="text" 
+                  id="busqueda-principal"
+                  name="palabraClave" 
+                  placeholder="Buscar en todos los recursos del catalogo"
+                  aria-describedby="instrucciones-busqueda"
+                  aria-required="true">
+                <span id="instrucciones-busqueda" class="sr-only">
+                  Presione Enter para realizar la búsqueda o use el botón de búsqueda
+                </span>
+                
+                <button class="vector-wrapper" type="submit" aria-label="Realizar búsqueda">
+                  <img class="vector" th:src="@{/img/busqueda.svg}" alt="Icono de lupa para búsqueda" />
+                </button>
+                
+                <button type="button" class="voice" aria-label="Activar búsqueda por voz" title="Búsqueda por voz">
+                  <img class="img" th:src="@{/img/microfono.svg}" alt="Icono de micrófono para búsqueda por voz" />
+                </button>
               </form>
               <div class="adv-nav-component">
                 <div class="adv-nav">
-                  <div class="switch-btn">
+                  <div class="switch-btn" role="switch" aria-checked="false" aria-label="Activar búsqueda avanzada" tabindex="0">
                     <div class="ellipse"></div>
                     <div class="div">No</div>
                   </div>
@@ -35,5 +103,45 @@
       </div>
       <div th:replace="~{fragmentos :: side-bar}"></div>
     </div>
+
+    <script>
+      // Mejorar la accesibilidad del interruptor de búsqueda avanzada
+      document.addEventListener('DOMContentLoaded', function() {
+        const switchBtn = document.querySelector('.switch-btn');
+        const advancedSearchText = document.querySelector('.text-wrapper-2');
+        
+        if (switchBtn) {
+          switchBtn.addEventListener('click', function() {
+            const isChecked = this.getAttribute('aria-checked') === 'true';
+            this.setAttribute('aria-checked', !isChecked);
+            
+            // Actualizar texto visual
+            const noText = this.querySelector('.div');
+            if (noText) {
+              noText.textContent = isChecked ? 'No' : 'Sí';
+            }
+          });
+          
+          switchBtn.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.key === 'Enter') {
+              e.preventDefault();
+              this.click();
+            }
+          });
+        }
+
+        // Mejorar accesibilidad del botón de voz
+        const voiceBtn = document.querySelector('.voice');
+        if (voiceBtn) {
+          voiceBtn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              // Aquí iría la lógica para activar búsqueda por voz
+              console.log('Búsqueda por voz activada');
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>

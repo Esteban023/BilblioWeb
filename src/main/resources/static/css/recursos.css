@@ -24,8 +24,6 @@ a {
 .home-page {
     background-color: #ffffff;
     width: 82%;
-
-
 }
 
 .home-page .footer {
@@ -561,9 +559,7 @@ a {
 }
 
 .mipanel-section .vector-2 {
-
     width: 100%;
-
 }
 
 .mipanel-section .item-section {
@@ -579,6 +575,7 @@ a {
 }
 
 .mipanel-section .item {
+
     align-items: center;
     gap: 16.76px;
     padding: 8.82px 0px 8.82px 8.82px;
@@ -589,6 +586,7 @@ a {
     flex: 0 0 auto;
 }
 .mipanel-section .item:hover{
+    
     background-color: #f2f2f2;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

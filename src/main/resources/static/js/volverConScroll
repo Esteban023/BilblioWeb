@@ -1,0 +1,28 @@
+
+// Versión imperativa
+window.onload = function() {
+    // Restaurar posición del scroll
+    var savedScroll = sessionStorage.getItem('resultsScrollPosition');
+    if (savedScroll !== null) {
+        setTimeout(function() {
+            window.scrollTo(0, parseInt(savedScroll));
+            sessionStorage.removeItem('resultsScrollPosition');
+        }, 0);
+    }
+
+    // Guardar posición al hacer click en resultados
+    var resultLinks = document.querySelectorAll('a.text-wrapper-3');
+    for (var i = 0; i < resultLinks.length; i++) {
+        resultLinks[i].onclick = function() {
+            sessionStorage.setItem('resultsScrollPosition', window.pageYOffset.toString());
+        };
+    }
+    
+    // También guardar posición al enviar formularios
+    var forms = document.querySelectorAll('form');
+    for (var j = 0; j < forms.length; j++) {
+        forms[j].onsubmit = function() {
+            sessionStorage.setItem('resultsScrollPosition', window.pageYOffset.toString());
+        };
+    }
+};

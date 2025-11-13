@@ -1,81 +1,166 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
+    <style>
+      /* Estilos para elementos accesibles */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      
+      /* Mejoras de focus para accesibilidad */
+      .item:focus,
+      .login:focus,
+      .modal-button:focus {
+        outline: 2px solid #c20e1a;
+        outline-offset: 2px;
+      }
+      
+      .back:focus {
+        outline: 2px solid #4a90e2;
+        outline-offset: 2px;
+      }
+
+      /* Estilos para los enlaces del footer */
+      .footer a {
+        color: white;
+        text-decoration: none;
+      }
+      
+      .footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
   </head>
   <body>
-    <div class="top-bar" th:fragment="top-bar"></div>
+    <!-- Top Bar -->
+    <div class="top-bar" th:fragment="top-bar" role="banner" aria-label="Barra superior"></div>
 
+    <!-- Profile Section -->
     <div class="profile" th:fragment="profile">
-      <a class="back" href="javascript:history.back()">
-        <div class="vector-wrapper"><img class="vector" th:src="@{/img/back.svg}" /></div>
+      <a class="back" href="#" aria-label="Volver a la página anterior">
+        <div class="vector-wrapper">
+          <img class="vector" th:src="@{/img/back.svg}" alt="Icono de flecha hacia atrás" />
+        </div>
         <div class="text-wrapper">Resultados</div>
       </a>
-      <div class="frame" th:if="${session.user}"><img class="icon" th:src="@{/img/icon.svg}"/></div>
-      <a class="login" th:if="${session.user == null}" th:href="@{/login}">Login</a>
+      
+      <div class="frame" th:if="${session.user}" role="img" aria-label="Perfil del usuario">
+        <img class="icon" th:src="@{/img/icon.svg}" alt=""/>
+      </div>
+      
+      <a class="login" th:if="${session.user == null}" th:href="@{/login}" aria-label="Iniciar sesión en el sistema">
+        Login
+      </a>
     </div>
 
-    <footer class="footer" th:fragment="footer">
+    <!-- Footer -->
+    <footer class="footer" th:fragment="footer" role="contentinfo" aria-label="Pie de página">
       <div class="content">
-        <p class="ref">Contacto | Enlaces | Ayuda<br />© 2025</p>
+        <p class="ref">
+          <a href="#" aria-label="Información de contacto">Contacto</a> | 
+          <a href="#" aria-label="Enlaces relacionados">Enlaces</a> | 
+          <a href="#" aria-label="Obtener ayuda">Ayuda</a><br />
+          © 2025 Universidad del Valle
+        </p>
       </div>
     </footer>
 
-    <div class="side-bar" th:fragment="side-bar">
-      <div class="logo-section"><img class="logo-UV" th:src="@{/img/univalle-logo-2.png}" /></div>
-      <div class="separador" ></div>
+    <!-- Side Bar -->
+    <nav class="side-bar" th:fragment="side-bar" role="navigation" aria-label="Menú principal">
+      <div class="logo-section">
+        <img class="logo-UV" th:src="@{/img/univalle-logo-2.png}" alt="Logo de la Universidad del Valle" />
+      </div>
+      
+      <div class="separador" role="separator" aria-hidden="true"></div>
+      
       <div class="mipanel-section">
         <div class="div-2">
-          <div class="text-wrapper-3">Mi panel</div>
-          <div class="arrow"><img class="vector-2" th:src="@{/img/arrow.svg}" /></div>
+          <h2 class="text-wrapper-3">Mi panel</h2>
+          <div class="arrow">
+            <img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" />
+          </div>
         </div>
-        <div class="item-section">
-          <a class="item" th:href="@{/}">
-            <div class="new-search"><img class="vector-3" th:src="@{/img/busqueda-black.svg}"/></div>
-
+        
+        <div class="item-section" role="menu" aria-label="Opciones de mi panel">
+          <a class="item" th:href="@{/}" role="menuitem" aria-label="Realizar nueva búsqueda">
+            <div class="new-search">
+              <img class="vector-3" th:src="@{/img/busqueda-black.svg}" alt="" aria-hidden="true"/>
+            </div>
             <div class="text-wrapper-4">Nueva Búsqueda</div>
           </a>
-          <a class="item" th:href="@{/canasta/listar}">
-            <div class="img-wrapper"><img class="vector-4" th:src="@{/img/canasta.jpeg}" /></div>
+          
+          <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos">
+            <div class="img-wrapper">
+              <img class="vector-4" th:src="@{/img/canasta.jpeg}" alt="Icono de canasta" />
+            </div>
             <div class="text-wrapper-4">Mi Canasta</div>
           </a>
-          <a class="item" th:href="@{/prestamo/listar}">
-            <div class="vector-wrapper-2"><img class="vector-5" th:src="@{/img/prestamo.jpeg}" /></div>
+          
+          <a class="item" th:href="@{/prestamo/listar}" role="menuitem" aria-label="Consultar mis préstamos activos">
+            <div class="vector-wrapper-2">
+              <img class="vector-5" th:src="@{/img/prestamo.jpeg}" alt="Icono de préstamo" />
+            </div>
             <div class="text-wrapper-4">Mis Préstamos</div>
           </a>
-          <a class="item" href="#">
-            <div class="vector-wrapper-2"><img class="vector-6" th:src="@{/img/reserva.jpeg}" /></div>
+          
+          <a class="item" href="#" role="menuitem" aria-label="Ver mis reservas pendientes">
+            <div class="vector-wrapper-2">
+              <img class="vector-6" th:src="@{/img/reserva.jpeg}" alt="Icono de reserva" />
+            </div>
             <div class="text-wrapper-4">Mis Reservas</div>
           </a>
         </div>
       </div>
+      
       <div class="tools-section">
-        <div class="div-2"><div class="text-wrapper-5">Herramientas de Búsqueda</div></div>
+        <div class="div-2">
+          <h2 class="text-wrapper-5">Herramientas de Búsqueda</h2>
+        </div>
       </div>
-      <a class="login" style="margin-bottom: 10px;" th:if="${session.user}" th:href="@{/logout}">Cerrar session</a>
-    </div>
+      
+      <a class="login" style="margin-bottom: 10px;" th:if="${session.user}" th:href="@{/logout}" aria-label="Cerrar sesión del sistema">
+        Cerrar sesión
+      </a>
+    </nav>
+
+    <!-- Modal Fragment -->
     <th:block th:fragment="modal-resultado">
-      <div class="modal-overlay" th:if="${mensajeModal}">
+      <div class="modal-overlay" th:if="${mensajeModal}" role="dialog" aria-labelledby="modal-title" aria-modal="true">
         <div class="modal-box">
-          <div class="modal-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#FFFFFF"><path d="M382-232.35 146.35-468l64.89-64.89L382-362.13l366.76-366.76L813.65-664 382-232.35Z"/></svg>
+          <div class="modal-icon" role="img" aria-label="Operación exitosa">
+            <svg xmlns="http://www.w3.org/2000/svg" height="50px" viewBox="0 -960 960 960" width="50px" fill="#FFFFFF" aria-hidden="true">
+              <path d="M382-232.35 146.35-468l64.89-64.89L382-362.13l366.76-366.76L813.65-664 382-232.35Z"/>
+            </svg>
           </div>
+          
           <div class="text-contenedor">
-            <h2 class="modal-title" th:text="${tituloModal}"></h2>
+            <h2 class="modal-title" id="modal-title" th:text="${tituloModal}"></h2>
             <p class="modal-message" th:text="${mensajeModal}"></p>
-            <div class="time-contenedor" th:if="${mensajeTime}">
-              <img th:src="@{/img/time.svg}" class="time-img">
+            
+            <div class="time-contenedor" th:if="${mensajeTime}" role="status">
+              <img th:src="@{/img/time.svg}" class="time-img" alt="Icono de tiempo" aria-hidden="true">
               <p class="time-text" th:text="${mensajeTime}"></p>
             </div>
           </div>
 
-          <button class="modal-button" onclick="document.querySelector('.modal-overlay').style.display = 'none';">Cerrar</button>
+          <button class="modal-button" 
+                  onclick="document.querySelector('.modal-overlay').style.display = 'none';"
+                  aria-label="Cerrar ventana de mensaje">
+            Cerrar
+          </button>
         </div>
       </div>
     </th:block>
   </body>
-
-
 
 </html>

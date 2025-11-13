@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <link rel="stylesheet" th:href="@{/css/resultado.css}" />
 </head>
+
 <body>
 <div th:replace="~{fragmentos :: top-bar}"></div>
 <div class="container">
@@ -48,5 +49,34 @@
   </div>
   <div th:replace="~{fragmentos :: side-bar}"></div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      // 1. Restaurar posición al cargar
+      const savedScroll = sessionStorage.getItem('resultsScrollPosition');
+      if (savedScroll !== null) {
+          setTimeout(function() {
+              window.scrollTo(0, parseInt(savedScroll));
+              sessionStorage.removeItem('resultsScrollPosition');
+          }, 100);
+      }
+
+      // 2. Manejar el botón de volver con event delegation
+      document.body.addEventListener('click', function(e) {
+          if (e.target.closest('a.back')) {
+              e.preventDefault();
+              sessionStorage.setItem('resultsScrollPosition', window.pageYOffset.toString());
+              window.history.back();
+          }
+      });
+
+      // 3. Manejar clicks en recursos
+      const resultLinks = document.querySelectorAll('a.text-wrapper-3');
+      resultLinks.forEach(function(link) {
+          link.addEventListener('click', function() {
+              sessionStorage.setItem('resultsScrollPosition', window.pageYOffset.toString());
+          });
+      });
+  });
+</script>
 </body>
 </html>

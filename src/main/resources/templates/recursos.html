@@ -34,9 +34,7 @@
             </div>
             <div class="frame-3">
               <div class="text-wrapper-3">Materia(s):</div>
-              <p class="text-wrapper-5" th:text="${lista[0].tema}">
-
-              </p>
+              <p class="text-wrapper-5" th:text="${lista[0].tema}"></p>
             </div>
           </div>
         </div>
@@ -88,31 +86,4 @@
 </div>
   <div th:replace="~{fragmentos :: modal-resultado}"></div>
 </body>
-    <script>
-      function soloUno(checkbox) {
-        const checkboxes = document.getElementsByName('select');
-        checkboxes.forEach((item) => {
-          if (item !== checkbox) item.checked = false;
-        });
-      }
-          // Función que verifica si al menos un checkbox está marcado
-    function verificarCheckboxes() {
-      const checkboxes = document.getElementsByName('select');
-      const boton = document.getElementById('btn-canasta');
-      let algunoSeleccionado = false;
-
-      checkboxes.forEach(cb => {
-        if (cb.checked) {
-          algunoSeleccionado = true;
-        }
-      });
-
-      boton.style.display = algunoSeleccionado ? 'flex' : 'none';
-    }
-
-    // Asignar el evento onchange a todos los checkboxes
-    document.getElementsByName('select').forEach(cb => {
-      cb.addEventListener('change', verificarCheckboxes);
-    });
-    </script>
 </html>

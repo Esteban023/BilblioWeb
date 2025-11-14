@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,12 +53,34 @@ public class ControladorCanasta {
     }
     
     @PostMapping("/servicio")
-    public String servicio(@RequestParam(value = "select", required = false) List<String> select, @RequestParam String servicio, RedirectAttributes flash){
-         if(select == null || select.isEmpty()) {
-            flash.addFlashAttribute("error", "Por favor seleccione al menos un recurso para prestar");
+    public String servicio(
+        @RequestParam(value = "select", required = false) List<String> select, 
+        @RequestParam(value = "servicio", required = false, defaultValue = "default") String servicio, 
+        RedirectAttributes flash) {
+        
+        if (select == null || select.isEmpty()) {
+            flash.addFlashAttribute("error", "Por favor seleccione al menos un recurso.");
             return "redirect:/canasta/listar";
         }
-         flash.addFlashAttribute("select", select);
-         return "redirect:/"+servicio+"/varios";
+        
+        // Validate servicio parameter
+        if (servicio == null || servicio.trim().isEmpty() || "default".equals(servicio)) {
+            flash.addFlashAttribute("error", "El tipo de servicio es requerido");
+            return "redirect:/canasta/listar";
+        }
+        
+        flash.addFlashAttribute("select", select);
+        return "redirect:/" + servicio + "/varios";
     }
+
+    @GetMapping("/eliminar/{pos}")
+    public String eliminar(@PathVariable String pos, HttpSession session) {
+        int i = Integer.parseInt(pos);
+        i--;
+        ArrayList<RecursoBibliografico> canasta= (ArrayList) session.getAttribute("canasta");
+        canasta.remove(i);
+        session.setAttribute("canasta", canasta);
+        return "redirect:/canasta/listar";
+    }
+    
 }

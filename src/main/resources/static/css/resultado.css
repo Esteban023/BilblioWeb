@@ -74,7 +74,7 @@ a {
     justify-content: flex-end;
     gap: 10px;
     padding: 0px 30px;
-
+    position: relative;
     align-self: stretch;
     width: 100%;
 }
@@ -129,7 +129,6 @@ a {
     height: 75%;
     align-self: stretch;
     width: 100%;
-    position: relative;
 
 }
 .nav-content {
@@ -311,8 +310,22 @@ a {
     gap: 10px;
     flex: 1;
     flex-grow: 1;
+    position: relative;
 }
-
+.contenido .delete{
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #c20e1a;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .result .text-wrapper-3 {
     align-self: stretch;
     margin-top: -1.00px;
@@ -393,7 +406,7 @@ a {
   border: 1px solid #9D989A; 
   border-radius: 5px;
   font-size: 16px;
-  color: #cfcfecd;
+  color: #cfcfec;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -604,14 +617,12 @@ a {
 
 .error-message {
             color: #c20e1a;
-            width: 80%;
+            width: 60%;
             background-color: #ffdddd;
             border: 1px solid #eccccc;
             padding: 12px;
-            margin-top: 30px;
             font-size: 20px;
-            left: 10%;
+            left: 20%;
             border-radius: 8px;
             position: absolute;
-            top: -6.2rem;
 }

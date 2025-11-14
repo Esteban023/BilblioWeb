@@ -6,6 +6,8 @@ import com.example.biblioteca.Model.Reserva;
 import com.example.biblioteca.Model.ResultadoPrestamo;
 import com.example.biblioteca.Model.Usuario;
 import com.example.biblioteca.Servicicos.ReservaServicio;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -36,14 +38,19 @@ public class ControladorReserva {
     public static final Logger logger = LoggerFactory.getLogger(ControladorReserva.class);
     
     @GetMapping("/{id}")
-    public String crearReserva(@PathVariable String id, HttpSession session, RedirectAttributes redirect){
+    public String crearReserva(@PathVariable String id, HttpSession session, RedirectAttributes redirect, HttpServletRequest request){
         String tituloRecurso = "";
         Usuario user = (Usuario) session.getAttribute("user");
         ReservaDTO crearReserva = servicio.crearReserva(user.getId(), id);
+        
         if(!crearReserva.isExito()){
             redirect.addFlashAttribute("error", crearReserva.getMensaje());
-            return "redirect:/";
+            // Obtener la página anterior del header Referer
+            String referer = request.getHeader("Referer");
+            
+            return "redirect:" + (referer != null ? referer : "/");
         }
+        
         String tituloModal = crearReserva.getMensaje();
         Reserva reserva = crearReserva.getReserva();
         String mensaje = String.format(

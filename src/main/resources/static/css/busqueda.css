@@ -90,6 +90,7 @@ a {
     padding: 0px 30px;
     align-self: stretch;
     width: 100%;
+    position: relative;
 }
 
 .home-page .frame {
@@ -140,11 +141,8 @@ a {
     height: 75%;
     align-self: stretch;
     width: 100%;
-<<<<<<< HEAD
-=======
     position: relative;
 
->>>>>>> ca1e33df0c5d4fd883352fd7ca8afabccc02a557
 }
 
 .home-page .search-content {
@@ -501,14 +499,12 @@ a {
 }
 .error-message {
             color: #c20e1a;
-            width: 80%;
+            width: 60%;
             background-color: #ffdddd;
             border: 1px solid #eccccc;
             padding: 12px;
-            margin-top: 30px;
             font-size: 20px;
-            left: 10%;
+            left: 20%;
             border-radius: 8px;
             position: absolute;
-            top: -6.2rem;
 }       

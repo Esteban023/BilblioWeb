@@ -47,7 +47,15 @@
 
     <!-- Profile Section -->
     <div class="profile" th:fragment="profile">
-      <a class="back" href="#" aria-label="Volver a la página anterior">
+      <div class="error-message"  th:if="${error}">
+        <div th:text="${error}"></div>
+        <button onclick="document.querySelector('.error-message').style.display = 'none';"
+                  aria-label="Cerrar alerta de error" style="border: none; background-color: transparent; cursor: pointer;">
+
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#c20e1a"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+        </button>
+      </div>
+      <a class="back" href="javascript:history.back()" aria-label="Volver a la página anterior">
         <div class="vector-wrapper">
           <img class="vector" th:src="@{/img/back.svg}" alt="Icono de flecha hacia atrás" />
         </div>
@@ -161,8 +169,7 @@
         </div>
       </div>
     </th:block>
-  <div class="error-message"  th:fragment="error-alert" th:if="${error}" th:text="${error}">
-
+  
   </div>
   </body>
 

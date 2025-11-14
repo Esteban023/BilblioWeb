@@ -76,7 +76,7 @@ a {
     justify-content: space-between;
     gap: 10px;
     padding: 0px 30px;
-
+    position: relative;
     align-self: stretch;
     width: 100%;
 }
@@ -108,7 +108,7 @@ a {
     align-self: stretch;
     width: 100%;
     overflow-y: scroll;
-    position: relative;
+    
 
 }
 .back {
@@ -781,14 +781,14 @@ a {
 }
 .error-message {
             color: #c20e1a;
-            width: 80%;
+            width: 60%;
             background-color: #ffdddd;
             border: 1px solid #eccccc;
             padding: 12px;
-            margin-top: 30px;
             font-size: 20px;
-            left: 10%;
+            left: 20%;
             border-radius: 8px;
             position: absolute;
-            top: -6.2rem;
+            display: flex;
+            justify-content: space-between;
 }

@@ -82,7 +82,7 @@ public class ControladorPrestamo {
         boolean todosExitosos = true;
         
         for (String codigo : select){
-            if(codigo == null || codigo.trim().isEmpty()) continue;
+            if(codigo == null || codigo.trim().isEmpty()) {continue;}
             
             ResultadoPrestamo resultado = servicio.iniciarPrestamo(idUser, codigo);
             if(!resultado.isExito()) {

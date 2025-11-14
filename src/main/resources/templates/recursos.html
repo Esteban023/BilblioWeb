@@ -13,7 +13,7 @@
       <div th:replace="~{fragmentos :: profile}"></div>
 
       <div class="search">
-          <div th:replace="~{fragmentos :: error-alert}"></div>
+          
         <div class="detalles-recurso-wrapper">
           <div class="detalles-recurso">
             <div class="tipo">
@@ -79,7 +79,6 @@
           </div>
         </form>
       </div>
-
       <footer th:replace="~{fragmentos :: footer}"></footer>
     </div>
   </div>
@@ -87,4 +86,31 @@
 </div>
   <div th:replace="~{fragmentos :: modal-resultado}"></div>
 </body>
+<script>
+    function soloUno(checkbox) {
+      const checkboxes = document.getElementsByName('select');
+      checkboxes.forEach((item) => {
+        if (item !== checkbox) item.checked = false;
+      });
+    }
+    // Función que verifica si al menos un checkbox está marcado
+    function verificarCheckboxes() {
+      const checkboxes = document.getElementsByName('select');
+      const boton = document.getElementById('btn-canasta');
+      let algunoSeleccionado = false;
+
+      checkboxes.forEach(cb => {
+        if (cb.checked) {
+          algunoSeleccionado = true;
+        }
+      });
+
+      boton.style.display = algunoSeleccionado ? 'flex' : 'none';
+    }
+
+    // Asignar el evento onchange a todos los checkboxes
+    document.getElementsByName('select').forEach(cb => {
+      cb.addEventListener('change', verificarCheckboxes);
+    });
+</script>
 </html>

@@ -4,12 +4,15 @@ package com.example.biblioteca.bibliotecaRepositorio;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.biblioteca.Model.RecursoBibliografico;
-import com.example.biblioteca.Model.Reserva;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import com.example.biblioteca.Model.RecursoBibliografico;
+import com.example.biblioteca.Model.Reserva;
+
+@Repository
 public interface ReservaRepositorio extends JpaRepository<Reserva, String> {
     @Query(value = "SELECT COALESCE(MAX(r.posicion_cola), 0) FROM reserva r " + 
        "JOIN recurso_bibliografico rb ON r.codigo_de_barras = rb.codigo_de_barras " +

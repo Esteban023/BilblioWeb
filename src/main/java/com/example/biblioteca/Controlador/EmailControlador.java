@@ -27,7 +27,7 @@ public class EmailControlador {
     }
 
     // Sending email with attachment
-    @PostMapping("/eviarCorreoConAdjunto")
+    @PostMapping("/enviarCorreoConAdjunto")
     public String enviarCorreoConAdjunto(
         @RequestBody Email detalles)
     {

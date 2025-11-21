@@ -3,9 +3,7 @@ package com.example.biblioteca.Servicicos;
 import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -21,24 +19,25 @@ public class EmailServiciosImp implements EmailServicios {
 
     @Autowired private JavaMailSender javaMailSender;
 
-    @Value("${spring.mail.username}") private String sender;
+    private String sender = "Biblioteca Univalle <alejandroxnoguera@gmail.com>";
 
     @Override
     public String enviarCorreo(Email detalles)
     {
-
+         MimeMessage msjCorreo
+            = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper;
         try {
-
-            // Crear mensaje del correo
-            SimpleMailMessage msjCorreo
-                = new SimpleMailMessage();
-
             
-            msjCorreo.setFrom(sender);
-            msjCorreo.setTo(detalles.getRecipiente());
-            msjCorreo.setText(detalles.getMsgBody());
-            msjCorreo.setSubject(detalles.getAsunto());
-
+            
+            // Poner multipart como true para permitir el envio de adjuntos
+            mimeMessageHelper
+            = new MimeMessageHelper(msjCorreo, true);
+            mimeMessageHelper.setFrom(sender);
+            mimeMessageHelper.setTo(detalles.getRecipiente());
+            mimeMessageHelper.setText(detalles.getMsgBody());
+            mimeMessageHelper.setSubject(
+                detalles.getAsunto());
             // Enviando el correo
             javaMailSender.send(msjCorreo);
             return "Correo enviado con exito";

@@ -2,16 +2,18 @@ package com.example.biblioteca.Servicicos;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.biblioteca.Model.Prestamo;
 import com.example.biblioteca.Model.RecursoBibliografico;
+import com.example.biblioteca.Model.Reserva;
 import com.example.biblioteca.Model.ResultadoPrestamo;
 import com.example.biblioteca.Model.Usuario;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.example.biblioteca.Model.Utilidades.Email;
 import com.example.biblioteca.bibliotecaRepositorio.PrestamoRepositorio;
 import com.example.biblioteca.bibliotecaRepositorio.RecursoRepositorio;
+import com.example.biblioteca.bibliotecaRepositorio.ReservaRepositorio;
 import com.example.biblioteca.bibliotecaRepositorio.UsuarioRepositorio;
 
 @Service
@@ -22,11 +24,17 @@ public class PrestamoServicio {
     @Autowired 
     UsuarioRepositorio usuarioRepositorio;
 
+    @Autowired
+    private EmailServicios emailServicios;
+
     private static final int DIAS_PRESTAMO_GENERAL = 15;
     private static final int DIAS_PRESTAMO_RESERVA = 2;
 
     @Autowired
     RecursoRepositorio rbRepositorio;
+
+    @Autowired
+    ReservaRepositorio reservaRepositorio;
 
     private Prestamo crearPrestamoEntity(Usuario usuario, RecursoBibliografico rb, LocalDateTime fechaDevolucion, LocalDateTime fechaAdquisicion) {
         Prestamo prestamo = new Prestamo();
@@ -118,7 +126,7 @@ public class PrestamoServicio {
         Prestamo prestamo = prestamoOpt.get();
         boolean estado = prestamo.getEstado();
         if (!estado) {
-            return new ResultadoPrestamo(false, "El prestamo ");
+            return new ResultadoPrestamo(false, "El prestamo no está activo.");
         }
 
         RecursoBibliografico rb = prestamo.getRecursoBibliografico();
@@ -138,6 +146,51 @@ public class PrestamoServicio {
         return new ResultadoPrestamo(estado, "El prestamo finalizo", prestamoFinalizado);
     }
 
+    public ResultadoPrestamo enviarCorreo(Integer idPrestamo){
+        Optional<Prestamo> prestamoOpt = prestamoRepositorio.findById(idPrestamo);
+
+        boolean isPresent = prestamoOpt.isPresent();
+        if (!isPresent) {
+            return new ResultadoPrestamo(false, "No se encontro el prestamo");
+        }
+
+        Prestamo prestamo = prestamoOpt.get();
+        RecursoBibliografico rb = prestamo.getRecursoBibliografico();
+
+        Optional<Usuario> userOpt = usuarioRepositorio.findPorReservaCodDeBarras(rb.getCodigoDeBarras());
+        boolean usuarioExiste = userOpt.isPresent(); 
+        if(!usuarioExiste) {
+            return new ResultadoPrestamo(false, "Usuario no encontrado: " + userOpt + rb.getCodigoDeBarras());
+        }
+
+        Usuario usuario = userOpt.get();
+
+        Optional<Reserva> reservaOpt = reservaRepositorio.findReservasActivasPorUsuarioYRecurso(rb.getCodigoDeBarras(), Reserva.EstadoReserva.ACTIVA, usuario.getId());
+        boolean reservaExiste = reservaOpt.isPresent(); 
+        if(!reservaExiste) {
+            return new ResultadoPrestamo(false, "No hay reservas para este recurso.");
+        }
+
+        Reserva reserva = reservaOpt.get();
+
+        LocalDateTime fechaInicio = LocalDateTime.now();
+        LocalDateTime fechaDevolucion = calcularFechaDevolucion(rb, fechaInicio);
+
+        Email detalles = new Email();        
+        detalles.setRecipiente(usuario.getEmail());
+        detalles.setAsunto("Libro '" + rb.getTitulo() + "' listo para reclamar");
+        detalles.setMsgBody("Hola " + usuario.getNombre() + ", el libro '" + rb.getTitulo() + 
+            "' que reservaste el " + reserva.getFechaReserva().toString().substring(0,10) 
+            + " ya está disponible para su entrega.\n\nDebe devolver el libro a más tardar en la siguiente fecha: " 
+            + fechaDevolucion.toString().substring(0,10) + ".\n\nTiene 24 horas para recoger el libro solicitado.");
+
+        try {
+            emailServicios.enviarCorreo(detalles);
+            return new ResultadoPrestamo(true, "Se notificó al primer reservado en cola sobre la disponibilidad del libro.");
+        } catch (Exception e) {
+            return new ResultadoPrestamo(false, "" + e);
+        }
+    }
 
     public Optional<Prestamo> buscarPrestamoPorId(Integer id) {
         return prestamoRepositorio.findById(id);

@@ -56,12 +56,8 @@ public class RecursoServicio {
 
     } 
 
-    public void eliminarRecursoBibliograficoPorIsbn(String isbn) {
-        rbRepositorio.deleteByIsbn(isbn);
-    }
-
-    public List<RecursoBibliografico> buscarPorPalabraClave(String palabraClave) {
-        return rbRepositorio.buscarPorPalabraClave(palabraClave);
+    public List<RecursoBibliografico> buscarPorPalabraClave(String palabraClave, String categoria) {
+        return rbRepositorio.buscarPorPalabraClave(palabraClave, categoria);
     }
 
     public Set<RecursoBibliografico> buscarPorTituloAutor(String titulo, String nombreAutor) {

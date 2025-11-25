@@ -43,7 +43,6 @@ public class ReservaControlador {
     }
 
     @PostMapping("/varias_reservas")
-    
     public ResponseEntity<ReservaDTO> cargarVariasReservas(@RequestBody List<ReservaDTO> requests) {
         if (requests == null || requests.isEmpty()) {
             return ResponseEntity.badRequest()

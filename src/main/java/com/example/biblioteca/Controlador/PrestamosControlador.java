@@ -88,8 +88,9 @@ public class PrestamosControlador {
 
         ResultadoPrestamo resultadoFinal = new ResultadoPrestamo(true, resultadoPrestamo.getMensaje() + " " + resultadoCorreo.getMensaje());
 
-        if(!resultadoPrestamo.isExito() || !resultadoCorreo.isExito()) resultadoFinal.setExito( false);
-
+        if(!resultadoPrestamo.isExito() || !resultadoCorreo.isExito()) {
+            resultadoFinal.setExito( false);
+        }
         return new ResponseEntity<>(resultadoFinal,HttpStatus.OK);
     }
 

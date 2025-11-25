@@ -131,15 +131,15 @@ public class PrestamoServicio {
 
         RecursoBibliografico rb = prestamo.getRecursoBibliografico();
 
-        // 1️⃣ Cambiar estados
+        // 1. Cambiar estados
         prestamo.setEstado(false);
         rb.setEstado("Disponible");
 
-        // 2️⃣ Registrar fecha real de devolución
+        // 2. egistrar fecha real de devolución
         LocalDateTime fechaDevolucionReal = LocalDateTime.now();
         prestamo.setFechaDevolucionReal(fechaDevolucionReal);
 
-        // 3️⃣ Guardar cambios
+        // 3. Guardar cambios
         rbRepositorio.save(rb);
         Prestamo prestamoFinalizado = prestamoRepositorio.save(prestamo);
 

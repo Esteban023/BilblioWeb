@@ -1,0 +1,94 @@
+package com.example.biblioteca.Servicicos;
+
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import com.example.biblioteca.Model.RecursoBibliografico;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import com.example.biblioteca.bibliotecaRepositorio.RecursoRepositorio;
+import java.util.ArrayList;
+
+@Service
+public class RecursoServicio {
+
+    @Autowired
+    private RecursoRepositorio rbRepositorio;
+
+    public List<RecursoBibliografico> listarRecursosBibliograficos() {
+        return rbRepositorio.findAll();
+    }
+
+    public Optional<RecursoBibliografico> obtenerRecursoBibliograficoCodigoDeBarras(String codigoBarras) {
+        return rbRepositorio.findById(codigoBarras);
+    }
+
+    public Optional<RecursoBibliografico> obtnerRecursoBibliograficoPorIsbn(String isbn) {
+        return rbRepositorio.buscarPorIsbn(isbn);
+    }
+
+    public RecursoBibliografico guardarRecursoBibliografico(RecursoBibliografico recursoBiblio) {
+        return rbRepositorio.save(recursoBiblio);
+    }
+
+    public RecursoBibliografico actualizarRecursoBibliografico(String codigoBarras, RecursoBibliografico recursoBiblio) {
+
+        RecursoBibliografico rbExistente = rbRepositorio.findById(codigoBarras).orElseThrow(
+            () -> RuntimeException("Ejemplar no encontrado con id: ", codigoBarras)
+        );
+
+        return rbRepositorio.save(rbExistente);
+    }
+
+    public Optional<RecursoBibliografico> eliminarRecursoBibliografico(String codigoDeBarras) {
+        Optional<RecursoBibliografico> recursoBiblio  = rbRepositorio.findById(codigoDeBarras);
+
+        boolean isPresent = recursoBiblio.isPresent();
+        if(isPresent) {
+            RecursoBibliografico rb = recursoBiblio.get();
+            rbRepositorio.delete(rb);
+            return Optional.of(rb);
+        } else {
+            return Optional.empty();
+        }
+
+    } 
+
+    public void eliminarRecursoBibliograficoPorIsbn(String isbn) {
+        rbRepositorio.deleteByIsbn(isbn);
+    }
+
+    public List<RecursoBibliografico> buscarPorPalabraClave(String palabraClave) {
+        return rbRepositorio.buscarPorPalabraClave(palabraClave);
+    }
+
+    public Set<RecursoBibliografico> buscarPorTituloAutor(String titulo, String nombreAutor) {
+        return rbRepositorio.buscarRecursoBibliograficoPorTituloNombreAutor(titulo, nombreAutor);
+    }
+
+    public List<RecursoBibliografico> buscarPorTitulo(String titulo){
+        return rbRepositorio.findByTitulo(titulo);
+    }
+
+    public Set<RecursoBibliografico> buscarPorTema(String tema) {
+        return rbRepositorio.encontrarPorTema(tema);
+    }
+    
+    public List<RecursoBibliografico> buscarVarios(List<RecursoBibliografico> listaDesac){
+        List<RecursoBibliografico> lista = new ArrayList<>();
+        for (RecursoBibliografico recurso : listaDesac){
+            RecursoBibliografico item = rbRepositorio.findById(recurso.getCodigoDeBarras()).orElseThrow( 
+                    () -> RuntimeException("Ejemplar no encontrado con id: ", ""));
+            lista.add(item);
+        }
+        return lista;
+    }
+
+    private RuntimeException RuntimeException(String string, Object primaryKey) {
+        throw new RuntimeException(string + primaryKey);
+    }
+
+}

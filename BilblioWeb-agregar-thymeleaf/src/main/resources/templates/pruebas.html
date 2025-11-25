@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/resultado.css}" />
+</head>
+<body>
+  <div th:replace="~{fragmentos :: top-bar}"></div>
+  <div class="container">
+    <div class="home-page">
+      <div class="main-content">
+        <div th:replace="~{fragmentos :: profile}"></div>
+        <div class="search">
+            <h3 th:text="${session.user.nombre}"></h3>
+            <h3 th:if="${prestamos}"> Tus préstamos</h3>
+            <h3 th:if="${reservas}"> Tus reservas</h3>
+            <table th:replace="~{tablaTemporal :: tabla}"></table>
+        </div>
+        <footer th:replace="~{fragmentos :: footer}"></footer>
+      </div>
+    </div>
+    <div th:replace="~{fragmentos :: side-bar}"></div>
+  </div>
+</body>
+</html>

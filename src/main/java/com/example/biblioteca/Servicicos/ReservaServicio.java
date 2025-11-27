@@ -190,5 +190,8 @@ public class ReservaServicio {
                 new ReservaDTO("Reserva cancelada exitosamente", true)
             );
     }
+    public List<Reserva> getPorUsuario (Integer idUsuario) {
+        return reservaRepositorio.findByUsuarioId(idUsuario);
+    }
 
 }

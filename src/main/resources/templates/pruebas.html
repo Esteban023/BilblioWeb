@@ -13,7 +13,8 @@
         <div th:replace="~{fragmentos :: profile}"></div>
         <div class="search">
             <h3 th:text="${session.user.nombre}"></h3>
-            <h3 > Tus préstamos</h3>
+            <h3 th:if="${prestamos}"> Tus préstamos</h3>
+            <h3 th:if="${reservas}"> Tus reservas</h3>
             <table th:replace="~{tablaTemporal :: tabla}"></table>
         </div>
         <footer th:replace="~{fragmentos :: footer}"></footer>

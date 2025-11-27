@@ -96,4 +96,13 @@ public class ControladorReserva {
         
         return "redirect:/canasta/listar";
     }
+    
+    @GetMapping("/listar")
+    public String listarReservas(HttpSession session, Model model){
+        Usuario user =(Usuario) session.getAttribute("user");
+        if(user == null) return "redirect:/";
+        List<Reserva> reservasPorUsuario = servicio.getPorUsuario(user.getId());
+        model.addAttribute("reservas", reservasPorUsuario);
+        return "pruebas";
+    }
 }

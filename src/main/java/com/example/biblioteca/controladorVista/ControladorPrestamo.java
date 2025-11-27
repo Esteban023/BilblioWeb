@@ -64,7 +64,7 @@ public class ControladorPrestamo {
         Usuario user =(Usuario) session.getAttribute("user");
         if(user == null) return "redirect:/";
         List<Prestamo> prestamosPorUsuario = servicio.getPrestamosPorUsuario(user.getId());
-        model.addAttribute("lista", prestamosPorUsuario);
+        model.addAttribute("prestamos", prestamosPorUsuario);
         return "pruebas";
     }
     

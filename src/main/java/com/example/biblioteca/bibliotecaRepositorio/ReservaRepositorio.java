@@ -37,4 +37,6 @@ public interface ReservaRepositorio extends JpaRepository<Reserva, String> {
         @Param("recurso") RecursoBibliografico recursoBibliografico,
         @Param("estado") Reserva.EstadoReserva estado);
     
+    List<Reserva> findByUsuarioId(Integer usuarioId);
+    
 }

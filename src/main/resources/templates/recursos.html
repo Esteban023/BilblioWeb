@@ -55,7 +55,7 @@
               <div class="frame-7"><div class="text-wrapper-7">Categoría</div></div>
               <div class="frame-7"><div class="text-wrapper-7">Estado</div></div>
               <div class="frame-8">
-                <div class="servicio">Servicio<br />(Préstamo / Reserva)</div>
+                <div class="servicio">Servicios</div>
               </div>
             </header>
             <div class="row" th:each="recurso : ${lista}">
@@ -66,10 +66,10 @@
               <div class="frame-7"><div class="text-wrapper-8" th:text="${recurso.estado}"></div></div>
               <div class="frame-9">
                 <th:block th:if="${session.user}">
-                  <a th:if="${recurso.estado.equalsIgnoreCase('Disponible')}" th:href="@{/prestamo/{id}(id = ${recurso.codigoDeBarras})}" style="display: flex;">
-                    <img class="image" th:src="@{/img/btn-reserva.png}" />
+                  <a th:if="${recurso.estado.equalsIgnoreCase('Disponible')}" th:href="@{/prestamo/{id}(id = ${recurso.codigoDeBarras})}">
+                    Préstamo
                   </a>
-                  <img class="image" th:src="@{/img/btn-reserva.png}" th:if="${recurso.estado.equalsIgnoreCase('No Disponible')}" style="opacity:0.7"/>
+                    <a class="res-icon-dis" >Préstamo</a>
                   <div class="line"></div>
                   <a class="res-icon" th:href="@{/reserva/{id}(id = ${recurso.codigoDeBarras})}">Reservar</a>   
                 </th:block>

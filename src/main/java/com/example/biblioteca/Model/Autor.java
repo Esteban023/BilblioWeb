@@ -1,20 +1,12 @@
 package com.example.biblioteca.Model;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.HashSet;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-
 @Entity
-
 public class Autor {
     @jakarta.persistence.Id
     @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
@@ -24,10 +16,6 @@ public class Autor {
     private String apellido;
     private String telefono;
     private String nacionalidad;
-
-    @OneToMany
-    List<Libros> libros;
-
 
     @ManyToMany(mappedBy = "autores")
     @JsonIgnore
@@ -71,14 +59,6 @@ public class Autor {
 
     public void setNacionalidad(String nacionalidad) {
         this.nacionalidad = nacionalidad;
-    }
-
-    public List<Libros> getLibros() {
-        return libros;
-    }
-
-    public void setLibros(List<Libros> libros) {
-        this.libros = libros;
     }
 
     public Set<RecursoBibliografico> getRecursoBibliograficos() {

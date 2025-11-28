@@ -45,9 +45,9 @@ public class RecursoControlador {
         }
     }
 
-    @GetMapping("/buscar/{palabraClave}")
-    public ResponseEntity<List<RecursoBibliografico>> buscarEjemplarePorPalabraClave(@PathVariable String palabraClave) {
-        Optional<List<RecursoBibliografico>> recursosBibliograficos = Optional.ofNullable(rbServicio.buscarPorPalabraClave(palabraClave));
+    @GetMapping("/buscar/{palabraClave}/{categoria}")
+    public ResponseEntity<List<RecursoBibliografico>> buscarEjemplarePorPalabraClave(@PathVariable String palabraClave, @PathVariable String categoria) {
+        Optional<List<RecursoBibliografico>> recursosBibliograficos = Optional.ofNullable(rbServicio.buscarPorPalabraClave(palabraClave, categoria));
 
         if (recursosBibliograficos != null) {
             return new ResponseEntity<>(recursosBibliograficos.get(), HttpStatus.OK);

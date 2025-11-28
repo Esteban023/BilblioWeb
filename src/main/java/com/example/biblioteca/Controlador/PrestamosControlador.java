@@ -2,24 +2,23 @@ package com.example.biblioteca.Controlador;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.biblioteca.DTO.PrestamoRequest;
-import com.example.biblioteca.DTO.ReservaDTO;
-import com.example.biblioteca.Model.Prestamo;
-import com.example.biblioteca.Model.ResultadoPrestamo;
-import com.example.biblioteca.Servicicos.PrestamoServicio;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.biblioteca.DTO.PrestamoRequest;
+import com.example.biblioteca.Model.Prestamo;
+import com.example.biblioteca.Model.ResultadoPrestamo;
+import com.example.biblioteca.Servicicos.PrestamoServicio;
 
 @RestController
 @RequestMapping("/api/prestamos")
@@ -85,8 +84,14 @@ public class PrestamosControlador {
             return ResponseEntity.badRequest().body(rPrestamo);
         }
         ResultadoPrestamo resultadoPrestamo = prestamoServicio.finalizarPrestamo(id);
+        ResultadoPrestamo resultadoCorreo = prestamoServicio.enviarCorreo(id);
 
-        return ResponseEntity.ok(resultadoPrestamo);
+        ResultadoPrestamo resultadoFinal = new ResultadoPrestamo(true, resultadoPrestamo.getMensaje() + " " + resultadoCorreo.getMensaje());
+
+        if(!resultadoPrestamo.isExito() || !resultadoCorreo.isExito()) {
+            resultadoFinal.setExito( false);
+        }
+        return new ResponseEntity<>(resultadoFinal,HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

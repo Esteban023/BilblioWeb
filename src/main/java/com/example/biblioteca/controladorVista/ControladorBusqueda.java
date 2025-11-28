@@ -26,7 +26,7 @@ public class ControladorBusqueda {
 
     @PostMapping("/buscar")
     public String mostrarResultados(Model model, @RequestParam String palabraClave){
-        Optional<List<RecursoBibliografico>> recursoBibliograficos = Optional.ofNullable(servicio.buscarPorPalabraClave(palabraClave));
+        Optional<List<RecursoBibliografico>> recursoBibliograficos = Optional.ofNullable(servicio.buscarPorPalabraClave(palabraClave, null));
         List<RecursoBibliografico> resultados;
         resultados = recursoBibliograficos.orElseGet(ArrayList::new);
         model.addAttribute("palabra", palabraClave);

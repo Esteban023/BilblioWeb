@@ -212,4 +212,16 @@ public class PrestamoServicio {
     public List<Prestamo> getPrestamosPorUsuario(Integer usuarioId){
         return prestamoRepositorio.findByUsuarioId(usuarioId);
     }
+    
+    public String generarBodyMail(ResultadoPrestamo resultadoPrestamo) {
+        Prestamo prestamo = resultadoPrestamo.getPrestamo();
+        String cuerpo = String.format(
+            "El recurso con codigo (%s) se Prestó satisfactoriamente el %s. Por favor, devuélvalo el %s o antes.",
+            prestamo.getRecursoBibliografico().getCodigoDeBarras(),
+            prestamo.getFechaAdquisicion().toString().substring(0,10),
+            prestamo.getFechaDevolucion().toString().substring(0,10)
+        );
+        return cuerpo;
+
+    }
 }

@@ -17,8 +17,8 @@ import jakarta.persistence.GenerationType;
 public class Prestamo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
     private int id;
+    
     private boolean estado;
     private boolean vencido;
     private LocalDateTime fechaDevolucion;

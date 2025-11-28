@@ -4,6 +4,8 @@ import com.example.biblioteca.Controlador.ReservaControlador;
 import com.example.biblioteca.Model.Prestamo;
 import com.example.biblioteca.Model.ResultadoPrestamo;
 import com.example.biblioteca.Model.Usuario;
+import com.example.biblioteca.Model.Utilidades.Email;
+import com.example.biblioteca.Servicicos.EmailServiciosImp;
 import com.example.biblioteca.Servicicos.PrestamoServicio;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ControladorPrestamo {
     @Autowired
     PrestamoServicio servicio;
+    @Autowired
+    EmailServiciosImp emailServicio;
 
     @GetMapping("/{id}")
     public String crearPrestamo(@PathVariable String id, HttpSession session, RedirectAttributes redirect){
@@ -40,6 +44,7 @@ public class ControladorPrestamo {
             redirect.addFlashAttribute("error", resultadoPrestamo.getMensaje());
             return "redirect:/";
         }
+        
         String tituloModal = resultadoPrestamo.getMensaje();
         Prestamo prestamo = resultadoPrestamo.getPrestamo();
         String mensaje = String.format(
@@ -56,6 +61,9 @@ public class ControladorPrestamo {
         tituloRecurso = prestamo.getRecursoBibliografico().getTitulo();
         tituloRecurso = URLEncoder.encode(tituloRecurso, StandardCharsets.UTF_8).replace("+", "%20");
 
+        String bodyMail = servicio.generarBodyMail(resultadoPrestamo);
+        Email email = new Email(prestamo.getUsuario().getEmail(), bodyMail, "Prestamo de Recurso Bibliografica", null);
+        emailServicio.enviarCorreo(email);
         return "redirect:/buscar/" + tituloRecurso;
     }
 

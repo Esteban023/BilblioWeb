@@ -105,4 +105,13 @@ public class ControladorReserva {
         model.addAttribute("reservas", reservasPorUsuario);
         return "pruebas";
     }
+
+    @GetMapping("/cancelar/{codigoReserva}")
+    public String cancelarReserva(@PathVariable String codigoReserva, RedirectAttributes redirect){
+        if(servicio.cancelarReserva(codigoReserva).getBody().isExito()){
+            return "redirect:/reserva/listar";
+        }
+        redirect.addFlashAttribute("error", "No se pudo cancelar la reserva");
+        return "redirect:/reserva/listar";
+    }
 }

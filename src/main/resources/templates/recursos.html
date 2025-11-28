@@ -66,10 +66,11 @@
               <div class="frame-7"><div class="text-wrapper-8" th:text="${recurso.estado}"></div></div>
               <div class="frame-9">
                 <th:block th:if="${session.user}">
-                  <a th:if="${recurso.estado.equalsIgnoreCase('Disponible')}" th:href="@{/prestamo/{id}(id = ${recurso.codigoDeBarras})}">
+                  <a class="res-icon" th:if="${recurso.estado.equalsIgnoreCase('Disponible')}" th:href="@{/prestamo/{id}(id = ${recurso.codigoDeBarras})}">
                     Préstamo
                   </a>
-                    <a class="res-icon-dis" >Préstamo</a>
+                  
+                    <a class="res-icon-dis" th:if="${!recurso.estado.equalsIgnoreCase('Disponible')}">Préstamo</a>
                   <div class="line"></div>
                   <a class="res-icon" th:href="@{/reserva/{id}(id = ${recurso.codigoDeBarras})}">Reservar</a>   
                 </th:block>

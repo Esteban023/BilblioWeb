@@ -31,7 +31,7 @@ public class ControladorCanasta {
         List<RecursoBibliografico> lista;
         Optional<RecursoBibliografico> opt = servicio.obtenerRecursoBibliograficoCodigoDeBarras(select);
         if(opt.isEmpty()) return "redirect:/";
-        lista = (ArrayList)session.getAttribute("canasta");
+        lista = (ArrayList) session.getAttribute("canasta");
         if(lista == null) lista = new ArrayList<>();
         RecursoBibliografico recurso = opt.get();
         lista.add(recurso);

@@ -36,7 +36,7 @@ public class ControladorBusqueda {
 
 
     @GetMapping("/pruebas") //este controlador es solo para pruebas
-    public String mostrarprueba(){
+    public String mostrarprueba() {
         return "pruebas";
     }
 

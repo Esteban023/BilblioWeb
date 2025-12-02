@@ -53,6 +53,7 @@ a {
     width: 45%;
 }
 .error-message {
+    font-family: "Open Sans", Helvetica;
     color: #c20e1a;
     width: 80%;
     background-color: #ffdddd;

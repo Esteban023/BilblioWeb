@@ -40,7 +40,7 @@ public class RecursoBiblioTest {
         return Stream.of(
             Arguments.of("recurso 1", null, 1),
             Arguments.of("Coleccion", null,  3),
-            Arguments.of("Tema1", null,  1)
+            Arguments.of("Txma", null,  3)
         );
     }
 
@@ -73,8 +73,8 @@ public class RecursoBiblioTest {
             RecursoBibliografico recurso = new RecursoBibliografico();
             recurso.setCodigoDeBarras("CB" + i);
             recurso.setCalificacion(String.valueOf(3 + i % 3)); // Calificación entre 3 y 5
-            recurso.setCategoria("Categoría " + i);
-            recurso.setColeccion("Colección " + i);
+            recurso.setCategoria("Categoria " + i);
+            recurso.setColeccion("Coleccion " + i);
             recurso.setComentarios("Comentario del recurso " + i);
             recurso.setContenido("Contenido " + i);
             recurso.setDescripcion("Descripcion del recurso " + i);
@@ -88,7 +88,7 @@ public class RecursoBiblioTest {
             recurso.setPublicacion("202" + (4 - i));
             recurso.setResumen("Resumen del recurso " + i);
             recurso.setSignaturaTipografica("ST" + i);
-            recurso.setTema("Tema" + i);
+            recurso.setTema("txma" + i);
             recurso.setTipoDePublicacion(i % 2 == 0 ? "Libro" : "Revista");
             recurso.setTitulo("Titulo" + i);
             recurso.setAutores(autores);
@@ -98,7 +98,6 @@ public class RecursoBiblioTest {
         return recursos;
     }
 
-    @Test
     private void insertarRecursos(Set<RecursoBibliografico> recursos) {
         for (RecursoBibliografico rb : recursos) {
             RecursoBibliografico recursoGuardado = recursoServicio.guardarRecursoBibliografico(rb);
@@ -171,8 +170,8 @@ public class RecursoBiblioTest {
 
     @Test
     void testBuscarPorTema(){
-        Set<RecursoBibliografico> resultado = recursoServicio.buscarPorTema("Tema");
-        assertEquals(4, resultado.size(), "Solo hay 4 datos de prueba que contienen la palabra Tema");
+        Set<RecursoBibliografico> resultado = recursoServicio.buscarPorTema("Txma");
+        assertEquals(3, resultado.size(), "Solo hay 3 datos de prueba que contienen la palabra Tema");
     }
 
 

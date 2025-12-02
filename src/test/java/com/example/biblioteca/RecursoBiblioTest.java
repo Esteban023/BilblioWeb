@@ -38,9 +38,9 @@ public class RecursoBiblioTest {
     // MÉTODOS PROVEEDORES
     private static Stream<Arguments> proveedorPalabrasClave() {
         return Stream.of(
-            Arguments.of("recurso", 3),
-            Arguments.of("Coleccion", 3),
-            Arguments.of("Tema1", 1)
+            Arguments.of("recurso 1", null, 1),
+            Arguments.of("Coleccion", null,  3),
+            Arguments.of("Tema1", null,  1)
         );
     }
 

@@ -24,8 +24,7 @@ public class EmailServiciosImp implements EmailServicios {
     @Override
     public String enviarCorreo(Email detalles)
     {
-         MimeMessage msjCorreo
-            = javaMailSender.createMimeMessage();
+        MimeMessage msjCorreo = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
         try {
             
@@ -82,7 +81,6 @@ public class EmailServiciosImp implements EmailServicios {
         }
 
         catch (MessagingException e) {
-
             return "Error enviando el correo";
         }
     }

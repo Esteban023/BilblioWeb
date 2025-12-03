@@ -196,8 +196,42 @@
         </div>
       </div>
     </th:block>
-  
+    <th:block th:fragment="busq-result">
+      <div class="nav-result-wrapper" id="navResultFrag" hx-swap-oob="innerHTML">
+        <div class="nav-result">
+          <div class="div-wrapper">
+            <div class="text-wrapper"><span th:text="${resultados.size()}"></span> Resultados</div>
+          </div>
+          <div class="div">
+            <p class="p">Resultados de búsqueda para “<span th:text="${palabra}"></span>”</p>
+          </div>
+        </div>
+      </div>
+      <div class="result-content" id="resultadoFrag"  hx-swap-oob="outerHTML">
+    
+        <div class="result" th:each="resultado, iterStat : ${resultados}">
+          <div class="numero">
+            <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div>
+          </div>
+          <div class="contenido">
+            <a class="text-wrapper-3" th:text="${resultado.titulo}"
+              th:href="@{/buscar/{titulo}(titulo = ${resultado.titulo})}"></a>
+            <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
+            <div class="icon-text">
+              <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
+              <div class="frame-2">
+                <div class="text-wrapper-5" th:text="${resultado.tipoDePublicacion}"></div>
+              </div>
+            </div>
+            <div class="text-wrapper-6">Ejemplares: 2</div>
+          </div>
+        </div>
+    
+      </div>
+    
+    </th:block>
   </div>
+  
   </body>
 
 </html>

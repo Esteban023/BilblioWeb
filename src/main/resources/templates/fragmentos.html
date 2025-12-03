@@ -55,6 +55,17 @@
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#c20e1a"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
         </button>
       </div>
+      <th:block th:if="${errors.size()>0}" th:each="error, iterStat : ${errors}">
+        <div th:class="'error-message error-'+${iterStat.count}"  >
+          <div th:text="${error}"></div>
+          <button th:onclick="document.querySelector('.error-[[${iterStat.count}]]').style.display = 'none';"
+                    aria-label="Cerrar alerta de error" style="border: none; background-color: transparent; cursor: pointer;">
+  
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#c20e1a"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+          </button>
+        </div>
+
+      </th:block>
       <a class="back" href="javascript:history.back()" aria-label="Volver a la página anterior">
         <div class="vector-wrapper">
           <img class="vector" th:src="@{/img/back.svg}" alt="Icono de flecha hacia atrás" />
@@ -66,7 +77,8 @@
         <img class="icon" th:src="@{/img/icon.svg}" alt=""/>
       </div>
       
-      <a class="login" th:if="${session.user == null}" th:href="@{/login}" aria-label="Iniciar sesión en el sistema"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M479.62-140v-60h268.07q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-535.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H479.62v-60h268.07Q778-820 799-799q21 21 21 51.31v535.38Q820-182 799-161q-21 21-51.31 21H479.62Zm-54.23-169.23-41.54-43.39L481.23-450H140v-60h341.23l-97.38-97.38 41.54-43.39L596.15-480 425.39-309.23Z"/></svg>
+      <a class="login" th:if="${session.user == null}" th:href="@{/login}" aria-label="Iniciar sesión en el sistema">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M479.62-140v-60h268.07q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-535.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H479.62v-60h268.07Q778-820 799-799q21 21 21 51.31v535.38Q820-182 799-161q-21 21-51.31 21H479.62Zm-54.23-169.23-41.54-43.39L481.23-450H140v-60h341.23l-97.38-97.38 41.54-43.39L596.15-480 425.39-309.23Z"/></svg>
         Acceder
       </a>
     </div>

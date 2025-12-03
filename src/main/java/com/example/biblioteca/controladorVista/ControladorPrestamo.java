@@ -1,11 +1,9 @@
 package com.example.biblioteca.controladorVista;
 
-import com.example.biblioteca.Controlador.ReservaControlador;
 import com.example.biblioteca.Model.Prestamo;
+import com.example.biblioteca.Model.RecursoBibliografico;
 import com.example.biblioteca.Model.ResultadoPrestamo;
 import com.example.biblioteca.Model.Usuario;
-import com.example.biblioteca.Model.Utilidades.Email;
-import com.example.biblioteca.Servicicos.EmailServiciosImp;
 import com.example.biblioteca.Servicicos.PrestamoServicio;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/prestamo")
 public class ControladorPrestamo {
     @Autowired
     PrestamoServicio prestamoServicio;
-
-    @Autowired
-    EmailServiciosImp emailServicio;
 
     @GetMapping("/{id}")
     public String crearPrestamo(@PathVariable String id,
@@ -56,7 +50,7 @@ public class ControladorPrestamo {
         );
 
         // Construcción de mensajes
-        String mensajePrestamo = buildMensajePrestamo(prestamo, formatter);
+        String mensajePrestamo = prestamoServicio.buildMensajePrestamo(prestamo, formatter);
 
         redirect.addFlashAttribute("tituloModal", resultado.getMensaje());
         redirect.addFlashAttribute("mensajeTime", "Tiempo para reclamar: 24 horas.");
@@ -68,35 +62,13 @@ public class ControladorPrestamo {
         );
 
         // Enviar correo
-        enviarCorreoPrestamo(prestamo, resultado);
+        prestamoServicio.enviarCorreoPrestamo(prestamo, formatter);
 
         return "redirect:/buscar/" + recursoCodificado;
     }
 
-    private String buildMensajePrestamo(Prestamo prestamo, DateTimeFormatter formatter) {
-        return String.format(
-            "El recurso con código (%s) se prestó satisfactoriamente el %s. "
-            + "Por favor, devuélvalo el %s o antes.",
-            prestamo.getRecursoBibliografico().getTitulo(),
-            prestamo.getRecursoBibliografico().getCodigoDeBarras(),
-            prestamo.getFechaAdquisicion().format(formatter),
-            prestamo.getFechaDevolucion().format(formatter)
-        );
-    }
-
     private String encodeTitulo(String titulo) {
         return URLEncoder.encode(titulo, StandardCharsets.UTF_8).replace("+", "%20");
-    }
-
-    private void enviarCorreoPrestamo(Prestamo prestamo, ResultadoPrestamo resultado) {
-        String bodyMail = prestamoServicio.generarBodyMail(resultado);
-        Email email = new Email(
-            prestamo.getUsuario().getEmail(),
-            bodyMail,
-            "Préstamo de recurso Bibliográfico",
-            null
-        );
-        emailServicio.enviarCorreo(email);
     }
 
     @GetMapping("listar")
@@ -123,25 +95,43 @@ public class ControladorPrestamo {
             return "redirect:/canasta/listar";
         }
 
+        String mensajeModal = null;
         Integer idUser = user.getId();
         List<String> errores = new ArrayList<>();
+        List<Prestamo> realizados = new ArrayList<>();
+        //lista donde se guardara los recursos que se deben eliminar de la canasta
+        List<RecursoBibliografico> eliminarCanasta = new ArrayList<>();
 
         for (String codigo : codigos) {
-            if (codigo != null || codigo.isBlank()) continue;
+            if (codigo == null || codigo.isBlank()) continue;
 
             ResultadoPrestamo resultado = prestamoServicio.iniciarPrestamo(idUser, codigo);
 
             if (!resultado.isExito()) {
-                errores.add("• " + codigo + ": " + resultado.getMensaje());
+                errores.add(resultado.getMensaje());
+            }else{
+                realizados.add(resultado.getPrestamo());
+                eliminarCanasta.add(resultado.getPrestamo().getRecursoBibliografico());
             }
         }
 
         if (errores.isEmpty()) {
-            redirect.addFlashAttribute("success", "Todos los recursos se prestaron exitosamente.");
-        } else {
-            redirect.addFlashAttribute("error",
-            "Algunos recursos no se pudieron prestar:<br>" + String.join("<br>", errores));
+            mensajeModal = "Todos los recursos fueron prestados exitosamente. Se le ha enviado un correo con la información completa.";
+        }else if(errores.size()< codigos.size()){
+            mensajeModal = "Algunos recursos no se pudieron prestar. Se le ha enviado un correo con la información completa.";
         }
+        redirect.addFlashAttribute("errors", errores);
+        
+        //generar mensaje para el modal
+        redirect.addFlashAttribute("tituloModal", "Prestamos realizados.");
+        redirect.addFlashAttribute("mensajeTime", "Tiempo para reclamar: 24 horas.");
+        redirect.addFlashAttribute("mensajeModal", mensajeModal);
+
+        //se envia los mails de los prestamos exitosos
+        if(!realizados.isEmpty()) prestamoServicio.enviarCorreoVariosPrestamos(realizados, user);
+
+        //se agrega un atributo redirect con los recursos que se deben eliminar de la canasta
+        redirect.addFlashAttribute("eliminarCanasta", eliminarCanasta);
 
         return "redirect:/canasta/listar";
     }

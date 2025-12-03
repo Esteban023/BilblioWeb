@@ -298,5 +298,20 @@ public class RecursoBibliografico {
     public List<Reserva> getReserva() {
         return reserva;
     }
-        
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // mismo objeto
+        if (obj == null || getClass() != obj.getClass()) return false; // distinto tipo
+        RecursoBibliografico recursoBibliografico = (RecursoBibliografico) obj;
+
+        return codigoDeBarras != null && codigoDeBarras.equals(recursoBibliografico.getCodigoDeBarras());
+    }
+
+    @Override
+    public int hashCode() {
+        return codigoDeBarras != null ? codigoDeBarras.hashCode() : 0;
+    }
+    
+    
 }

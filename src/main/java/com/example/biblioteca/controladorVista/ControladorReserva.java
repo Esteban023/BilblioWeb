@@ -2,8 +2,8 @@
 package com.example.biblioteca.controladorVista;
 
 import com.example.biblioteca.DTO.ReservaDTO;
+import com.example.biblioteca.Model.RecursoBibliografico;
 import com.example.biblioteca.Model.Reserva;
-import com.example.biblioteca.Model.ResultadoPrestamo;
 import com.example.biblioteca.Model.Usuario;
 import com.example.biblioteca.Servicicos.ReservaServicio;
 
@@ -11,7 +11,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +60,14 @@ public class ControladorReserva {
         );
         redirect.addFlashAttribute("tituloModal", tituloModal);
         redirect.addFlashAttribute("mensajeModal", mensaje);
+
+        // Formateador reutilizable
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'del' yyyy", 
+        Locale.of("es", "ES")
+    );
+    
+        //enviar mail
+        servicio.enviarCorreoReserva(reserva, formatter);
         
         tituloRecurso = reserva.getRecursoBibliografico().getTitulo();
         tituloRecurso = URLEncoder.encode(tituloRecurso, StandardCharsets.UTF_8).replace("+", "%20");
@@ -75,22 +86,42 @@ public class ControladorReserva {
 
 
         Integer idUser = user.getId();
-        boolean todosExitosos = true;
+        String mensajeModal = null;
+        List<String> errores = new ArrayList<>();
+        List<Reserva> realizados = new ArrayList<>(); 
+        //lista donde se guardara los recursos que se deben eliminar de la canasta
+        List<RecursoBibliografico> eliminarCanasta = new ArrayList<>();
         
         for (String codigo : select){
             if(codigo == null || codigo.trim().isEmpty()) continue;
             
             ReservaDTO resultado = servicio.crearReserva(idUser, codigo);
             if(!resultado.isExito()) {
-                redirect.addFlashAttribute("error", "Error al prestar el recurso " + codigo + ": " + resultado.getMensaje());
-                todosExitosos = false;
+                errores.add(resultado.getMensaje());
+            }else{
+                realizados.add(resultado.getReserva());
+                eliminarCanasta.add(resultado.getReserva().getRecursoBibliografico());
             }
         }
         
-        if(todosExitosos) {
-            redirect.addFlashAttribute("success", "Todos los recursos se prestaron exitosamente");
+        if(errores.isEmpty()) {
+            mensajeModal = "Todos los recursos fueron reservados exitosamente. Se le ha enviado un correo con la información completa.";
+        }else if(errores.size() < select.size()){
+            mensajeModal = "Algunos recursos no se pudieron reservar. Se le ha enviado un correo con la información completa.";
         }
-        
+
+        redirect.addFlashAttribute("errors", errores);
+
+        //generar mensaje para el modal
+        redirect.addFlashAttribute("tituloModal", "Reservas realizadas.");
+        redirect.addFlashAttribute("mensajeModal", mensajeModal);
+
+        //enviar mail con todas las reservas exitosas
+        servicio.enviarCorreoVariasReservas(realizados, user);
+
+        //se agrega un atributo redirect con los recursos que se deben eliminar de la canasta
+        redirect.addFlashAttribute("eliminarCanasta", eliminarCanasta);
+
         return "redirect:/canasta/listar";
     }
     

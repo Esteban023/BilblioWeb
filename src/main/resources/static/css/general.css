@@ -109,6 +109,8 @@ a {
   gap: 5px;
   align-items: center;
   background-color: #c20e1a;
+  display: flex; 
+  align-items: center;
   color: white;
   font-family: "Open Sans-Regular", Helvetica;
   border: none;

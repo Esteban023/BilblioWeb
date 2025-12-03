@@ -137,6 +137,8 @@ a {
   cursor: pointer;
   transition: background-color 0.3s ease;
   line-height: normal;
+  display: flex;
+  align-items: center;
 }
 .login:hover {
   cursor: pointer;

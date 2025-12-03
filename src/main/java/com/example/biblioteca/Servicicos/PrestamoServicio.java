@@ -1,10 +1,13 @@
 package com.example.biblioteca.Servicicos;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import com.example.biblioteca.Model.Prestamo;
 import com.example.biblioteca.Model.RecursoBibliografico;
@@ -27,6 +30,9 @@ public class PrestamoServicio {
 
     @Autowired
     private EmailServicios emailServicios;
+    
+    @Autowired
+    private TemplateEngine templateEngine;
 
     private static final int DIAS_PRESTAMO_GENERAL = 15;
     private static final int DIAS_PRESTAMO_RESERVA = 2;
@@ -86,9 +92,9 @@ public class PrestamoServicio {
         boolean disponible = rb.getEstado().equals("Disponible");
         if(!disponible){
             return new ResultadoPrestamo(
-                false, "El recurso con codigo " + 
-                rb.getCodigoDeBarras() + 
-                " no se encuentra disponible"
+                false, "El recurso '" + 
+                rb.getTitulo() + 
+                "' no se encuentra disponible"
             );
         }
 
@@ -213,15 +219,58 @@ public class PrestamoServicio {
         return prestamoRepositorio.findByUsuarioId(usuarioId);
     }
     
-    public String generarBodyMail(ResultadoPrestamo resultadoPrestamo) {
-        Prestamo prestamo = resultadoPrestamo.getPrestamo();
+    public String generarBodyMail(Prestamo prestamo, DateTimeFormatter formatter) {
         String cuerpo = String.format(
-            "El recurso con codigo (%s) se Prestó satisfactoriamente el %s. Por favor, devuélvalo el %s o antes.",
-            prestamo.getRecursoBibliografico().getCodigoDeBarras(),
-            prestamo.getFechaAdquisicion().toString().substring(0,10),
-            prestamo.getFechaDevolucion().toString().substring(0,10)
+            "Hola %s, tu préstamo del recurso “%s” se ha realizado exitosamente.  \r\nPor favor reclámarlo en la sede correspondiente dentro de las próximas 24 horas.  \r\nRecuerda que debe devolverlo el día %s. Si no lo reclamas en el plazo indicado, el prestamo será cancelado.  \r\nGracias por utilizar nuestros servicios.",
+            prestamo.getUsuario().getNombre().concat(" ").concat(prestamo.getUsuario().getApellido()),
+            prestamo.getRecursoBibliografico().getTitulo(),
+            prestamo.getFechaDevolucion().format(formatter)
+            
         );
         return cuerpo;
 
+    }
+
+    public String buildMensajePrestamo(Prestamo prestamo, DateTimeFormatter formatter) {
+        return String.format(
+                "El recurso con código (%s) se prestó satisfactoriamente el %s. "
+                        + "Por favor, devuélvalo el %s o antes.",
+                prestamo.getRecursoBibliografico().getTitulo(),
+                prestamo.getRecursoBibliografico().getCodigoDeBarras(),
+                prestamo.getFechaAdquisicion().format(formatter),
+                prestamo.getFechaDevolucion().format(formatter));
+    }
+
+    public void enviarCorreoPrestamo(Prestamo prestamo, DateTimeFormatter formatter) {
+        String bodyMail = generarBodyMail(prestamo, formatter);
+        Email email = new Email(
+                prestamo.getUsuario().getEmail(),
+                bodyMail,
+                "Préstamo de recurso Bibliográfico",
+                null, 
+            false
+        );
+        emailServicios.enviarCorreo(email);
+    }
+    public String generarBodyMailVarios(List<Prestamo> prestamos, Usuario user){
+        Context context = new Context();
+        context.setVariable("usuario", user);
+        context.setVariable("prestamos", prestamos);
+
+        //Se procesa el template con las variables
+        String bodyMail = templateEngine.process("tablaMail", context);
+        return bodyMail;
+
+    }
+    public void enviarCorreoVariosPrestamos(List<Prestamo> prestamos, Usuario user){
+        String bodyMail = generarBodyMailVarios(prestamos, user);
+        Email email = new Email(
+            user.getEmail(),
+            bodyMail,
+            "Prestamo de varios recurso",
+            null,
+            true
+        );
+        emailServicios.enviarCorreo(email);
     }
 }

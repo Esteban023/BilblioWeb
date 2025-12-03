@@ -4,13 +4,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import com.example.biblioteca.Model.Reserva;
 import com.example.biblioteca.Model.Usuario;
 import com.example.biblioteca.DTO.ReservaDTO;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import org.springframework.http.ResponseEntity;
 import com.example.biblioteca.Model.RecursoBibliografico;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.biblioteca.Model.Utilidades.Email;
 import com.example.biblioteca.Model.Utilidades.FechaComparador;
 import com.example.biblioteca.bibliotecaRepositorio.RecursoRepositorio;
 import com.example.biblioteca.bibliotecaRepositorio.ReservaRepositorio;
@@ -31,6 +37,12 @@ public class ReservaServicio {
     @Autowired
     PrestamoRepositorio prestamoRepositorio;
 
+    @Autowired
+    EmailServicios emailServicios;
+
+    @Autowired
+    private TemplateEngine templateEngine;
+
     private LocalDateTime calcularFechaVencimiento(RecursoBibliografico rb, Integer puestoFila) {
         String categoria = rb.getCategoria().toLowerCase().trim();
         LocalDateTime fechaBase = rb.getPrestamo().getFechaDevolucion();
@@ -50,21 +62,25 @@ public class ReservaServicio {
         if (usuarioOpt.isEmpty()) {
             return new ReservaDTO("Usuario no encontrado", false);
         }
-
         var recursoOpt = recursoRepositorio.findById(codigoBarras);
+        String tituloRecurso;
         if (recursoOpt.isEmpty()) {
             return new ReservaDTO("Recurso bibliográfico no encontrado", false);
+        }else {
+            tituloRecurso = recursoOpt.get().getTitulo();
         }
 
         // --- Validaciones de existencia de reserva o préstamo ---
         if (reservaRepositorio.findReservasActivasPorUsuarioYRecurso(
                 codigoBarras, Reserva.EstadoReserva.ACTIVA, idUsuario).isPresent()) {
-            return new ReservaDTO("El usuario ya tiene una reserva activa para este recurso", false);
+            return new ReservaDTO("El usuario ya tiene una reserva activa para el recurso '"+ tituloRecurso +"'"
+            , false);
         }
 
         if (prestamoRepositorio.buscarPrestamoActivoPorCodigoDeBarras(
                 codigoBarras, idUsuario, true).isPresent()) {
-            return new ReservaDTO("El usuario ya tiene un préstamo activo para este recurso", false);
+            return new ReservaDTO("El usuario ya tiene un préstamo activo para el recurso '"+ tituloRecurso +"'"
+            , false);
         }
 
         Usuario usuario = usuarioOpt.get();
@@ -72,7 +88,7 @@ public class ReservaServicio {
 
         // --- Verificar disponibilidad ---
         if (!"No disponible".equals(recurso.getEstado())) {
-            return new ReservaDTO("El recurso se encuentra disponible. Use la función de préstamo", false);
+            return new ReservaDTO("El recurso '"+ tituloRecurso + "' se encuentra disponible. Use la función de préstamo", false);
         }
 
         // --- Crear reserva ---
@@ -84,7 +100,8 @@ public class ReservaServicio {
 
         actualizarRelaciones(usuario, recurso, reservaGuardada);
 
-        return new ReservaDTO("Se reservó con éxito el recurso", true, reservaGuardada);
+        return new ReservaDTO("Se reservó con éxito el recurso '" + reservaGuardada.getRecursoBibliografico().getTitulo() + "'"
+        , true, reservaGuardada);
     }
 
 
@@ -175,4 +192,49 @@ public class ReservaServicio {
         return reservaRepositorio.findByUsuarioId(idUsuario);
     }
 
+    
+    private String generarBodyMail(Reserva reserva, DateTimeFormatter formatter){
+        String mensaje = String.format(
+            "Estimado %s,\n\n" +
+            "El recurso “%s” se reservó satisfactoriamente para el %s. " +
+            "Será notificado cuando el recurso esté listo para ser recogido.\n\n" +
+            "Saludos cordiales.",
+            reserva.getUsuario().getNombre().concat(" ").concat(reserva.getUsuario().getApellido()),
+            reserva.getRecursoBibliografico().getTitulo(),
+            reserva.getFechaReserva().format(formatter)
+            
+        );
+        
+        return mensaje;
+    }
+    private String generarBodyMailVarios(List<Reserva> reservas, Usuario user){
+        Context context = new Context();
+        context.setVariable("reservas", reservas);
+        context.setVariable("usuario", user);
+        String bodyMail = templateEngine.process("tablaMail", context);
+        return bodyMail;
+    }
+    
+    public void enviarCorreoReserva(Reserva reserva, DateTimeFormatter formatter){
+        String bodyMail = generarBodyMail(reserva, formatter);
+        Email email = new Email(
+            reserva.getUsuario().getEmail(),
+            bodyMail,
+            "Recurso bibliografico reservado.",
+            null,
+            false
+        );
+        emailServicios.enviarCorreo(email);
+    }
+    public void enviarCorreoVariasReservas(List<Reserva> reservas, Usuario user){
+        String bodyMail = generarBodyMailVarios(reservas, user);
+        Email email = new Email(
+            user.getEmail(),
+            bodyMail,
+            "Reserva de varios recursos",
+            null,
+            true
+        );
+        emailServicios.enviarCorreo(email);
+    }
 }

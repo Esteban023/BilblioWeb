@@ -15,5 +15,6 @@ public class Email {
     private String msgBody;
     private String asunto;
     private String adjunto;
+    private boolean html;
     
 }

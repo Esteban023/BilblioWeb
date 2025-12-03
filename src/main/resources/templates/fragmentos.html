@@ -154,9 +154,35 @@
     </div>
   </div>
   
-  <div class="tools-section">
-    <div class="div-2">
-      <h2 class="text-wrapper-5">Herramientas de Búsqueda</h2>
+  <div class="mipanel-section">
+    <div class="div-2"  
+         role="button" 
+         tabindex="0" 
+         aria-expanded="false" 
+         data-toggle="mi-panel">
+      <h2 class="text-wrapper-3">Herramientas de busquedad</h2>
+      <div class="arrow" data-arrow="mi-panel">
+        <img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/>
+      </div>
+    </div>
+    <div class="item-section" 
+         role="menu" 
+         aria-label="Opciones de mi panel"
+         data-menu="mi-panel"
+         style="display: none;">
+         
+      <div class="item">
+        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
+        <span class="text-wrapper-4">Filtrar por autor</span>
+      </div>
+      <div class="item">
+        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
+        <span class="text-wrapper-4">Filtrar por categoria</span>
+      </div>
+      <div class="item">
+        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
+        <span class="text-wrapper-4">Filtrar por ISBN</span>
+      </div>
     </div>
   </div>
   
@@ -196,6 +222,7 @@
         </div>
       </div>
     </th:block>
+    <!-- fragemnto para la busquedad sin recarga -->
     <th:block th:fragment="busq-result">
       <div class="nav-result-wrapper" id="navResultFrag" hx-swap-oob="innerHTML">
         <div class="nav-result">

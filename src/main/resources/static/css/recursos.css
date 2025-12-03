@@ -548,7 +548,7 @@ a {
 .side-bar .div-2 {
   display: flex;
   align-items: center;
-  gap: 90px;
+  justify-content: space-between;
   padding: 0px 0px 0px 10px;
   align-self: stretch;
   width: 100%;

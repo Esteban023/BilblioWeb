@@ -105,6 +105,9 @@ a {
   display: none;
 }
 .login {
+  display: flex;
+  gap: 5px;
+  align-items: center;
   background-color: #c20e1a;
   color: white;
   font-family: "Open Sans-Regular", Helvetica;
@@ -170,7 +173,7 @@ a {
   align-items: flex-start;
   gap: 30px;
   padding: 10px;
-
+  cursor: pointer;
   flex: 0 0 auto;
 }
 .home-page .search {
@@ -210,6 +213,7 @@ a {
   width: 25px;
   height: 25px;
   aspect-ratio: 1;
+  transition: transform 0.3s ease;
 }
 
 .mipanel-section .vector-2 {
@@ -222,7 +226,7 @@ a {
   justify-content: flex-end;
   gap: 23px;
   display: flex;
-
+  margin-bottom: 10px;
   align-self: stretch;
   width: 100%;
   flex: 0 0 auto;
@@ -233,7 +237,7 @@ a {
   gap: 16.76px;
   padding: 8.82px 0px 8.82px 8.82px;
   display: flex;
-
+  margin-bottom: 10px;
   align-self: stretch;
   width: 100%;
   flex: 0 0 auto;
@@ -259,7 +263,7 @@ a {
   font-family: "Open Sans-Regular", Helvetica;
   font-weight: 400;
   color: #000000;
-  font-size: 14.1px;
+  font-size: 15px;
   letter-spacing: 0;
   line-height: normal;
 }

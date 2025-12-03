@@ -84,62 +84,77 @@
     </footer>
 
     <!-- Side Bar -->
-    <nav class="side-bar" th:fragment="side-bar" role="navigation" aria-label="Menú principal">
-      <div class="logo-section">
-        <img class="logo-UV" th:src="@{/img/univalle-logo-2.png}" alt="Logo de la Universidad del Valle" />
+<nav class="side-bar" th:fragment="side-bar" role="navigation" aria-label="Menú principal">
+  <div class="logo-section">
+    <img class="logo-UV" th:src="@{/img/univalle-logo-2.png}" alt="Logo de la Universidad del Valle" />
+  </div>
+  
+  <div class="separador" role="separator" aria-hidden="true"></div>
+  
+  <!-- ==== MI PANEL COLAPSABLE ==== -->
+  <div class="mipanel-section">
+    <!-- Cabecera clickable -->
+    <div class="div-2" 
+         role="button" 
+         tabindex="0" 
+         aria-expanded="false" 
+         data-toggle="mi-panel">
+      <h2 class="text-wrapper-3">Mi panel</h2>
+      <div class="arrow" data-arrow="mi-panel">
+        <img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/>
       </div>
-      
-      <div class="separador" role="separator" aria-hidden="true"></div>
-      
-      <div class="mipanel-section">
-        <div class="div-2">
-          <h2 class="text-wrapper-3">Mi panel</h2>
-          <div class="arrow">
-            <img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" />
-          </div>
+    </div>
+    
+    <!-- Menú que se muestra/oculta -->
+    <div class="item-section" 
+         role="menu" 
+         aria-label="Opciones de mi panel"
+         data-menu="mi-panel"
+         style="display: none;">
+         
+      <a class="item" th:href="@{/}" role="menuitem" aria-label="Realizar nueva búsqueda">
+        <div class="new-search">
+          <img class="vector-3" th:src="@{/img/busqueda-black.svg}" alt="" aria-hidden="true"/>
         </div>
-        
-        <div class="item-section" role="menu" aria-label="Opciones de mi panel">
-          <a class="item" th:href="@{/}" role="menuitem" aria-label="Realizar nueva búsqueda">
-            <div class="new-search">
-              <img class="vector-3" th:src="@{/img/busqueda-black.svg}" alt="" aria-hidden="true"/>
-            </div>
-            <div class="text-wrapper-4">Nueva Búsqueda</div>
-          </a>
-          
-          <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos">
-            <div class="img-wrapper">
-              <img class="vector-4" th:src="@{/img/canasta.jpeg}" alt="Icono de canasta" />
-            </div>
-            <div class="text-wrapper-4">Mi Canasta</div>
-          </a>
-          
-          <a class="item" th:href="@{/prestamo/listar}" role="menuitem" aria-label="Consultar mis préstamos activos">
-            <div class="vector-wrapper-2">
-              <img class="vector-5" th:src="@{/img/prestamo.jpeg}" alt="Icono de préstamo" />
-            </div>
-            <div class="text-wrapper-4">Mis Préstamos</div>
-          </a>
-          
-          <a class="item" th:href="@{/reserva/listar}" role="menuitem" aria-label="Ver mis reservas pendientes">
-            <div class="vector-wrapper-2">
-              <img class="vector-6" th:src="@{/img/reserva.jpeg}" alt="Icono de reserva" />
-            </div>
-            <div class="text-wrapper-4">Mis Reservas</div>
-          </a>
-        </div>
-      </div>
-      
-      <div class="tools-section">
-        <div class="div-2">
-          <h2 class="text-wrapper-5">Herramientas de Búsqueda</h2>
-        </div>
-      </div>
-      
-      <a class="login" style="margin-bottom: 10px;" th:if="${session.user}" th:href="@{/logout}" aria-label="Cerrar sesión del sistema"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M212.31-140Q182-140 161-161q-21-21-21-51.31v-535.38Q140-778 161-799q21-21 51.31-21h268.07v60H212.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v535.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85h268.07v60H212.31Zm436.92-169.23-41.54-43.39L705.08-450H363.85v-60h341.23l-97.39-97.38 41.54-43.39L820-480 649.23-309.23Z"/></svg>
-        Cerrar sesión
+        <div class="text-wrapper-4">Nueva Búsqueda</div>
       </a>
-    </nav>
+      
+      <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos">
+        <div class="img-wrapper">
+          <img class="vector-4" th:src="@{/img/canasta.jpeg}" alt="Icono de canasta" />
+        </div>
+        <div class="text-wrapper-4">Mi Canasta</div>
+      </a>
+      
+      <a class="item" th:href="@{/prestamo/listar}" role="menuitem" aria-label="Consultar mis préstamos activos">
+        <div class="vector-wrapper-2">
+          <img class="vector-5" th:src="@{/img/prestamo.jpeg}" alt="Icono de préstamo" />
+        </div>
+        <div class="text-wrapper-4">Mis Préstamos</div>
+      </a>
+      
+      <a class="item" th:href="@{/reserva/listar}" role="menuitem" aria-label="Ver mis reservas pendientes">
+        <div class="vector-wrapper-2">
+          <img class="vector-6" th:src="@{/img/reserva.jpeg}" alt="Icono de reserva" />
+        </div>
+        <div class="text-wrapper-4">Mis Reservas</div>
+      </a>
+    </div>
+  </div>
+  
+  <div class="tools-section">
+    <div class="div-2">
+      <h2 class="text-wrapper-5">Herramientas de Búsqueda</h2>
+    </div>
+  </div>
+  
+  <a class="login" style="margin-bottom: 10px;" th:if="${session.user}" th:href="@{/logout}" aria-label="Cerrar sesión del sistema">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+      <path d="M212.31-140Q182-140 161-161q-21-21-21-51.31v-535.38Q140-778 161-799q21-21 51.31-21h268.07v60H212.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v535.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85h268.07v60H212.31Zm436.92-169.23-41.54-43.39L705.08-450H363.85v-60h341.23l-97.39-97.38 41.54-43.39L820-480 649.23-309.23Z"/>
+    </svg>
+    Cerrar sesión
+  </a>
+</nav>
 
     <!-- Modal Fragment -->
     <th:block th:fragment="modal-resultado">

@@ -113,7 +113,7 @@ public class PrestamoServicio {
         // pero por si acaso lo guardamos también
         rbRepositorio.save(rb);
 
-        return new ResultadoPrestamo(true, "Prestamo exitoso", prestamoGuardado);
+        return new ResultadoPrestamo(true, "Préstamo exitoso", prestamoGuardado);
     }
 
     public ResultadoPrestamo finalizarPrestamo(Integer idPrestamo) {
@@ -121,13 +121,13 @@ public class PrestamoServicio {
 
         boolean isPresent = prestamoOpt.isPresent();
         if (!isPresent) {
-            return new ResultadoPrestamo(false, "No se encontro el prestamo");
+            return new ResultadoPrestamo(false, "No se encontro el préstamo");
         }
 
         Prestamo prestamo = prestamoOpt.get();
         boolean estado = prestamo.getEstado();
         if (!estado) {
-            return new ResultadoPrestamo(false, "El prestamo no está activo.");
+            return new ResultadoPrestamo(false, "El préstamo no está activo.");
         }
 
         RecursoBibliografico rb = prestamo.getRecursoBibliografico();
@@ -144,7 +144,7 @@ public class PrestamoServicio {
         rbRepositorio.save(rb);
         Prestamo prestamoFinalizado = prestamoRepositorio.save(prestamo);
 
-        return new ResultadoPrestamo(estado, "El prestamo finalizo", prestamoFinalizado);
+        return new ResultadoPrestamo(estado, "El préstamo finalizó", prestamoFinalizado);
     }
 
     public ResultadoPrestamo enviarCorreo(Integer idPrestamo){
@@ -152,7 +152,7 @@ public class PrestamoServicio {
 
         boolean isPresent = prestamoOpt.isPresent();
         if (!isPresent) {
-            return new ResultadoPrestamo(false, "No se encontro el prestamo");
+            return new ResultadoPrestamo(false, "No se encontró el préstamo");
         }
 
         Prestamo prestamo = prestamoOpt.get();

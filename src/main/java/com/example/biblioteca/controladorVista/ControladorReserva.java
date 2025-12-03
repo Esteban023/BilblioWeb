@@ -51,8 +51,8 @@ public class ControladorReserva {
         String tituloModal = crearReserva.getMensaje();
         Reserva reserva = crearReserva.getReserva();
         String mensaje = String.format(
-                "El recurso con codigo (%s) se Reservó satisfactoriamente para el %s. Sera notificado cuando el recurso este listo para ser recogido",
-                reserva.getRecursoBibliografico().getCodigoDeBarras(),
+                "Has reservado (%s) para el %s. Serás notificado en tu correo cuando el recurso esté listo para ser recogido",
+                reserva.getRecursoBibliografico().getTitulo(),
                 reserva.getFechaReserva()
         );
         redirect.addFlashAttribute("tituloModal", tituloModal);

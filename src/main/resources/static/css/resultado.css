@@ -112,7 +112,7 @@ a {
   color: white;
   font-family: "Open Sans-Regular", Helvetica;
   border: none;
-  padding: 10px 26px;
+  padding: 10px 14px;
   border-radius: 6px;
   font-size: 17px;
   cursor: pointer;
@@ -411,14 +411,14 @@ a {
   border: 1px solid #9d989a;
   border-radius: 5px;
   font-size: 16px;
-  color: #cfcfec;
+  color: #9d989a;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-/*Al pasar el mouse */
 .servicio:hover {
-  background-color: #eef;
+  background-color: #cfcfcf;
+  color: #fff;
 }
 
 /*Opciones dentro del dropdown */

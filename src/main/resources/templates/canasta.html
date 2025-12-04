@@ -1,103 +1,167 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta charset="utf-8" />
   <link rel="stylesheet" th:href="@{/css/resultado.css}" />
 </head>
+
 <body>
-<div th:replace="~{fragmentos :: top-bar}"></div>
-<div class="container">
-  <div class="home-page">
-    <div class="main-content">
-      <div th:replace="~{fragmentos :: profile}"></div>
-      <div class="search">
-        <!-- FORMULARIO DE BÚSQUEDA -->
-        <div class="nav-content">
-          <form class="nav" th:action="@{/buscar}" method="post">
-            <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo" th:value="${palabra}">
-            <button class="vector-wrapper" type="submit"><img class="vector" th:src="@{/img/busqueda.svg}" /></button>
-            <div class="voice"><img class="img" th:src="@{/img/microfono.svg}" /></div>
-          </form>
-        </div>
-        
-        <div class="nav-result-wrapper">
-          <div class="nav-result">
-            <div class="div-wrapper"><div class="text-wrapper"><span th:text="${resultados.size()}"></span> Resultados</div></div>
-            <div class="div"><p class="p">Mi canasta</p></div>
+  <div th:replace="~{fragmentos :: top-bar}"></div>
+  <div class="container">
+    <div class="home-page">
+      <div class="main-content">
+        <div th:replace="~{fragmentos :: profile}"></div>
+        <div class="search">
+          <!-- FORMULARIO DE BÚSQUEDA -->
+          <div class="nav-content">
+            <form class="nav" th:action="@{/buscar}" method="post">
+              <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo"
+                th:value="${palabra}">
+              <button class="vector-wrapper" type="submit"><img class="vector" th:src="@{/img/busqueda.svg}" /></button>
+              <div class="voice"><img class="img" th:src="@{/img/microfono.svg}" /></div>
+            </form>
           </div>
-        </div>
 
-        <!-- FORMULARIO PARA PRÉSTAMOS -->
-        <form th:action="@{/canasta/servicio}" method="post" id="prestamoForm" class="result-content">
-          <div class="result" th:each="resultado, iterStat : ${resultados}">
-            <div class="numero">
-              <input type="checkbox" name="select" th:value="${resultado.codigoDeBarras}"> 
-              <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div>
-            </div>
-            <div class="contenido">
-              <a class="text-wrapper-3" th:text="${resultado.titulo}" th:href="@{'/buscar/' + ${resultado.titulo}}"></a>
-              <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
-              <div class="icon-text">
-                <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
-                <div class="frame-2"><div class="text-wrapper-5" th:text="${resultado.tipoDePublicacion}"></div></div>
+          <div class="nav-result-wrapper">
+            <div class="nav-result">
+              <div class="div-wrapper">
+                <div class="text-wrapper"><span th:text="${resultados.size()}"></span> Resultados</div>
               </div>
-              <div class="text-wrapper-6">Ejemplares: 2</div>
-              <a class="delete" th:href="@{'/canasta/eliminar/'+ ${iterStat.count}}">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
-
-              </a>
+              <div class="div">
+                <p class="p">Mi canasta</p>
+              </div>
             </div>
           </div>
-            <div class="acciones">
-                <select name="servicio" class="servicio" required>
-                    <option disabled selected>Seleccionar servicio</option>
-                    <option value="prestamo">Préstamo</option>
 
-                    <option value="reserva">Reserva</option>
-                </select>
-                <button type="submit" class="login">Aceptar</button>
-           </div>
-        </form>
+          <!-- FORMULARIO PARA PRÉSTAMOS -->
+          <form th:action="@{/canasta/servicio}" method="post" id="prestamoForm" class="result-content">
+            <div class="result" th:each="resultado, iterStat : ${resultados}">
+              <div class="numero">
+                <input type="checkbox" name="select" th:value="${resultado.codigoDeBarras}">
+                <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div>
+              </div>
+              <div class="contenido">
+                <a class="text-wrapper-3" th:text="${resultado.titulo}"
+                  th:href="@{'/buscar/' + ${resultado.titulo}}"></a>
+                <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
+                <div class="icon-text">
+                  <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
+                  <div class="frame-2">
+                    <div class="text-wrapper-5" th:text="${resultado.tipoDePublicacion}"></div>
+                  </div>
+                </div>
+                <div class="text-wrapper-6">Ejemplares: 2</div>
+                <a class="delete" th:href="@{'/canasta/eliminar/'+ ${iterStat.count}}">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#fff">
+                    <path
+                      d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                  </svg>
 
-       
+                </a>
+              </div>
+            </div>
+          </form>          
+          <div class="acciones">
+            <div class="seleccion" style="font-family: 'Open Sans', Helvetica;">
+              <a href="" id="seleccionar-todo" style="color: #1e1e1e;">Seleccionar todos</a>
+            </div>
+            <div class="acc-servicio" style="display: flex; gap: 10px;">
+              <select name="servicio" class="servicio" required>
+              <option disabled selected>Seleccionar servicio</option>
+              <option value="prestamo">Préstamo</option>
+              <option value="reserva">Reserva</option>
+              </select>
+              <button type="submit" class="login">Aceptar</button>
+            </div>
+          </div>
+        </div>
+        <footer th:replace="~{fragmentos :: footer}"></footer>
       </div>
-      <footer th:replace="~{fragmentos :: footer}"></footer>
     </div>
+    <div th:replace="~{fragmentos :: side-bar}"></div>
   </div>
-  <div th:replace="~{fragmentos :: side-bar}"></div>
-</div>
-<div th:replace="~{fragmentos :: modal-resultado}"></div>
-<script>
-  function validarSeleccion(formId) {
+  <div th:replace="~{fragmentos :: modal-resultado}"></div>
+  <script>
+    function validarSeleccion(formId) {
       const form = document.getElementById(formId);
       const checkboxes = form.querySelectorAll('input[type="checkbox"][name="select"]');
       let alMenosUnoSeleccionado = false;
-      
-      checkboxes.forEach(checkbox => {
-          if(checkbox.checked) {
-              alMenosUnoSeleccionado = true;
-          }
-      });
-      
-      if(!alMenosUnoSeleccionado) {
-          alert('Por favor seleccione al menos un recurso');
-          return false;
-      }
-      
-      return true;
-  }
-</script>
-<script th:src="@{/js/dropdown-sidebar.js}"></script>
-<style>
 
-.acciones{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content:  end;
-    gap: 10px;
-}
-</style>
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          alMenosUnoSeleccionado = true;
+        }
+      });
+
+      if (!alMenosUnoSeleccionado) {
+        alert('Por favor seleccione al menos un recurso');
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const enlace = document.getElementById("seleccionar-todo");
+    const form   = document.getElementById("prestamoForm");
+
+    setTimeout(function () {
+      const checkboxes = form.querySelectorAll('input[name="select"]');
+      if (checkboxes.length === 0) return;
+
+      function actualizarTexto() {
+        const todosMarcados = Array.from(checkboxes).every(cb => cb.checked);
+        enlace.textContent = todosMarcados ? "Quitar selección" : "Seleccionar todos";
+      }
+
+      enlace.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const todosMarcadosActualmente = Array.from(checkboxes).every(cb => cb.checked);
+
+        if (todosMarcadosActualmente) {
+          checkboxes.forEach(cb => cb.checked = false);
+        } else {
+          checkboxes.forEach(cb => cb.checked = true);
+        }
+
+        actualizarTexto();
+      });
+      checkboxes.forEach(cb => cb.addEventListener("change", actualizarTexto));
+
+      actualizarTexto();
+
+    }, 600); //aqui es
+  });
+  </script>
+  <script th:src="@{/js/dropdown-sidebar.js}"></script>
+  <style>
+    .acciones {
+      display: flex;
+      align-items: baseline;
+      padding: 10px 30px;
+      width: 100%;
+      justify-content: space-between;
+      flex-direction: row;
+
+      a{
+        padding: 10px;
+        color:#1e1e1e;
+      }
+
+      a:hover{
+        text-decoration: underline;
+        background: #e5e5e5;
+        padding: 10px;
+        border-radius: 6px;
+      }
+    }
+
+  </style>
 </body>
+
 </html>

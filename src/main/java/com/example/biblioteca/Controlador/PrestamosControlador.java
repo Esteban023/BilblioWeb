@@ -56,21 +56,21 @@ public class PrestamosControlador {
 
     @PostMapping("/varios_prestamos")
     public ResponseEntity<ResultadoPrestamo> cargarVariosPrestamos(@RequestBody List<PrestamoRequest> requests) {
-        ResultadoPrestamo resultadoFinal = new ResultadoPrestamo(true, "Todos los prestamos se realizaron con exito");
+        ResultadoPrestamo resultadoFinal = new ResultadoPrestamo(true, "Todos los préstamos se realizaron con éxito");
 
         for (PrestamoRequest request : requests) {
             Integer usuarioId = request.getIdUsuario();
             String codigoBarras = request.getCodigoDeBarras();
 
             if(usuarioId == null || codigoBarras == null) {
-                ResultadoPrestamo rPrestamo = new ResultadoPrestamo(false, "Datos incorrectos en uno de los prestamos");
+                ResultadoPrestamo rPrestamo = new ResultadoPrestamo(false, "Datos incorrectos en uno de los préstamos");
                 return ResponseEntity.badRequest().body(rPrestamo);
             }
             ResultadoPrestamo resultadoPrestamo = prestamoServicio.iniciarPrestamo(usuarioId, codigoBarras);
             
             if (!resultadoPrestamo.isExito()) {
                 resultadoFinal.setExito(false);
-                resultadoFinal.setMensaje("Algunos prestamos no se pudieron realizar correctamente");
+                resultadoFinal.setMensaje("Algunos préstamos no se pudieron realizar correctamente");
             }
         }
 

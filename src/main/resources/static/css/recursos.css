@@ -124,6 +124,9 @@ a {
   padding: 5px 8px;
 }
 .login {
+  display: flex;
+  gap: 5px;
+  align-items: center;
   background-color: #c20e1a;
   color: white;
   font-family: "Open Sans-Regular", Helvetica;
@@ -134,6 +137,8 @@ a {
   cursor: pointer;
   transition: background-color 0.3s ease;
   line-height: normal;
+  display: flex;
+  align-items: center;
 }
 .login:hover {
   cursor: pointer;
@@ -536,16 +541,15 @@ a {
   align-items: flex-start;
   gap: 30px;
   padding: 10px;
-
+  cursor: pointer;
   flex: 0 0 auto;
 }
 
 .side-bar .div-2 {
   display: flex;
   align-items: center;
-  gap: 90px;
+  justify-content: space-between;
   padding: 0px 0px 0px 10px;
-
   align-self: stretch;
   width: 100%;
   flex: 0 0 auto;
@@ -557,7 +561,6 @@ a {
   font-weight: 600;
   color: #1e1c1a;
   font-size: 18px;
-
   width: fit-content;
   letter-spacing: 0;
   line-height: normal;
@@ -567,6 +570,7 @@ a {
   width: 25px;
   height: 25px;
   aspect-ratio: 1;
+  transition: transform 0.3s ease;
 }
 
 .mipanel-section .vector-2 {
@@ -579,7 +583,6 @@ a {
   justify-content: flex-end;
   gap: 23px;
   display: flex;
-
   align-self: stretch;
   width: 100%;
   flex: 0 0 auto;
@@ -589,8 +592,8 @@ a {
   align-items: center;
   gap: 16.76px;
   padding: 8.82px 0px 8.82px 8.82px;
-  display: flex;
-
+  display: flex;  
+  margin-bottom: 10px;
   align-self: stretch;
   width: 100%;
   flex: 0 0 auto;

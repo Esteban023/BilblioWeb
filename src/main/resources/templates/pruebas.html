@@ -13,9 +13,7 @@
       <div class="main-content">
         <div th:replace="~{fragmentos :: profile}"></div>
         <div class="search">
-            <h3 th:text="${session.user.nombre}"></h3>
-            <h3 th:if="${prestamos}"> Tus préstamos</h3>
-            <h3 th:if="${reservas}"> Tus reservas</h3>
+            
             <div class="frame-4">
                 <div class="frame-5"><div class="text-wrapper-6">Ejemplares que actualmente tiene en <span th:text="${prestamos != null ? 'Préstamos' : 'Reservas'}"></span>:</div></div>
                 <table th:replace="~{tablaTemporal :: tabla}"></table>                
@@ -26,5 +24,6 @@
     </div>
     <div th:replace="~{fragmentos :: side-bar}"></div>
   </div>
+  <script th:src="@{/js/dropdown-sidebar.js}"></script>
 </body>
 </html>

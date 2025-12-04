@@ -34,6 +34,16 @@ public class ControladorBusqueda {
         return "resultado";
     }
 
+    @PostMapping("/buscarFragment")
+    public String mostrarfragmento(Model model, @RequestParam String palabraClave){
+        Optional<List<RecursoBibliografico>> recursoBibliograficos = Optional.ofNullable(servicio.buscarPorPalabraClave(palabraClave, null));
+        List<RecursoBibliografico> resultados;
+        resultados = recursoBibliograficos.orElseGet(ArrayList::new);
+        model.addAttribute("palabra", palabraClave);
+        model.addAttribute("resultados", resultados);
+        return "fragmentos :: busq-result";
+    }
+
 
     @GetMapping("/pruebas") //este controlador es solo para pruebas
     public String mostrarprueba() {

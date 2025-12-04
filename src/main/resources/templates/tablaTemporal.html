@@ -10,7 +10,7 @@
                 <th scope="col" class="frame-8"><div class="text-wrapper-7" >Codigo del recurso</div></th>
                 <th scope="col" class="frame-8"><div class="text-wrapper-7">Título del recurso</div></th>
         </tr>
-        <tr th:if="${reservas}" class="header">
+        <tr th:if="${reservas}" class="header" style="font-weight: 600;">
             <th scope="col" class="frame-8"><div class="text-wrapper-7">Código de reserva</div></th>
             <th scope="col" class="frame-7"><div class="text-wrapper-7">Fecha de reserva</div></th>
             <th scope="col" class="frame-7"><div class="text-wrapper-7">Fecha límite de retiro</div></th>
@@ -35,7 +35,7 @@
             <td class="frame-7"><div class="text-wrapper-8"  th:text="${#temporals.format(reserva.fechaLimiteRetiro, 'dd/MM/yyyy')}"></div></td>
             <td class="frame-7"><div class="text-wrapper-8"  th:text="${reserva.estado}"></div></td>
             <td class="frame-7"><div class="text-wrapper-8"  th:text="${reserva.posicionCola}"></div></td>
-            <td class="frame-7"><a th:href="@{'/reserva/cancelar/'+ ${reserva.codigoReserva}}"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="18px" fill="#FFFFFF"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path>
+            <td class="frame-7"><a th:if="${reserva.estado.name != 'CANCELADA'}" th:href="@{'/reserva/cancelar/'+ ${reserva.codigoReserva}}"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="18px" fill="#FFFFFF"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path>
             </svg>Cancelar</a></td>
         </tr>
     </tbody>    

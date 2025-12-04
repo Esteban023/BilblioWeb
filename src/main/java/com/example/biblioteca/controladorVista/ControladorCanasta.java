@@ -26,7 +26,7 @@ public class ControladorCanasta {
     RecursoServicio servicio;
     
     @PostMapping("/agregar")
-    public String agregarRecurso(@RequestParam String select, HttpSession session){
+    public String agregarRecurso(@RequestParam String select, HttpSession session, RedirectAttributes redirect){
         if(select == null ) return "redirect:/";
         List<RecursoBibliografico> lista;
         Optional<RecursoBibliografico> opt = servicio.obtenerRecursoBibliograficoCodigoDeBarras(select);
@@ -34,10 +34,14 @@ public class ControladorCanasta {
         lista = (ArrayList) session.getAttribute("canasta");
         if(lista == null) lista = new ArrayList<>();
         RecursoBibliografico recurso = opt.get();
-        lista.add(recurso);
-        session.setAttribute("canasta", lista);
         String tituloRecurso = recurso.getTitulo();
         tituloRecurso = URLEncoder.encode(tituloRecurso, StandardCharsets.UTF_8).replace("+", "%20");
+        if(recursoIsPresent(lista, recurso)) {
+            redirect.addFlashAttribute("error", "El recurso ya se encuentra en la canasta"); 
+            return "redirect:/buscar/" + tituloRecurso;
+        }
+        lista.add(recurso);
+        session.setAttribute("canasta", lista);
         
         return "redirect:/buscar/" + tituloRecurso;
     }
@@ -46,7 +50,14 @@ public class ControladorCanasta {
     public String verCanasta(HttpSession session, Model model){
         List<RecursoBibliografico> lista = (ArrayList)session.getAttribute("canasta");
         if(lista == null) lista = new ArrayList<>();
-        else lista = servicio.buscarVarios(lista);
+        else {
+            List<RecursoBibliografico> eliminar = (List<RecursoBibliografico>) model.getAttribute("eliminarCanasta");
+            if(eliminar != null && eliminar.size()>0){
+                lista.removeAll(eliminar);
+                session.setAttribute("canasta", lista);
+            }
+            lista = servicio.buscarVarios(lista);
+        }
         model.addAttribute("resultados", lista);
         return "canasta";
         
@@ -83,4 +94,12 @@ public class ControladorCanasta {
         return "redirect:/canasta/listar";
     }
     
+    private boolean recursoIsPresent(List<RecursoBibliografico> lista, RecursoBibliografico recurso){
+        for (RecursoBibliografico recursoBibliografico : lista) {
+            if(recursoBibliografico.getCodigoDeBarras().equalsIgnoreCase(recurso.getCodigoDeBarras())){
+                return true;
+            }
+        }
+        return false;
+    }
 }

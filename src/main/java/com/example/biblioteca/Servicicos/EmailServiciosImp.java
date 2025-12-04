@@ -31,10 +31,10 @@ public class EmailServiciosImp implements EmailServicios {
             
             // Poner multipart como true para permitir el envio de adjuntos
             mimeMessageHelper
-            = new MimeMessageHelper(msjCorreo, true);
+            = new MimeMessageHelper(msjCorreo, true, "UTF-8");
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(detalles.getRecipiente());
-            mimeMessageHelper.setText(detalles.getMsgBody());
+            mimeMessageHelper.setText(detalles.getMsgBody(), detalles.isHtml());
             mimeMessageHelper.setSubject(
                 detalles.getAsunto());
             // Enviando el correo

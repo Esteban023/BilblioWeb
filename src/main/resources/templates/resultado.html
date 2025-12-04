@@ -4,6 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta charset="utf-8" />
   <link rel="stylesheet" th:href="@{/css/resultado.css}" />
+  <link rel="stylesheet" th:href="@{/css/loaderRecursos.css}" />
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 
 <body>
@@ -14,19 +16,19 @@
       <div th:replace="~{fragmentos :: profile}"></div>
       <div class="search">
         <div class="nav-content">
-          <form class="nav" th:action="@{/buscar}" method="post">
+          <form class="nav" hx-post="/buscarFragment" hx-target="#resultadoFrag" hx-swap="innerHTML"  hx-indicator="#loading, #resultadoFrag">
             <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo" th:value="${palabra}">
             <button class="vector-wrapper" type="submit"><img class="vector" th:src="@{/img/busqueda.svg}" /></button>
             <div class="voice"><img class="img" th:src="@{/img/microfono.svg}" /></div>
           </form>
         </div>
-        <div class="nav-result-wrapper">
+        <div class="nav-result-wrapper" id="navResultFrag">
           <div class="nav-result">
             <div class="div-wrapper"><div class="text-wrapper"><span th:text="${resultados.size()}"></span>  Resultados</div></div>
             <div class="div"><p class="p">Resultados de búsqueda para “<span th:text="${palabra}"></span>”</p></div>
           </div>
         </div>
-        <div class="result-content" >
+        <div class="result-content" id="resultadoFrag">
 
           <div class="result" th:each="resultado, iterStat : ${resultados}">
             <div class="numero"><div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div></div>
@@ -42,6 +44,17 @@
           </div>
 
         </div>
+        <div id="loading">
+          <div class="book">
+            <div class="book__pg-shadow"></div>
+            <div class="book__pg"></div>
+            <div class="book__pg book__pg--2"></div>
+            <div class="book__pg book__pg--3"></div>
+            <div class="book__pg book__pg--4"></div>
+            <div class="book__pg book__pg--5"></div>
+          </div>
+          <div>Cargando resultados...</div>
+        </div>
       </div>
       <footer th:replace="~{fragmentos :: footer}"></footer>
     </div>
@@ -49,34 +62,11 @@
   </div>
   <div th:replace="~{fragmentos :: side-bar}"></div>
 </div>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      // 1. Restaurar posición al cargar
-      const savedScroll = sessionStorage.getItem('resultsScrollPosition');
-      if (savedScroll !== null) {
-          setTimeout(function() {
-              window.scrollTo(0, parseInt(savedScroll));
-              sessionStorage.removeItem('resultsScrollPosition');
-          }, 100);
-      }
-
-      // 2. Manejar el botón de volver con event delegation
-      document.body.addEventListener('click', function(e) {
-          if (e.target.closest('a.back')) {
-              e.preventDefault();
-              sessionStorage.setItem('resultsScrollPosition', window.pageYOffset.toString());
-              window.history.back();
-          }
-      });
-
-      // 3. Manejar clicks en recursos
-      const resultLinks = document.querySelectorAll('a.text-wrapper-3');
-      resultLinks.forEach(function(link) {
-          link.addEventListener('click', function() {
-              sessionStorage.setItem('resultsScrollPosition', window.pageYOffset.toString());
-          });
-      });
-  });
-</script>
+<script th:src="@{/js/dropdown-sidebar.js}"></script>
+<style>
+  #resultadoFrag.htmx-request {
+    display: none;
+  }
+</style>
 </body>
 </html>

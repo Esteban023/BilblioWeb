@@ -162,7 +162,7 @@ a {
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: -4px 3px 10px 0px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(2px);
+  /* backdrop-filter: blur(2px); */
 }
 
 .home-page .text-wrapper {
@@ -376,12 +376,13 @@ a {
   gap: 30px;
   padding: 10px;
   flex: 0 0 auto;
+  cursor: pointer;  
 }
 
 .side-bar .div-2 {
   display: flex;
   align-items: center;
-  gap: 90px;
+  justify-content: space-between;
   padding: 0px 0px 0px 10px;
   align-self: stretch;
   width: 100%;
@@ -402,7 +403,8 @@ a {
 .mipanel-section .arrow {
   width: 25px;
   height: 25px;
-  aspect-ratio: 1;
+  aspect-ratio: 1;  
+  transition: transform 0.3s ease;
 }
 
 .mipanel-section .vector-2 {
@@ -427,7 +429,8 @@ a {
   display: flex;
   align-self: stretch;
   width: 100%;
-  flex: 0 0 auto;
+  flex: 0 0 auto;    
+  margin-bottom: 10px;
   text-decoration: none;
   color: inherit;
 }

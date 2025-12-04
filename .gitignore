@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+###archivos de camilo###
+src/main/resources/application-dev.properties
+src/main/resources/data.sql

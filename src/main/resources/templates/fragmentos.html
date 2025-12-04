@@ -55,6 +55,17 @@
           <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#c20e1a"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
         </button>
       </div>
+      <th:block th:if="${errors.size()>0}" th:each="error, iterStat : ${errors}">
+        <div th:class="'error-message error-'+${iterStat.count}"  >
+          <div th:text="${error}"></div>
+          <button th:onclick="document.querySelector('.error-[[${iterStat.count}]]').style.display = 'none';"
+                    aria-label="Cerrar alerta de error" style="border: none; background-color: transparent; cursor: pointer;">
+  
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#c20e1a"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+          </button>
+        </div>
+
+      </th:block>
       <a class="back" href="javascript:history.back()" aria-label="Volver a la página anterior">
         <div class="vector-wrapper">
           <img class="vector" th:src="@{/img/back.svg}" alt="Icono de flecha hacia atrás" />
@@ -66,7 +77,8 @@
         <img class="icon" th:src="@{/img/icon.svg}" alt=""/>
       </div>
       
-      <a class="login" th:if="${session.user == null}" th:href="@{/login}" aria-label="Iniciar sesión en el sistema"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M479.62-140v-60h268.07q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-535.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H479.62v-60h268.07Q778-820 799-799q21 21 21 51.31v535.38Q820-182 799-161q-21 21-51.31 21H479.62Zm-54.23-169.23-41.54-43.39L481.23-450H140v-60h341.23l-97.38-97.38 41.54-43.39L596.15-480 425.39-309.23Z"/></svg>
+      <a class="login" th:if="${session.user == null}" th:href="@{/login}" aria-label="Iniciar sesión en el sistema">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M479.62-140v-60h268.07q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-535.38q0-4.62-3.85-8.46-3.84-3.85-8.46-3.85H479.62v-60h268.07Q778-820 799-799q21 21 21 51.31v535.38Q820-182 799-161q-21 21-51.31 21H479.62Zm-54.23-169.23-41.54-43.39L481.23-450H140v-60h341.23l-97.38-97.38 41.54-43.39L596.15-480 425.39-309.23Z"/></svg>
         Acceder
       </a>
     </div>
@@ -84,62 +96,103 @@
     </footer>
 
     <!-- Side Bar -->
-    <nav class="side-bar" th:fragment="side-bar" role="navigation" aria-label="Menú principal">
-      <div class="logo-section">
-        <img class="logo-UV" th:src="@{/img/univalle-logo-2.png}" alt="Logo de la Universidad del Valle" />
+<nav class="side-bar" th:fragment="side-bar" role="navigation" aria-label="Menú principal">
+  <div class="logo-section">
+    <img class="logo-UV" th:src="@{/img/univalle-logo-2.png}" alt="Logo de la Universidad del Valle" />
+  </div>
+  
+  <div class="separador" role="separator" aria-hidden="true"></div>
+  
+  <!-- ==== MI PANEL COLAPSABLE ==== -->
+  <div class="mipanel-section">
+    <!-- Cabecera clickable -->
+    <div class="div-2" 
+         role="button" 
+         tabindex="0" 
+         aria-expanded="false" 
+         data-toggle="mi-panel">
+      <h2 class="text-wrapper-3">Mi panel</h2>
+      <div class="arrow" data-arrow="mi-panel">
+        <img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/>
       </div>
-      
-      <div class="separador" role="separator" aria-hidden="true"></div>
-      
-      <div class="mipanel-section">
-        <div class="div-2">
-          <h2 class="text-wrapper-3">Mi panel</h2>
-          <div class="arrow">
-            <img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" />
-          </div>
+    </div>
+    
+    <!-- Menú que se muestra/oculta -->
+    <div class="item-section" 
+         role="menu" 
+         aria-label="Opciones de mi panel"
+         data-menu="mi-panel"
+         style="display: none;">
+         
+      <a class="item" th:href="@{/}" role="menuitem" aria-label="Realizar nueva búsqueda">
+        <div class="new-search">
+          <img class="vector-3" th:src="@{/img/busqueda-black.svg}" alt="" aria-hidden="true"/>
         </div>
-        
-        <div class="item-section" role="menu" aria-label="Opciones de mi panel">
-          <a class="item" th:href="@{/}" role="menuitem" aria-label="Realizar nueva búsqueda">
-            <div class="new-search">
-              <img class="vector-3" th:src="@{/img/busqueda-black.svg}" alt="" aria-hidden="true"/>
-            </div>
-            <div class="text-wrapper-4">Nueva Búsqueda</div>
-          </a>
-          
-          <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos">
-            <div class="img-wrapper">
-              <img class="vector-4" th:src="@{/img/canasta.jpeg}" alt="Icono de canasta" />
-            </div>
-            <div class="text-wrapper-4">Mi Canasta</div>
-          </a>
-          
-          <a class="item" th:href="@{/prestamo/listar}" role="menuitem" aria-label="Consultar mis préstamos activos">
-            <div class="vector-wrapper-2">
-              <img class="vector-5" th:src="@{/img/prestamo.jpeg}" alt="Icono de préstamo" />
-            </div>
-            <div class="text-wrapper-4">Mis Préstamos</div>
-          </a>
-          
-          <a class="item" th:href="@{/reserva/listar}" role="menuitem" aria-label="Ver mis reservas pendientes">
-            <div class="vector-wrapper-2">
-              <img class="vector-6" th:src="@{/img/reserva.jpeg}" alt="Icono de reserva" />
-            </div>
-            <div class="text-wrapper-4">Mis Reservas</div>
-          </a>
-        </div>
-      </div>
-      
-      <div class="tools-section">
-        <div class="div-2">
-          <h2 class="text-wrapper-5">Herramientas de Búsqueda</h2>
-        </div>
-      </div>
-      
-      <a class="login" style="margin-bottom: 10px;" th:if="${session.user}" th:href="@{/logout}" aria-label="Cerrar sesión del sistema"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M212.31-140Q182-140 161-161q-21-21-21-51.31v-535.38Q140-778 161-799q21-21 51.31-21h268.07v60H212.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v535.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85h268.07v60H212.31Zm436.92-169.23-41.54-43.39L705.08-450H363.85v-60h341.23l-97.39-97.38 41.54-43.39L820-480 649.23-309.23Z"/></svg>
-        Cerrar sesión
+        <div class="text-wrapper-4">Nueva Búsqueda</div>
       </a>
-    </nav>
+      
+      <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos">
+        <div class="img-wrapper">
+          <img class="vector-4" th:src="@{/img/canasta.jpeg}" alt="Icono de canasta" />
+        </div>
+        <div class="text-wrapper-4">Mi Canasta</div>
+      </a>
+      
+      <a class="item" th:href="@{/prestamo/listar}" role="menuitem" aria-label="Consultar mis préstamos activos">
+        <div class="vector-wrapper-2">
+          <img class="vector-5" th:src="@{/img/prestamo.jpeg}" alt="Icono de préstamo" />
+        </div>
+        <div class="text-wrapper-4">Mis Préstamos</div>
+      </a>
+      
+      <a class="item" th:href="@{/reserva/listar}" role="menuitem" aria-label="Ver mis reservas pendientes">
+        <div class="vector-wrapper-2">
+          <img class="vector-6" th:src="@{/img/reserva.jpeg}" alt="Icono de reserva" />
+        </div>
+        <div class="text-wrapper-4">Mis Reservas</div>
+      </a>
+    </div>
+  </div>
+  
+  <div class="mipanel-section">
+    <div class="div-2"  
+         role="button" 
+         tabindex="0" 
+         aria-expanded="false" 
+         data-toggle="mi-panel">
+      <h2 class="text-wrapper-3">Herramientas de busquedad</h2>
+      <div class="arrow" data-arrow="mi-panel">
+        <img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/>
+      </div>
+    </div>
+    <div class="item-section" 
+         role="menu" 
+         aria-label="Opciones de mi panel"
+         data-menu="mi-panel"
+         style="display: none;">
+         
+      <div class="item">
+        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
+        <span class="text-wrapper-4">Filtrar por autor</span>
+      </div>
+      <div class="item">
+        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
+        <span class="text-wrapper-4">Filtrar por categoria</span>
+      </div>
+      <div class="item">
+        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
+        <span class="text-wrapper-4">Filtrar por ISBN</span>
+      </div>
+    </div>
+  </div>
+  
+  <a class="login" style="margin-bottom: 10px;" th:if="${session.user}" th:href="@{/logout}" aria-label="Cerrar sesión del sistema">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+      <path d="M212.31-140Q182-140 161-161q-21-21-21-51.31v-535.38Q140-778 161-799q21-21 51.31-21h268.07v60H212.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v535.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85h268.07v60H212.31Zm436.92-169.23-41.54-43.39L705.08-450H363.85v-60h341.23l-97.39-97.38 41.54-43.39L820-480 649.23-309.23Z"/>
+    </svg>
+    Cerrar sesión
+  </a>
+</nav>
 
     <!-- Modal Fragment -->
     <th:block th:fragment="modal-resultado">
@@ -169,8 +222,43 @@
         </div>
       </div>
     </th:block>
-  
+    <!-- fragemnto para la busquedad sin recarga -->
+    <th:block th:fragment="busq-result">
+      <div class="nav-result-wrapper" id="navResultFrag" hx-swap-oob="innerHTML">
+        <div class="nav-result">
+          <div class="div-wrapper">
+            <div class="text-wrapper"><span th:text="${resultados.size()}"></span> Resultados</div>
+          </div>
+          <div class="div">
+            <p class="p">Resultados de búsqueda para “<span th:text="${palabra}"></span>”</p>
+          </div>
+        </div>
+      </div>
+      <div class="result-content" id="resultadoFrag"  hx-swap-oob="outerHTML">
+    
+        <div class="result" th:each="resultado, iterStat : ${resultados}">
+          <div class="numero">
+            <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div>
+          </div>
+          <div class="contenido">
+            <a class="text-wrapper-3" th:text="${resultado.titulo}"
+              th:href="@{/buscar/{titulo}(titulo = ${resultado.titulo})}"></a>
+            <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
+            <div class="icon-text">
+              <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
+              <div class="frame-2">
+                <div class="text-wrapper-5" th:text="${resultado.tipoDePublicacion}"></div>
+              </div>
+            </div>
+            <div class="text-wrapper-6">Ejemplares: 2</div>
+          </div>
+        </div>
+    
+      </div>
+    
+    </th:block>
   </div>
+  
   </body>
 
 </html>

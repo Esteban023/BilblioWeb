@@ -36,9 +36,10 @@ public interface RecursoRepositorio extends JpaRepository<RecursoBibliografico, 
         "  OR LOWER(r.estado_fisico) LIKE LOWER(CONCAT('%', ?1, '%')) " +
         "  OR LOWER(r.contenido) LIKE LOWER(CONCAT('%', ?1, '%')) " +
         ") " +
-        "AND ( ?2 IS NULL OR UPPER(?2) = 'TODOS' OR LOWER(r.categoria) = LOWER(?2) )",
+        "AND ( ?2 IS NULL OR UPPER(?2) = 'TODOS' OR LOWER(r.categoria) = LOWER(?2) )"+
+        "AND ( ?3 IS NULL OR UPPER(?3) = 'TODOS' OR a.id = ?3 )",
         nativeQuery = true)
-       List<RecursoBibliografico> buscarPorPalabraClave(String palabraClave, String categoria);
+       List<RecursoBibliografico> buscarPorPalabraClave(String palabraClave, String categoria, String idAutor);
 
 
        @Query("SELECT recurso FROM RecursoBibliografico recurso WHERE recurso.isbn = ?1")

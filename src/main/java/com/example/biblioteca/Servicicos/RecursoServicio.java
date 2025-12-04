@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.example.biblioteca.Model.Autor;
 import com.example.biblioteca.Model.RecursoBibliografico;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.biblioteca.bibliotecaRepositorio.RecursoRepositorio;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @Service
 public class RecursoServicio {
@@ -57,8 +59,8 @@ public class RecursoServicio {
 
     } 
 
-    public List<RecursoBibliografico> buscarPorPalabraClave(String palabraClave, String categoria) {
-        return rbRepositorio.buscarPorPalabraClave(palabraClave, categoria);
+    public List<RecursoBibliografico> buscarPorPalabraClave(String palabraClave, String categoria, String autorId) {
+        return rbRepositorio.buscarPorPalabraClave(palabraClave, categoria, autorId);
     }
 
     public Set<RecursoBibliografico> buscarPorTituloAutor(String titulo, String nombreAutor) {
@@ -87,4 +89,11 @@ public class RecursoServicio {
         throw new RuntimeException(string + primaryKey);
     }
 
+    public Set<Autor> getAutorsByRecursos(List<RecursoBibliografico> recursos){
+        Set<Autor> autores = new HashSet<>();
+        for(RecursoBibliografico recurso : recursos){
+            autores.addAll(recurso.getAutores());
+        }
+        return autores;
+    }
 }

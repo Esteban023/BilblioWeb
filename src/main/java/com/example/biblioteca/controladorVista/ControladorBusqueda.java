@@ -25,25 +25,29 @@ public class ControladorBusqueda {
     }
 
     @PostMapping("/buscar")
-    public String mostrarResultados(Model model, @RequestParam String palabraClave){
-        Optional<List<RecursoBibliografico>> recursoBibliograficos = Optional.ofNullable(servicio.buscarPorPalabraClave(palabraClave, null));
+    public String mostrarResultados(Model model, @RequestParam String palabraClave
+        , @RequestParam(value = "categoriaFormBusq", required = false) String categoria
+        , @RequestParam(value = "isbnFormBusq", required = false) String isbn
+        , @RequestParam(value = "autorFormBusq", required = false) String autor
+        ,@RequestParam(value = "htmxForm", required = false) String htmx
+    ){
         List<RecursoBibliografico> resultados;
-        resultados = recursoBibliograficos.orElseGet(ArrayList::new);
+        if(isbn != null && !isbn.equals("TODOS")){
+            Optional<RecursoBibliografico> obtnerRecursoBibliograficoPorIsbn = servicio.obtnerRecursoBibliograficoPorIsbn(palabraClave);
+            resultados = new ArrayList<>();
+            if(obtnerRecursoBibliograficoPorIsbn.isPresent()) resultados.add(obtnerRecursoBibliograficoPorIsbn.get());
+        }else{
+            Optional<List<RecursoBibliografico>> recursoBibliograficos;
+            recursoBibliograficos = Optional.ofNullable(servicio.buscarPorPalabraClave(palabraClave, categoria, autor));
+            resultados = recursoBibliograficos.orElseGet(ArrayList::new);
+        }
+        
+        model.addAttribute("autors", servicio.getAutorsByRecursos(resultados));
         model.addAttribute("palabra", palabraClave);
         model.addAttribute("resultados", resultados);
+        if(htmx != null && htmx.equals("htmx")) return "fragmentos :: busq-result";
         return "resultado";
     }
-
-    @PostMapping("/buscarFragment")
-    public String mostrarfragmento(Model model, @RequestParam String palabraClave){
-        Optional<List<RecursoBibliografico>> recursoBibliograficos = Optional.ofNullable(servicio.buscarPorPalabraClave(palabraClave, null));
-        List<RecursoBibliografico> resultados;
-        resultados = recursoBibliograficos.orElseGet(ArrayList::new);
-        model.addAttribute("palabra", palabraClave);
-        model.addAttribute("resultados", resultados);
-        return "fragmentos :: busq-result";
-    }
-
 
     @GetMapping("/pruebas") //este controlador es solo para pruebas
     public String mostrarprueba() {

@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .querySelectorAll('[data-toggle="mi-panel"]')
         .forEach((toggle) => {
             const menu = toggle
-                .closest(".mipanel-section")
+                .closest(".dropdown-cont")
                 .querySelector('[data-menu="mi-panel"]');
             const arrow = toggle.querySelector('[data-arrow="mi-panel"]');
 
@@ -32,4 +32,68 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         });
+
+        //listener para checkbox del filtro categoria
+        document.querySelectorAll('input[name="categoriaOpcFilter"]').forEach(cb =>{
+            cb.addEventListener("change", () => {
+                const input = document.getElementById("categoriaFormBusq")
+                enviarForm(cb, input)
+                
+            });
+        });
+
+        //listener para checkbox de filtro autores
+        document.querySelectorAll('input[name="autorOpcFilter"]').forEach(cb =>{
+            cb.addEventListener("change", () => {
+                const input = document.getElementById("autorFormBusq")
+                enviarForm(cb, input)
+            })
+        })
+
+        //listener para checkbox de filtro ISBN
+        const cbISBN = document.getElementById("filterISBN")
+        cbISBN.addEventListener("change", () =>{
+            const input = document.getElementById("isbnFormBusq")
+            enviarForm(cbISBN, input)
+        })
 });
+document.body.addEventListener("htmx:afterSwap", function(evt) {
+    // Re-enganchar listeners a los nuevos checkboxes
+    document.querySelectorAll('input[name="autorOpcFilter"]').forEach(cb => {
+      cb.addEventListener("change", () => {
+        const input = document.getElementById("autorFormBusq");
+        console.log(cb.checked)
+        enviarForm(cb, input);
+      });
+    });
+  
+});
+
+//solo un checkbox seleccionado
+function soloUno(checkbox) {
+    const checkboxes = document.getElementsByName(checkbox.name);
+    checkboxes.forEach((item) => {
+        if (item !== checkbox) item.checked = false;
+    });
+}
+
+//procesar el checkbox para el envio del formulario
+function enviarForm(cb, input) {
+    if (cb.checked) {
+        soloUno(cb)
+        input.value = cb.value
+    } else {
+        input.value = "TODOS"
+    }
+    const form = document.getElementById("busqueda-principal-form")
+    if (document.getElementById("busqueda-principal").value !== "") {
+        // Verifica si el form tiene atributos htmx
+        if (form.hasAttribute("hx-post")) {
+            // Usa htmx
+            htmx.trigger(form, "submit");
+        } else {
+            // Usa submit clásico
+            form.submit();
+        }
+    }
+}

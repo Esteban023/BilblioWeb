@@ -102,9 +102,8 @@
   </div>
   
   <div class="separador" role="separator" aria-hidden="true"></div>
-  
   <!-- ==== MI PANEL COLAPSABLE ==== -->
-  <div class="mipanel-section">
+  <div class="mipanel-section dropdown-cont">
     <!-- Cabecera clickable -->
     <div class="div-2" 
          role="button" 
@@ -153,8 +152,9 @@
       </a>
     </div>
   </div>
-  
-  <div class="mipanel-section">
+  <div class="separador" role="separator" aria-hidden="true"></div>
+  <!-- herramientas de busqueda -->
+  <div class="mipanel-section dropdown-cont">
     <div class="div-2"  
          role="button" 
          tabindex="0" 
@@ -165,27 +165,53 @@
         <img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/>
       </div>
     </div>
-    <div class="item-section" 
-         role="menu" 
-         aria-label="Opciones de mi panel"
-         data-menu="mi-panel"
-         style="display: none;">
-         
-      <div class="item">
-        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
-        <span class="text-wrapper-4">Filtrar por autor</span>
+<!-- Menú que se muestra/oculta -->
+    <div class="item-section" role="menu" aria-label="Herramientas de busqueda" data-menu="mi-panel"
+      style="display: none; height: 8rem; overflow-y: scroll;">
+    
+      <div class="dropdown-cont">
+        <div class="item" role="button" tabindex="0" aria-expanded="false" data-toggle="mi-panel">
+          <div class="vector-wrapper-2" data-arrow="mi-panel"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true"
+              style="rotate: calc(180deg);" /></div>
+          <span class="text-wrapper-4">Filtrar por Autor</span>
+        </div>
+        <div role="menu" aria-label="Opciones para Autores" data-menu="mi-panel" style="display: none;" id="autoresFrag">
+          <th:block th:if="${autors}">
+              <label class="item" th:each="autor : ${autors}" th:for="${'autor' + autor.id}">
+                <input  type="checkbox" name="autorOpcFilter" th:id="${'autor' + autor.id}" th:value="${autor.id}">
+                <span class="text-wrapper-4" th:text="${autor.nombre + ' '  +autor.apellido}"></span>
+              </label>
+             
+          </th:block>
+          <label class="item" th:if="${autors ==null}"><span class="text-wrapper-4">Realice una busqueda</span></label>
+        </div>
       </div>
-      <div class="item">
-        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
-        <span class="text-wrapper-4">Filtrar por categoria</span>
+      <div class="dropdown-cont">
+        <div class="item" role="button" tabindex="0" aria-expanded="false" data-toggle="mi-panel">
+          <div class="vector-wrapper-2" data-arrow="mi-panel"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true"
+              style="rotate: calc(180deg);" /></div>
+          <span class="text-wrapper-4">Filtrar por Categoria</span>
+        </div>
+        <div role="menu" aria-label="Opciones para categotia" data-menu="mi-panel" style="display: none;">
+          <label class="item" for="categoria1">
+            <input  type="checkbox" name="categoriaOpcFilter" id="categoria1" value="general">
+            <span class="text-wrapper-4"> General</span>
+          </label>
+          <label class="item" for="categoria2">
+            <input  type="checkbox" name="categoriaOpcFilter" id="categoria2" value="reserva">
+            <span class="text-wrapper-4"> Reserva</span>
+          </label>
+        </div>
       </div>
-      <div class="item">
-        <div class="vector-wrapper-2"><img class="vector-2" th:src="@{/img/arrow.svg}" alt="" aria-hidden="true" style="rotate: calc(180deg);"/></div>
-        <span class="text-wrapper-4">Filtrar por ISBN</span>
+      <div class="dropdown-cont">
+        <label class="item" for="filterISBN">
+            <input  type="checkbox" name="IsbnOpcFilter" id="filterISBN" value="ISBN">
+            <span class="text-wrapper-4"> Filtrar por ISBN</span>
+        </label>
       </div>
     </div>
   </div>
-  
+  <div class="separador" role="separator" aria-hidden="true"></div>
   <a class="login" style="margin-bottom: 10px;" th:if="${session.user}" th:href="@{/logout}" aria-label="Cerrar sesión del sistema">
     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
       <path d="M212.31-140Q182-140 161-161q-21-21-21-51.31v-535.38Q140-778 161-799q21-21 51.31-21h268.07v60H212.31q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v535.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85h268.07v60H212.31Zm436.92-169.23-41.54-43.39L705.08-450H363.85v-60h341.23l-97.39-97.38 41.54-43.39L820-480 649.23-309.23Z"/>
@@ -255,7 +281,15 @@
         </div>
     
       </div>
-    
+      <div th:if="${autors.size > 1}" id="autoresFrag" hx-swap-oob="innerHTML">
+        <th:block>
+              <label class="item" th:each="autor : ${autors}" th:for="${'autor' + autor.id}">
+                <input  type="checkbox" name="autorOpcFilter" th:id="${'autor' + autor.id}" th:value="${autor.id}">
+                <span class="text-wrapper-4" th:text="${autor.nombre + ' '  +autor.apellido}"></span>
+              </label>
+             
+          </th:block>
+      </div>
     </th:block>
   </div>
   

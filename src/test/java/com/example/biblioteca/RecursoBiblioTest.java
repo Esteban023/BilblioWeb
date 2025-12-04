@@ -167,7 +167,7 @@ public class RecursoBiblioTest {
     @ParameterizedTest
     @MethodSource("proveedorPalabrasClave")
     void testBuscarPorPalabraClave(String palabraClave, String categoria, int resultadosEsperados) {
-        List<RecursoBibliografico> resultado = recursoServicio.buscarPorPalabraClave(palabraClave, null);
+        List<RecursoBibliografico> resultado = recursoServicio.buscarPorPalabraClave(palabraClave, null, null);
         assertEquals(resultadosEsperados, resultado.size(), "El número de resultados debe coincidir con el esperado");
     }
 

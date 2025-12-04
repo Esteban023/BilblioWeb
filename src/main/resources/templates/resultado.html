@@ -16,10 +16,14 @@
       <div th:replace="~{fragmentos :: profile}"></div>
       <div class="search">
         <div class="nav-content">
-          <form class="nav" hx-post="/buscarFragment" hx-target="#resultadoFrag" hx-swap="innerHTML"  hx-indicator="#loading, #resultadoFrag">
-            <input type="text" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo" th:value="${palabra}">
+          <form class="nav" id="busqueda-principal-form" hx-post="/buscar" hx-target="#resultadoFrag" hx-swap="innerHTML"  hx-indicator="#loading, #resultadoFrag">
+            <input type="text" id="busqueda-principal" name="palabraClave" placeholder="Buscar en todos los recursos del catalogo" th:value="${palabra}">
             <button class="vector-wrapper" type="submit"><img class="vector" th:src="@{/img/busqueda.svg}" /></button>
             <div class="voice"><img class="img" th:src="@{/img/microfono.svg}" /></div>
+            <input type="text" id="categoriaFormBusq" name="categoriaFormBusq" value="TODOS" style="display: none;">
+            <input type="text" id="isbnFormBusq" name="isbnFormBusq" value="TODOS" style="display: none;">
+            <input type="text" id="autorFormBusq" name="autorFormBusq" value="TODOS" style="display: none;">
+            <input type="text"  name="htmxForm" value="htmx" style="display: none;">
           </form>
         </div>
         <div class="nav-result-wrapper" id="navResultFrag">

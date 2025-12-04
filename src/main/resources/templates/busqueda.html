@@ -71,6 +71,7 @@
               <h1 class="text-wrapper">Búsqueda Principal</h1>
               <form
                 class="nav"
+                id="busqueda-principal-form"
                 th:action="@{/buscar}"
                 method="post"
                 role="search"
@@ -116,6 +117,9 @@
                     alt="Icono de micrófono para búsqueda por voz"
                   />
                 </button>
+                <input type="text" id="categoriaFormBusq" name="categoriaFormBusq" value="TODOS" style="display: none;">
+                <input type="text" id="isbnFormBusq" name="isbnFormBusq" value="TODOS" style="display: none;">
+                <input type="text" id="autorFormBusq" name="autorFormBusq" value="TODOS" style="display: none;">
               </form>
               <div class="adv-nav-component">
                 <div class="adv-nav">

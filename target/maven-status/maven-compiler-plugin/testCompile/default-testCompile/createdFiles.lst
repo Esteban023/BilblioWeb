@@ -1,0 +1,6 @@
+com\example\biblioteca\UsuarioServiceTest.class
+com\example\biblioteca\BibliotecaApplicationTests.class
+com\example\biblioteca\AutorServicioTest.class
+com\example\biblioteca\PrestamoServicioTest.class
+com\example\biblioteca\ReservaServicioTest.class
+com\example\biblioteca\RecursoBiblioTest.class

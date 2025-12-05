@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Biblioteca Casa Abierta</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f0f2f5; }
+    header { background-color: #1e90ff; padding: 20px; color: white; text-align: center; font-size: 2em; }
+    #panel { padding: 20px; background: white; margin: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn-blue { background-color: #007bff; }
+    .btn-green { background-color: #28a745; }
+    .btn-orange { background-color: #fd7e14; }
+    .btn-gray { background-color: #6c757d; }
+    button:hover { opacity: 0.9; }
+    table { width: 100%; border-collapse: collapse; background: white; margin-top: 20px; }
+    th, td { padding: 12px; border: 1px solid #ddd; text-align: center; }
+    th { background-color: #e9ecef; }
+    #tablaResultados { margin: 20px; }
+  </style>
+</head>
+
+<body>
+
+<header>Biblioteca Casa Abierta</header>
+
+<div id="panel">
+  <button class="btn-blue" onclick="listarLibros()"><i class="fas fa-book"></i> Listar Libros</button>
+  <button class="btn-blue" onclick="buscarLibroId()"><i class="fas fa-search"></i> Buscar Libro</button>
+  <button class="btn-blue" onclick="listarAutores()"><i class="fas fa-user"></i> Listar Autores</button>
+  <button class="btn-blue" onclick="buscarAutorId()"><i class="fas fa-search"></i> Buscar Autor</button>
+  <hr>
+  <button class="btn-green" onclick="abrirActualizarLibro()"><i class="fas fa-edit"></i> Actualizar Libro</button>
+  <button class="btn-gray" onclick="abrirEliminarLibro()"><i class="fas fa-trash"></i> Eliminar Libro</button>
+  <button class="btn-orange" onclick="abrirInsertarLibro()"><i class="fas fa-plus"></i> Insertar Libro</button>
+  <br><br>
+  <button class="btn-green" onclick="abrirActualizarAutor()"><i class="fas fa-edit"></i> Actualizar Autor</button>
+  <button class="btn-gray" onclick="abrirEliminarAutor()"><i class="fas fa-trash"></i> Eliminar Autor</button>
+  <button class="btn-orange" onclick="abrirInsertarAutor()"><i class="fas fa-plus"></i> Insertar Autor</button>
+</div>
+
+<div id="tablaResultados"></div>
+
+<script>
+  function listarLibros() {
+    fetch('/api/libros')
+      .then(r => r.json())
+      .then(data => {
+        let tabla = `<table><tr><th>ID</th><th>Título</th><th>Editorial</th><th>Género</th><th>Fecha Edición</th><th>Precio</th></tr>`;
+        data.forEach(l => {
+          tabla += `<tr><td>${l.id}</td><td>${l.titulo}</td><td>${l.editorial}</td><td>${l.genero}</td><td>${l.fechaedicion}</td><td>$${l.precio}</td></tr>`;
+        });
+        tabla += `</table>`;
+        document.getElementById('tablaResultados').innerHTML = tabla;
+      });
+  }
+
+  function abrirActualizarAutor() {
+    Swal.fire({
+      title: 'Actualizar Autor',
+      html: `
+        <input id="id" type="number" class="swal2-input" placeholder="ID Autor">
+        <input id="nombre" class="swal2-input" placeholder="Nombre">
+        <input id="apellido" class="swal2-input" placeholder="Apellido">
+        <input id="telefono" class="swal2-input" placeholder="Teléfono">
+      `,
+      confirmButtonText: 'Actualizar',
+      showCancelButton: true,
+      preConfirm: () => {
+        const id = document.getElementById('id').value;
+        const data = {
+          nombre: document.getElementById('nombre').value,
+          apellido: document.getElementById('apellido').value,
+          telefono: document.getElementById('telefono').value
+        };
+        return fetch(`/api/autores/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }).then(r => {
+          if (!r.ok) throw new Error();
+          Swal.fire('Éxito', 'Autor actualizado', 'success');
+          listarAutores();
+        }).catch(() => Swal.fire('Error', 'No se pudo actualizar', 'error'));
+      }
+    });
+  }
+
+  function abrirInsertarAutor() {
+    Swal.fire({
+      title: 'Insertar Autor',
+      html: `
+        <input id="nombre" class="swal2-input" placeholder="Nombre">
+        <input id="apellido" class="swal2-input" placeholder="Apellido">
+        <input id="telefono" class="swal2-input" placeholder="Teléfono">
+      `,
+      confirmButtonText: 'Insertar',
+      showCancelButton: true,
+      preConfirm: () => {
+        const data = {
+          nombre: document.getElementById('nombre').value,
+          apellido: document.getElementById('apellido').value,
+          telefono: document.getElementById('telefono').value
+        };
+        return fetch('/api/autores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }).then(r => {
+          if (!r.ok) throw new Error();
+          Swal.fire('Éxito', 'Autor insertado', 'success');
+          listarAutores();
+        }).catch(() => Swal.fire('Error', 'No se pudo insertar', 'error'));
+      }
+    });
+  }
+
+  function abrirEliminarAutor() {
+    Swal.fire({
+      title: 'Eliminar Autor',
+      input: 'number',
+      inputLabel: 'Ingrese ID del autor',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      preConfirm: (id) => {
+        return fetch(`/api/autores/${id}`, { method: 'DELETE' })
+          .then(r => {
+            if (!r.ok) throw new Error();
+            Swal.fire('Éxito', 'Autor eliminado', 'success');
+            listarAutores();
+          }).catch(() => Swal.fire('Error', 'No se pudo eliminar', 'error'));
+      }
+    });
+  }
+
+  function listarAutores() {
+    fetch('/api/autores')
+      .then(r => r.json())
+      .then(data => {
+        let tabla = `<table><tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Teléfono</th></tr>`;
+        data.forEach(a => {
+          tabla += `<tr><td>${a.id}</td><td>${a.nombre}</td><td>${a.apellido}</td><td>${a.telefono}</td></tr>`;
+        });
+        tabla += `</table>`;
+        document.getElementById('tablaResultados').innerHTML = tabla;
+      });
+  }
+
+  function buscarLibroId() {
+    const id = prompt("Ingrese ID del libro:");
+    if (id) {
+      fetch(`/api/libros/${id}`)
+        .then(r => {
+          if (!r.ok) throw new Error();
+          return r.json();
+        })
+        .then(libro => {
+          let tabla = `<table><tr><th>ID</th><th>Título</th><th>Editorial</th><th>Género</th><th>Fecha Edición</th><th>Precio</th></tr>
+                       <tr><td>${libro.id}</td><td>${libro.titulo}</td><td>${libro.editorial}</td><td>${libro.genero}</td><td>${libro.fechaedicion}</td><td>$${libro.precio}</td></tr></table>`;
+          document.getElementById('tablaResultados').innerHTML = tabla;
+        })
+        .catch(() => Swal.fire('Error', 'Libro no encontrado', 'error'));
+    }
+  }
+
+  function buscarAutorId() {
+    const id = prompt("Ingrese ID del autor:");
+    if (id) {
+      fetch(`/api/autores/${id}`)
+        .then(r => {
+          if (!r.ok) throw new Error();
+          return r.json();
+        })
+        .then(autor => {
+          let tabla = `<table><tr><th>ID</th><th>Nombre</th><th>Apellido</th><th>Teléfono</th></tr>
+                       <tr><td>${autor.id}</td><td>${autor.nombre}</td><td>${autor.apellido}</td><td>${autor.telefono}</td></tr></table>`;
+          document.getElementById('tablaResultados').innerHTML = tabla;
+        })
+        .catch(() => Swal.fire('Error', 'Autor no encontrado', 'error'));
+    }
+  }
+
+  // --- Formulario Insertar Libro ---
+  function abrirInsertarLibro() {
+    Swal.fire({
+      title: 'Insertar Libro',
+      html: `
+        <input id="titulo" class="swal2-input" placeholder="Título">
+        <input id="editorial" class="swal2-input" placeholder="Editorial">
+        <input id="genero" class="swal2-input" placeholder="Género">
+        <input id="fecha" type="date" class="swal2-input">
+        <input id="precio" type="number" step="0.01" class="swal2-input" placeholder="Precio">
+      `,
+      confirmButtonText: 'Insertar',
+      showCancelButton: true,
+      preConfirm: () => {
+        const data = {
+          titulo: document.getElementById('titulo').value,
+          editorial: document.getElementById('editorial').value,
+          genero: document.getElementById('genero').value,
+          fechaedicion: document.getElementById('fecha').value,
+          precio: parseFloat(document.getElementById('precio').value)
+        };
+        return fetch('/api/libros', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }).then(r => {
+          if (!r.ok) throw new Error();
+          Swal.fire('Éxito', 'Libro insertado', 'success');
+          listarLibros();
+        }).catch(() => Swal.fire('Error', 'No se pudo insertar', 'error'));
+      }
+    });
+  }
+
+  // --- Formulario Actualizar Libro ---
+  function abrirActualizarLibro() {
+    Swal.fire({
+      title: 'Actualizar Libro',
+      html: `
+        <input id="id" type="number" class="swal2-input" placeholder="ID Libro">
+        <input id="titulo" class="swal2-input" placeholder="Título">
+        <input id="editorial" class="swal2-input" placeholder="Editorial">
+        <input id="genero" class="swal2-input" placeholder="Género">
+        <input id="fecha" type="date" class="swal2-input">
+        <input id="precio" type="number" step="0.01" class="swal2-input" placeholder="Precio">
+      `,
+      confirmButtonText: 'Actualizar',
+      showCancelButton: true,
+      preConfirm: () => {
+        const id = document.getElementById('id').value;
+        const data = {
+          titulo: document.getElementById('titulo').value,
+          editorial: document.getElementById('editorial').value,
+          genero: document.getElementById('genero').value,
+          fechaedicion: document.getElementById('fecha').value,
+          precio: parseFloat(document.getElementById('precio').value)
+        };
+        return fetch(`/api/libros/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }).then(r => {
+          if (!r.ok) throw new Error();
+          Swal.fire('Éxito', 'Libro actualizado', 'success');
+          listarLibros();
+        }).catch(() => Swal.fire('Error', 'No se pudo actualizar', 'error'));
+      }
+    });
+  }
+
+  // --- Formulario Eliminar Libro ---
+  function abrirEliminarLibro() {
+    Swal.fire({
+      title: 'Eliminar Libro',
+      input: 'number',
+      inputLabel: 'Ingrese ID del libro',
+      showCancelButton: true,
+      confirmButtonText: 'Eliminar',
+      preConfirm: (id) => {
+        return fetch(`/api/libros/${id}`, { method: 'DELETE' })
+          .then(r => {
+            if (!r.ok) throw new Error();
+            Swal.fire('Éxito', 'Libro eliminado', 'success');
+            listarLibros();
+          }).catch(() => Swal.fire('Error', 'No se pudo eliminar', 'error'));
+      }
+    });
+  }
+
+
+</script>
+
+</body>
+</html>

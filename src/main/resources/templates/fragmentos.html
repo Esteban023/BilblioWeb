@@ -127,7 +127,7 @@
         <div class="text-wrapper-4">Nueva Búsqueda</div>
       </a>
       
-      <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos">
+      <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos" th:if="${session.user}">
         <div class="img-wrapper">
           <img class="vector-4" th:src="@{/img/canasta.jpeg}" alt="Icono de canasta" />
         </div>

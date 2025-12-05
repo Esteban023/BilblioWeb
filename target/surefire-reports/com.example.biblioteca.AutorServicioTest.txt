@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.biblioteca.AutorServicioTest
--------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.414 s -- in com.example.biblioteca.AutorServicioTest

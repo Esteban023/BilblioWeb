@@ -36,48 +36,50 @@
           </div>
 
           <!-- FORMULARIO PARA PRÉSTAMOS -->
-          <form th:action="@{/canasta/servicio}" method="post" id="prestamoForm" class="result-content">
-            <div class="result" th:each="resultado, iterStat : ${resultados}">
-              <div class="numero">
-                <input type="checkbox" name="select" th:value="${resultado.codigoDeBarras}">
-                <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div>
-              </div>
-              <div class="contenido">
-                <a class="text-wrapper-3" th:text="${resultado.titulo}"
-                  th:href="@{'/buscar/' + ${resultado.titulo}}"></a>
-                <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
-                <div class="icon-text">
-                  <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
-                  <div class="frame-2">
-                    <div class="text-wrapper-5" th:text="${resultado.tipoDePublicacion}"></div>
-                  </div>
+          <form th:action="@{/canasta/servicio}" method="post" id="prestamoForm" class="result-content" style="overflow: hidden; padding: 0;">
+            <div class="result-content">
+              <div class="result" th:each="resultado, iterStat : ${resultados}">
+                <div class="numero">
+                  <input type="checkbox" name="select" th:value="${resultado.codigoDeBarras}">
+                  <div class="text-wrapper-2" th:text="${iterStat.count} + ' .'"></div>
                 </div>
-                <div class="text-wrapper-6">Ejemplares: 2</div>
-                <a class="delete" th:href="@{'/canasta/eliminar/'+ ${iterStat.count}}">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="#fff">
-                    <path
-                      d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                  </svg>
+                <div class="contenido">
+                  <a class="text-wrapper-3" th:text="${resultado.titulo}"
+                    th:href="@{'/buscar/' + ${resultado.titulo}}"></a>
+                  <p class="text-wrapper-4" th:text="${resultado.getAutoresString()}"></p>
+                  <div class="icon-text">
+                    <div class="vector-wrapper"><img class="vector-2" th:src="@{/img/libros.svg}" /></div>
+                    <div class="frame-2">
+                      <div class="text-wrapper-5" th:text="${resultado.tipoDePublicacion}"></div>
+                    </div>
+                  </div>
+                  <div class="text-wrapper-6">Ejemplares: 2</div>
+                  <a class="delete" th:href="@{'/canasta/eliminar/'+ ${iterStat.count}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                      fill="#fff">
+                      <path
+                        d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                    </svg>
 
-                </a>
+                  </a>
+                </div>
               </div>
             </div>
-          </form>          
-          <div class="acciones">
-            <div class="seleccion" style="font-family: 'Open Sans', Helvetica;">
-              <a href="" id="seleccionar-todo" style="color: #1e1e1e;">Seleccionar todos</a>
-            </div>
-            <div class="acc-servicio" style="display: flex; gap: 10px;">
-              <select name="servicio" class="servicio" required>
-              <option disabled selected>Seleccionar servicio</option>
-              <option value="prestamo">Préstamo</option>
-              <option value="reserva">Reserva</option>
-              </select>
-              <button type="submit" class="login">Aceptar</button>
+            <div class="acciones">
+              <div class="seleccion" style="font-family: 'Open Sans', Helvetica;">
+                <a href="" id="seleccionar-todo" style="color: #1e1e1e;">Seleccionar todos</a>
+              </div>
+              <div class="acc-servicio" style="display: flex; gap: 10px;">
+                <select name="servicio" class="servicio" required>
+                  <option disabled selected>Seleccionar servicio</option>
+                  <option value="prestamo">Préstamo</option>
+                  <option value="reserva">Reserva</option>
+                </select>
+                <button type="submit" class="login">Aceptar</button>
+              </div>
             </div>
           </div>
-        </div>
+        </form>          
         <footer th:replace="~{fragmentos :: footer}"></footer>
       </div>
     </div>

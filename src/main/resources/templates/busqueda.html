@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
     <title>Búsqueda - Catálogo Universitario</title>
+    <link rel="stylesheet" th:href="@{/css/general.css}" />
     <link rel="stylesheet" th:href="@{/css/busqueda.css}" />
     <style>
       /* Estilos para elementos accesibles */
@@ -87,6 +88,7 @@
                   placeholder="Buscar en todos los recursos del catalogo"
                   aria-describedby="instrucciones-busqueda"
                   aria-required="true"
+                  autofocus
                 />
                 <span id="instrucciones-busqueda" class="sr-only">
                   Presione Enter para realizar la búsqueda o use el botón de

@@ -6,6 +6,7 @@
 html,
 body {
     margin: 0px;
+    height: 100%;
 }
 button:focus-visible {
     outline: 2px solid #4a90e2 !important;
@@ -17,8 +18,6 @@ a {
 
 .login {
     display: flex;
-    height: 100vh;
-    width: 100vw;
     align-items: flex-start;
     background-color: #ffffff;
 }
@@ -70,7 +69,7 @@ a {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 732px;
+    height: 100%;
     align-items: center;
     justify-content: center;
     gap: 60px;
@@ -88,13 +87,13 @@ a {
     font-size: 60px;
     letter-spacing: 0;
     line-height: normal;
-    width: 480px;
+    width: 90%;
 }
 
 .login .login-content {
     display: flex;
     flex-direction: column;
-    width: 480px;
+    width: 90%;
     align-items: flex-start;
     gap: 50px;
     position: relative;
@@ -118,7 +117,6 @@ a {
 }
 
 .login input {
-    width: 433px;
     padding: 15px 25px 12px 25px;
     background-color: #ffffff;
     border-radius: 5px;
@@ -127,6 +125,7 @@ a {
     font-family: "Open Sans-Light", Helvetica;
     font-weight: 300;
     font-size: 20px;
+    flex-grow: 1;
 }
 
 
@@ -196,4 +195,61 @@ a {
     font-size: 25px;
     letter-spacing: 0;
     line-height: normal;
+}
+
+/* Pantallas medianas (laptop pequeñas) */
+@media (max-width: 1115px) {
+    .login .title{
+        font-size: 50px;
+    }
+}
+/* pantalla tipo tablets */
+/* Ocultar sidebar en pantallas pequeñas */
+@media  (max-width: 850px) {
+    body{
+        background-color: #c20e1a;
+    }
+    .login{
+        flex-direction: column;
+        background-color: #c20e1a;
+        height: 95%;
+    }
+    .login .left-content{
+        width: 100%;
+        height: 40%;
+    }
+    .login .right-content{
+        height: 60%;
+        margin: auto;
+        flex-grow: 1;
+        padding: 20px 0;
+        width: 100%;
+    }
+    .login .content{
+        background-color: #fff;
+        padding: 0;
+        width: 400px;
+        border-radius: 30px;
+        margin: auto;
+        gap: 40px;
+    }
+    .login .title{
+        text-align: center;
+    }
+    .login .login-content{
+        gap: 20px;
+    }
+    .login .button-place{
+        align-items: normal;
+    }
+    .login .icon{
+        display: none;
+    }
+    
+}
+/* pantalla pequeña moviles */
+@media (max-width: 449px) {
+    .login .content{
+        width: 90%;
+    }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -241,6 +242,7 @@ public class PrestamoServicio {
                 prestamo.getFechaDevolucion().format(formatter));
     }
 
+    @Async
     public void enviarCorreoPrestamo(Prestamo prestamo, DateTimeFormatter formatter) {
         String bodyMail = generarBodyMail(prestamo, formatter);
         Email email = new Email(
@@ -262,6 +264,7 @@ public class PrestamoServicio {
         return bodyMail;
 
     }
+    @Async
     public void enviarCorreoVariosPrestamos(List<Prestamo> prestamos, Usuario user){
         String bodyMail = generarBodyMailVarios(prestamos, user);
         Email email = new Email(

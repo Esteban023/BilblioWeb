@@ -99,24 +99,17 @@ public class PrestamoServicio {
         }
 
         LocalDateTime fechaDevolucion = calcularFechaDevolucion(rb, fechaInicio); 
-        // 1. Crear la entidad Prestamo
         Prestamo prestamo = crearPrestamoEntity(usuario, rb, fechaDevolucion, fechaInicio);
         
-        // 2. ESTABLECER RELACIÓN BIDIRECCIONAL ANTES DE GUARDAR
         prestamo.setRecursoBibliografico(rb);  // Del préstamo al recurso
         rb.setPrestamo(prestamo);              // Del recurso al préstamo
         rb.setEstado("No disponible");
         
-        // 3. Ahora guardar el préstamo (con la relación ya establecida)
-
         Prestamo prestamoGuardado = prestamoRepositorio.save(prestamo);
         
-        // 4. Actualizar el usuario
         usuario.getPrestamos().add(prestamoGuardado);
         usuarioRepositorio.save(usuario);
         
-        // 5. El recurso bibliográfico YA debería estar actualizado por la relación
-        // pero por si acaso lo guardamos también
         rbRepositorio.save(rb);
 
         return new ResultadoPrestamo(true, "Préstamo exitoso", prestamoGuardado);

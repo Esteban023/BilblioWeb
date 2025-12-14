@@ -1,6 +1,10 @@
 package com.example.biblioteca;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -78,7 +82,8 @@ public class AutorServicioTest {
             assert(autorGuardado.getNombre().equals(autor.getNombre()));
             assert(autorGuardado.getApellido().equals(autor.getApellido()));
             assert(autorGuardado.getTelefono().equals(autor.getTelefono()));
-
+            
+            assertTrue(autorRepositorio.existsById(autorGuardado.getId()));
         }
     }
 
@@ -100,16 +105,17 @@ public class AutorServicioTest {
     void listarUsuarios() {
         List<Autor> autoresListados = autorServicio.listarAutores();
         assertNotNull(autoresListados);
-        assert(autoresListados.size() > 0);
+        assertEquals(autores.size(), autoresListados.size());
     }
 
     @Test
     void eliminarUsuario() {
         for (Autor autor : autores) {
             Integer id = autor.getId();
+            assertTrue(autorRepositorio.findById(id).isPresent());
             autorServicio.eliminarAutor(id);
-            Optional<Autor> autorEliminado = autorServicio.obtenerAutorPorId(id);
-            assert(autorEliminado.isEmpty());
+            assertTrue(autorRepositorio.findById(id).isEmpty());
+            assertFalse(autorRepositorio.existsById(id));
         }
     }
 
@@ -157,9 +163,23 @@ public class AutorServicioTest {
         autores.clear();
     }
 
+    @Test
+    void buscarAutorPorId_NoExiste() {
+    Optional<Autor> resultado = autorServicio.obtenerAutorPorId(999999);
+    assert(resultado.isEmpty());
+    }
 
+    @Test
+    void eliminarAutor_NoExiste() {
+    assertDoesNotThrow(() -> autorServicio.eliminarAutor(999999));
+    }
 
-    
+    @Test
+    void listarAutores_Vacio() {
+    autorRepositorio.deleteAll();
 
+    List<Autor> lista = autorServicio.listarAutores();
 
+    assertTrue(lista.isEmpty());
+    }
 }

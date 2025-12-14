@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
+
 import com.example.biblioteca.Model.RecursoBibliografico;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -214,7 +216,7 @@ public class ReservaServicio {
         String bodyMail = templateEngine.process("tablaMail", context);
         return bodyMail;
     }
-    
+    @Async
     public void enviarCorreoReserva(Reserva reserva, DateTimeFormatter formatter){
         String bodyMail = generarBodyMail(reserva, formatter);
         Email email = new Email(
@@ -226,6 +228,7 @@ public class ReservaServicio {
         );
         emailServicios.enviarCorreo(email);
     }
+    @Async
     public void enviarCorreoVariasReservas(List<Reserva> reservas, Usuario user){
         String bodyMail = generarBodyMailVarios(reservas, user);
         Email email = new Email(

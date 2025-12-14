@@ -56,6 +56,16 @@ document.addEventListener("DOMContentLoaded", function () {
             const input = document.getElementById("isbnFormBusq")
             enviarForm(cbISBN, input)
         })
+
+        //listener para responsive del sidebar
+        const toggleBtns = document.querySelectorAll('.side-toggle');
+        const sidebar = document.querySelector('.side-bar');
+        toggleBtns.forEach(toggleBtn =>{
+            toggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('side-active'); // alterna entre mostrar/ocultar
+            });
+        })
+
 });
 document.body.addEventListener("htmx:afterSwap", function(evt) {
     // Re-enganchar listeners a los nuevos checkboxes

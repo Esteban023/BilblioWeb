@@ -79,7 +79,7 @@
       </div>
       <div class="text-wrapper">Resultados</div>
     </a>
-
+    <div class="menu-toggle side-toggle">☰</div> 
     <div class="frame" th:if="${session.user}" role="img" aria-label="Perfil del usuario">
       <img class="icon" th:src="@{/img/icon.svg}" alt="" />
     </div>
@@ -95,9 +95,18 @@
 
   <!-- Side Bar -->
   <nav class="side-bar" th:fragment="side-bar" role="navigation" aria-label="Menú principal">
-    <div class="logo-section">
+      
+      <button aria-label="Cerrar alerta de error" class="close-side side-toggle">
+
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#c20e1a">
+        <path
+            d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+        </svg>
+      </button>
+      
+    <a th:href="@{/}" class="logo-section">
       <img class="logo-UV" th:src="@{/img/univalle-logo-2.png}" alt="Logo de la Universidad del Valle" />
-    </div>  
+    </a>  
   <div class="separador" role="separator" aria-hidden="true"></div>
   <!-- ==== MI PANEL COLAPSABLE ==== -->
   <div class="mipanel-section dropdown-cont">
@@ -127,7 +136,7 @@
         <div class="text-wrapper-4">Nueva Búsqueda</div>
       </a>
       
-      <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos">
+      <a class="item" th:href="@{/canasta/listar}" role="menuitem" aria-label="Ver mi canasta de recursos" th:if="${session.user}">
         <div class="img-wrapper">
           <img class="vector-4" th:src="@{/img/canasta.jpeg}" alt="Icono de canasta" />
         </div>
